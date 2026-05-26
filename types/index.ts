@@ -1,17 +1,24 @@
 // ─── User / Auth ──────────────────────────────────────────────────────────────
 
+// IMPORTANT: these string values are the wire format sent to the Go API
+// and stored in the `users.role` column. They MUST match the backend's
+// CHECK constraint exactly. For user-facing labels, map separately
+// (see roleOptions in SignupForm.tsx).
 export enum UserRole {
   Artist = "artist",
-  Client = "client",
   StudioAdmin = "studio_admin",
+  User = "user",
 }
 
 export interface User {
   id: string;
   email: string;
   role: UserRole;
-  name: string;
+  firstName: string;
+  lastName: string;
+  phone?: string;
   avatarUrl?: string;
+  phoneVerifiedAt?: string;
   createdAt: string;
 }
 

@@ -1,0 +1,365 @@
+/*
+  styles/ArtistSidebar.module.css
+  ─────────────────────────────────────────────────────────────────
+  Styles for the artist dashboard sidebar (composes shadcn Sidebar
+  primitives + custom rows in the footer).
+*/
+
+/* ── Sidebar theme overrides (applied via className on <Sidebar>) ──
+   The shadcn sidebar reads --sidebar / --sidebar-accent etc. via
+   Tailwind theme tokens; overriding those vars in scope retints
+   everything inside the sidebar without touching globals. */
+
+.sidebarRoot {
+  --sidebar: #ffffff;
+  --sidebar-accent: #f3f4f6;
+  --sidebar-foreground: hsl(220, 9%, 46%); /* muted gray for inactive items */
+  --sidebar-accent-foreground: hsl(240, 100%, 70%); /* purple for active hover/text */
+}
+
+/* Extra horizontal breathing room around the menu groups (expanded mode).
+   In icon-collapsed mode this padding would crush the 3rem-wide column,
+   so we drop it back to shadcn's defaults below. */
+.sidebarRoot :global([data-sidebar="group"]),
+.sidebarRoot :global([data-sidebar="header"]),
+.sidebarRoot :global([data-sidebar="footer"]) {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+:global([data-collapsible="icon"]) .sidebarRoot :global([data-sidebar="group"]),
+:global([data-collapsible="icon"]) .sidebarRoot :global([data-sidebar="header"]),
+:global([data-collapsible="icon"]) .sidebarRoot :global([data-sidebar="footer"]) {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Active menu item: purple icon + purple text. Background stays
+   --sidebar-accent (light gray) since the shadcn class already
+   applies bg-sidebar-accent on data-active. */
+.sidebarRoot :global([data-slot="sidebar-menu-button"][data-active]),
+.sidebarRoot :global([data-slot="sidebar-menu-sub-button"][data-active]) {
+  color: hsl(240, 100%, 70%);
+}
+
+/* Purple vertical bar on the far left edge of the sidebar, aligned
+   with the currently active item. The SidebarMenuItem is position:
+   relative (set by shadcn) — we anchor the bar there and pull it
+   leftward past the group's 1rem padding so it touches the edge. */
+.sidebarRoot :global([data-slot="sidebar-menu-item"]):has(
+    > [data-slot="sidebar-menu-button"][data-active]
+  )::before {
+  content: "";
+  position: absolute;
+  left: -1rem;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  width: 3px;
+  background-color: hsl(240, 100%, 70%);
+  border-radius: 0 2px 2px 0;
+}
+
+/* Hide the left bar when the sidebar is collapsed to icon mode. */
+:global([data-collapsible="icon"]) .sidebarRoot :global([data-slot="sidebar-menu-item"])::before {
+  display: none;
+}
+
+/* ── Brand row (logo + company name) ─────────────────────────── */
+
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.25rem 0.75rem;
+}
+
+.brandLogo {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.brandName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--foreground);
+  letter-spacing: -0.01em;
+}
+
+:global([data-collapsible="icon"]) .brandName {
+  display: none;
+}
+
+/* Center the (now logo-only) brand row + (now trigger-only) header row
+   in icon-collapsed mode so they line up with the icons below. */
+:global([data-collapsible="icon"]) .brandRow,
+:global([data-collapsible="icon"]) .headerRow {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* In icon-collapsed mode the menu items default to full-width <li>
+   wrappers, which left-aligns the 32px button inside. Forcing the
+   menu (<ul>) to align-items center shrinks each <li> to its content
+   width and centers it in the 48px column — same x-position as the
+   trigger and logo above. */
+:global([data-collapsible="icon"]) .sidebarRoot :global([data-sidebar="menu"]) {
+  align-items: center;
+}
+
+/* Slightly larger icons in nav items so they don't look tiny next
+   to the bigger avatar in the footer. In collapsed mode revert to
+   16px so the icon fits cleanly inside the 32px button's padding. */
+.sidebarRoot :global([data-slot="sidebar-menu-button"] svg),
+.sidebarRoot :global([data-slot="sidebar-menu-sub-button"] svg) {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+:global([data-collapsible="icon"]) .sidebarRoot :global([data-slot="sidebar-menu-button"] svg),
+:global([data-collapsible="icon"]) .sidebarRoot :global([data-slot="sidebar-menu-sub-button"] svg) {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ── Header row (section label + collapse trigger) ── */
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px 0;
+}
+
+.sectionLabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+/* Hide the section label when sidebar is in icon/collapsed mode. */
+:global([data-collapsible="icon"]) .sectionLabel {
+  display: none;
+}
+
+/* ── Collapsible parent item chevron ── */
+
+.chevron {
+  margin-left: auto;
+  width: 16px;
+  height: 16px;
+  transition: transform 200ms ease;
+}
+
+/* The Collapsible root receives data-open when expanded. */
+.parentItem[data-open] .chevron {
+  transform: rotate(180deg);
+}
+
+/* ── AI Assist row in footer ── */
+
+.aiAssistRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+}
+
+:global([data-collapsible="icon"]) .aiAssistRow {
+  display: none;
+}
+
+.aiIcon {
+  width: 16px;
+  height: 16px;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.aiLabel {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ── User card ── */
+
+.userCard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 6px;
+  margin-top: 4px;
+}
+
+:global([data-collapsible="icon"]) .userCard {
+  padding: 0;
+  justify-content: center;
+}
+
+.userInitial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background-color: hsl(178, 38%, 45%);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.userInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+:global([data-collapsible="icon"]) .userInfo {
+  display: none;
+}
+
+.userName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sidebar-foreground);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.userSubtitle {
+  font-size: 12px;
+  color: var(--muted-foreground);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.moreButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 150ms ease;
+}
+
+.moreButton:hover {
+  background-color: var(--sidebar-accent);
+  color: var(--sidebar-foreground);
+}
+
+:global([data-collapsible="icon"]) .moreButton {
+  display: none;
+}
+
+.moreIcon {
+  width: 18px;
+  height: 18px;
+}
+
+/* ── Popover ── */
+
+.userPopover {
+  width: 260px;
+  padding: 0;
+}
+
+.popoverHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+}
+
+.popoverName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.popoverEmail {
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+
+.upgradeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 6px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--foreground);
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.upgradeButton:hover {
+  background-color: var(--accent);
+}
+
+.upgradeIcon {
+  width: 14px;
+  height: 14px;
+}
+
+.popoverDivider {
+  height: 1px;
+  background-color: var(--border);
+}
+
+.popoverItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  color: var(--foreground);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.popoverItem:hover {
+  background-color: var(--accent);
+}
+
+.popoverItemIcon {
+  width: 16px;
+  height: 16px;
+  color: var(--muted-foreground);
+}
+
+/* ── Footer copyright ── */
+
+.copyright {
+  padding: 8px 4px 0;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted-foreground);
+}
+
+:global([data-collapsible="icon"]) .copyright {
+  display: none;
+}

@@ -1,22 +1,32 @@
+// Next.js
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter_Tight } from "next/font/google";
+
+// CSS
+import "@/styles/globals.css";
+
+// Components
+import { TooltipProvider } from "@/components/ui/tooltip";
+
+// Libs
 import { AuthProvider } from "@/lib/auth";
-import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const interTight = Inter_Tight({
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Inkspace — Tattoo Artist Marketplace",
+  title: "Inkspace — Booking & Management Suite",
   description:
-    "Discover tattoo artists, submit requests, and book appointments on Inkspace.",
+    "Manage your tattoo studio with Inkspace. Track artists, clients, and appointments.",
+  icons: {
+    icon: {
+      url: "/logos/inkspace-logo.svg",
+      type: "image/svg+xml",
+    },
+  },
 };
 
 export default function RootLayout({
@@ -25,9 +35,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en" className={interTight.className}>
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <TooltipProvider>{children}</TooltipProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,4 +1,5 @@
 import { ArtistSidebar } from "@/components/layout/ArtistSidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export default function ArtistDashboardLayout({
   children,
@@ -6,9 +7,9 @@ export default function ArtistDashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <SidebarProvider>
       <ArtistSidebar />
-      <main>{children}</main>
-    </div>
+      <SidebarInset>{children}</SidebarInset>
+    </SidebarProvider>
   );
 }
