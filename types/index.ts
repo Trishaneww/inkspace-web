@@ -128,19 +128,9 @@ export interface Appointment {
 }
 
 // ─── Flash ────────────────────────────────────────────────────────────────────
+// See types/flash.ts for the up-to-date wire types (matches /v1/flashes).
 
-export type FlashStatus = "available" | "reserved" | "sold";
-
-export interface FlashDesign {
-  id: string;
-  artistId: string;
-  imageUrl: string;
-  title: string;
-  price: number;
-  styles: TattooStyle[];
-  status: FlashStatus;
-  createdAt: string;
-}
+export type { Flash, FlashStatus, FlashPricingTier } from "@/types/flash";
 
 // ─── Messaging ────────────────────────────────────────────────────────────────
 

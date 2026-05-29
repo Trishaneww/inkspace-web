@@ -1,0 +1,423 @@
+/* ── Flash Form Sheet ────────────────────────────────────────────────────── */
+
+.flashFormSheet {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 32rem;
+  height: 100%;
+
+  padding: 0;
+}
+
+.sheetContent {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+
+  gap: 1.5rem;
+  padding: 0 1.3rem 1rem;
+
+  overflow-y: auto;
+}
+
+.sheetTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+/* ── Form sections ───────────────────────────────────────────────────────── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sectionHeading {
+  font-size: 1rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+}
+
+.sectionHelper {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 50%);
+}
+
+.labelOptional {
+  margin-left: 0.25rem;
+
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: hsl(220, 9%, 55%);
+}
+
+.required {
+  color: hsl(0, 70%, 50%);
+}
+
+/* ── Image upload tiles ──────────────────────────────────────────────────── */
+.imageRow {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  align-items: start;
+
+  gap: 1rem;
+}
+
+.imagePicker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+
+  gap: 0.4rem;
+  border-radius: 0.7rem;
+
+  border: 1px dashed hsl(220, 13%, 80%);
+  background-color: hsl(220, 13%, 98%);
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 45%);
+
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.imagePicker input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.imagePreview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.referenceColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.addReferenceButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  gap: 0.4rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 0.5rem;
+
+  border: 1px solid hsl(220, 13%, 88%);
+  background-color: white;
+  font-size: 0.9rem;
+  color: hsl(220, 13%, 18%);
+
+  cursor: pointer;
+}
+
+.addReferenceButton input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.referencePreview {
+  position: relative;
+  width: 100%;
+}
+
+.referenceImageBox {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+
+  border-radius: 0.5rem;
+  border: 1px solid hsl(220, 13%, 90%);
+
+  overflow: hidden;
+}
+
+.referenceImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.removeReferenceButton {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+
+  padding: 0;
+  border-radius: 50px;
+
+  background-color: hsl(0, 75%, 50%);
+  color: white;
+
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: hsl(0, 75%, 42%);
+  }
+}
+
+/* ── Repeatable toggle card ──────────────────────────────────────────────── */
+
+.repeatableCard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 0.7rem;
+
+  background-color: hsl(220, 13%, 96%);
+}
+
+.repeatableText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.repeatableLabel {
+  font-size: 1rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+}
+
+.repeatableHelper {
+  font-size: 0.8rem;
+  color: hsl(220, 9%, 50%);
+}
+
+/* ── Pricing mode toggle ─────────────────────────────────────────────────── */
+
+.pricingHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.modeToggle {
+  display: inline-flex;
+  border-radius: 0.5rem;
+
+  border: 1px solid hsl(220, 13%, 88%);
+  background-color: white;
+
+  overflow: hidden;
+}
+
+.modeToggleButton {
+  padding: 0.4rem 0.75rem;
+
+  border: none;
+  background: white;
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 35%);
+
+  cursor: pointer;
+}
+
+.modeToggleButtonActive {
+  background: hsl(220, 13%, 95%);
+  color: hsl(220, 13%, 18%);
+}
+
+/* ── Per-size pricing table ──────────────────────────────────────────────── */
+
+.tierTable {
+  display: grid;
+  grid-template-columns: 1.5rem 1fr 6rem 6rem;
+  align-items: center;
+
+  gap: 0.25rem 0.75rem;
+  padding: 0.5rem;
+  border-radius: 0.7rem;
+
+  border: 1px solid hsl(220, 13%, 90%);
+  background-color: white;
+}
+
+.tierTableHeader {
+  display: contents;
+
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: hsl(220, 9%, 50%);
+}
+
+.tierHeaderCell {
+  padding: 0.4rem 0.25rem;
+}
+
+.tierRow {
+  display: contents;
+}
+
+.tierLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.5rem 0;
+}
+
+.tierName {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+}
+
+.tierSubtle {
+  font-size: 0.75rem;
+  color: hsl(220, 9%, 55%);
+}
+
+.tierInput {
+  width: 100%;
+
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.5rem;
+
+  border: 1px solid hsl(220, 13%, 88%);
+  font-size: 0.9rem;
+}
+
+.tierInput:disabled {
+  background-color: hsl(220, 13%, 97%);
+  color: hsl(220, 9%, 60%);
+}
+
+/* ── Flat-rate inputs ────────────────────────────────────────────────────── */
+
+.flatRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.currencyRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 0.4rem;
+
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 50%);
+}
+
+/* ── More details collapsible ────────────────────────────────────────────── */
+
+.moreDetailsCard {
+  border-radius: 0.7rem;
+
+  border: 1px solid hsl(220, 13%, 92%);
+  background-color: white;
+}
+
+.moreDetailsTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+
+  padding: 0.9rem 1rem;
+
+  border: none;
+  background: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+
+  cursor: pointer;
+}
+
+.moreDetailsBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 0 1rem 1rem;
+}
+
+.depositNote {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 0.5rem;
+  padding: 0.9rem 1rem;
+  border-radius: 0.6rem;
+
+  background-color: hsl(216, 90%, 96%);
+  font-size: 0.9rem;
+  color: hsl(216, 60%, 30%);
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+  }
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 0.5rem;
+  padding: 0.9rem 1.2rem;
+
+  border-top: 1px solid hsl(220, 13%, 92%);
+}
+
+.footerLeft,
+.footerRight {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.saveBtn {
+  background-color: var(--color-primary);
+
+  &:hover, 
+  &:focus {
+    background-color: var(--color-primary-hover);
+  }
+}
+
+.formError {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+
+  background-color: hsl(0, 80%, 96%);
+  font-size: 0.9rem;
+  color: hsl(0, 75%, 35%);
+}

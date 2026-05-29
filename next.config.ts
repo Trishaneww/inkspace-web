@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
   // as <Logo className="..." /> with className/color control.
   // Configured for both Turbopack (dev) and webpack (prod build).
   turbopack: {
+    // Pin the workspace root to this project. Without this, a stray lockfile
+    // higher up the tree makes Next infer the wrong root and watch far too
+    // many files.
+    root: __dirname,
     rules: {
       "*.svg": {
         loaders: ["@svgr/webpack"],
