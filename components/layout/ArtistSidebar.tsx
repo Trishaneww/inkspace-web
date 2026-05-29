@@ -39,6 +39,16 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Switch } from "@/components/ui/switch";
+import InkspaceLogo from "@/public/logos/inkspace-logo.svg";
+import {
+  ChevronDown,
+  HelpCircle,
+  LogOut,
+  MoreHorizontal,
+  Sparkles,
+} from "lucide-react";
+
+// Libs
 import { useAuth } from "@/lib/auth";
 import {
   artistMainNav,
@@ -55,16 +65,6 @@ import {
   checkIsParentActive,
   getUserInitial,
 } from "@/lib/sidebar/utils";
-
-// Assets
-import InkspaceLogo from "@/public/logos/inkspace-logo.svg";
-import {
-  ChevronDown,
-  HelpCircle,
-  LogOut,
-  MoreHorizontal,
-  Sparkles,
-} from "lucide-react";
 
 export const ArtistSidebar = () => {
   const pathname = usePathname() ?? "";

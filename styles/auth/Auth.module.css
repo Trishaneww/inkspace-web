@@ -188,11 +188,11 @@
   width: 100%;
   height: 38px;
 
-  background-color: var(--color-brand);
+  background-color: var(--color-primary);
 
   &:hover {
     cursor: pointer;
-    background-color: var(--color-brand-hover);
+    background-color: var(--color-primary-hover);
   }
 }
 

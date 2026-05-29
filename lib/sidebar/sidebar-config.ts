@@ -1,3 +1,4 @@
+// HTML Components
 import {
   BarChart3,
   BookOpenCheck,
@@ -71,7 +72,7 @@ export const artistMainNav: NavItem[] = [
   },
   { href: "/dashboard/artist/clients", label: "Clients", icon: Users },
   { href: "/dashboard/artist/portfolio", label: "Portfolio", icon: ImageIcon },
-  { href: "/dashboard/artist/flash", label: "Flash", icon: Zap },
+  { href: "/dashboard/artist/flashbook", label: "Flash", icon: Zap },
 ];
 
 export const artistOtherNav: NavLeaf[] = [
