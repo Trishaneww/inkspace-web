@@ -22,5 +22,5 @@ function getToastPosition() {
   ) {
     return "top-center" as const;
   }
-  return "bottom-center" as const;
+  return "bottom-right" as const;
 }

@@ -33,7 +33,7 @@ export const EMPTY_FLASH_FILTERS: FlashFilters = {
   priceSort: "none",
 };
 
-export function computeFlashStats(flashes: Flash[]): FlashStats {
+export function getFlashStats(flashes: Flash[]): FlashStats {
   return flashes.reduce<FlashStats>(
     (stats, flash) => {
       if (flash.status === "available") stats.available += 1;

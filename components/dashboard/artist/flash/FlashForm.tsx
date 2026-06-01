@@ -33,8 +33,8 @@ import { FlashMoreDetails } from "./FlashMoreDetails";
 import { CurrencySelect } from "@/components/common/CurrencySelect";
 
 // Hooks
-import { useFlashImages } from "@/hooks/use-flash-images";
-import { useFlashForm } from "@/hooks/use-flash-form";
+import { useFlashImages } from "@/hooks/useFlashImages";
+import { useFlashForm } from "@/hooks/useFlashForm";
 
 // Types
 import {

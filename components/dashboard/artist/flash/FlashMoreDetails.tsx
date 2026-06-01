@@ -25,7 +25,7 @@ import { type ColorType } from "@/types/flash";
 
 interface FlashMoreDetailsProps {
   isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
+onOpenChange: (open: boolean) => void;
   colorType: ColorType;
   setColorType: (colorType: ColorType) => void;
   placementsText: string;
@@ -33,6 +33,7 @@ interface FlashMoreDetailsProps {
   stylesText: string;
   setStylesText: (stylesText: string) => void;
 }
+
 export const FlashMoreDetails = ({
   isOpen,
   onOpenChange,

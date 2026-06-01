@@ -8,19 +8,6 @@ type TokenPair = {
 };
 
 let inFlightRefresh: Promise<string | null> | null = null;
-const cleared = new Set<() => void>();
-
-export function onAuthCleared(listener: () => void): () => void {
-  cleared.add(listener);
-  return () => {
-    cleared.delete(listener);
-  };
-}
-
-function endSession() {
-  clearTokens();
-  cleared.forEach((listener) => listener());
-}
 
 export function refreshAccessToken(): Promise<string | null> {
   if (inFlightRefresh) return inFlightRefresh;
@@ -55,4 +42,17 @@ export function refreshAccessToken(): Promise<string | null> {
   })();
 
   return inFlightRefresh;
+}
+
+const cleared = new Set<() => void>();
+export function onAuthCleared(listener: () => void): () => void {
+  cleared.add(listener);
+  return () => {
+    cleared.delete(listener);
+  };
+}
+
+function endSession() {
+  clearTokens();
+  cleared.forEach((listener) => listener());
 }

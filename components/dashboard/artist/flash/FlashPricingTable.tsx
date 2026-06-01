@@ -3,12 +3,16 @@
 // CSS
 import styles from "@/styles/dashboard/artist/FlashFormSheet.module.css";
 
-// Types
-import { TierFormRow, type FlashSizeCode } from "@/types/flash";
-import { FLASH_SIZE_OPTIONS } from "@/constants/flashes";
+// HTML Components
 import { Checkbox } from "@/components/ui/checkbox";
+
+// Components
 import { DurationSelect } from "./DurationSelect";
 import { PriceInput } from "./PricingInput";
+
+// Libs
+import { TierFormRow, type FlashSizeCode } from "@/types/flash";
+import { FLASH_SIZE_OPTIONS } from "@/constants/flashes";
 
 interface PerSizePricingTableProps {
   tierRows: Record<FlashSizeCode, TierFormRow>;

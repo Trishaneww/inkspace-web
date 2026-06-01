@@ -5,7 +5,7 @@ import { useMemo, useState, type KeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
 
 // Libs
-import { filterSearchPages, type SearchPage } from "@/lib/sidebar/search-pages";
+import { filterSearchPages, type SearchPage } from "@/lib/sidebar/searchPages";
 
 export function useGlobalSearch({
   onNavigate,

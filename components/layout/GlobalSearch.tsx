@@ -6,12 +6,12 @@ import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 // CSS
 import styles from "@/styles/GlobalSearch.module.css";
 
-// Components
-import { SearchResultsList } from "@/components/layout/search/SearchResultsList";
-
 // HTML Components
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+
+// Components
+import { SearchResultsList } from "@/components/layout/search/SearchResultsList";
 
 // Libs
 import { useGlobalSearch } from "@/components/layout/search/useGlobalSearch";

@@ -18,7 +18,7 @@ import { FlashFormSheet } from "@/components/dashboard/artist/flash/FlashFormShe
 import { flashesApi } from "@/lib/api/flashes";
 import { useAuth } from "@/lib/auth";
 import {
-  computeFlashStats,
+  getFlashStats,
   filterFlashes,
   EMPTY_FLASH_FILTERS,
   type FlashFilters,
@@ -58,15 +58,12 @@ export default function ArtistFlashbookPage() {
   }, [token]);
 
   useEffect(() => {
-    // Defer to a microtask so React 19's react-hooks/set-state-in-effect
-    // lint sees the setState calls as async-from-the-effect, not synchronous.
-    const fetchKey = token ?? "anon";
-    if (lastFetchKey.current === fetchKey) return;
-    lastFetchKey.current = fetchKey;
-    void Promise.resolve().then(() => fetchFlashes());
+    if (lastFetchKey.current === token) return;
+    lastFetchKey.current = token;
+    queueMicrotask(fetchFlashes);
   }, [fetchFlashes, token]);
 
-  const stats = useMemo(() => computeFlashStats(flashes), [flashes]);
+  const stats = useMemo(() => getFlashStats(flashes), [flashes]);
   const visibleFlashes = useMemo(
     () => filterFlashes(flashes, filters),
     [flashes, filters],

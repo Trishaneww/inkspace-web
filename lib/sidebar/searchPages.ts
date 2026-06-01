@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 // Libs
-import type { IconType } from "@/lib/sidebar/sidebar-config";
+import type { IconType } from "@/lib/sidebar/sidebarConfig";
 
 export interface SearchPage {
   label: string;

@@ -9,7 +9,7 @@ import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 // Libs
-import type { SearchPage } from "@/lib/sidebar/search-pages";
+import type { SearchPage } from "@/lib/sidebar/searchPages";
 
 interface SearchResultsListProps {
   results: SearchPage[];

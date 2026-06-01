@@ -15,6 +15,8 @@ import {
 import { DEFAULT_CURRENCY } from "@/constants/flashes";
 import { formatCurrency, parseCsv } from "@/lib/formatters";
 import { displayToast } from "@/lib/toast";
+
+// Types
 import {
   type ColorType,
   type CreateFlashPayload,

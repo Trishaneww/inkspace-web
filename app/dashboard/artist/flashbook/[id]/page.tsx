@@ -33,20 +33,22 @@ export default function FlashDetailPage() {
     if (lastFetchedId.current === flashId) return;
     lastFetchedId.current = flashId;
 
-    // Defer to a microtask so React 19's set-state-in-effect lint sees the
-    // setState calls as async-from-the-effect, not synchronous.
-    void Promise.resolve().then(async () => {
+    const id = flashId;
+
+    async function loadFlash() {
       setIsLoading(true);
       setLoadError(null);
       try {
-        const next = await flashesApi.get(flashId);
-        setFlash(next);
+        const data = await flashesApi.get(id);
+        setFlash(data);
       } catch (err) {
         setLoadError(err instanceof Error ? err.message : "Failed to load");
       } finally {
         setIsLoading(false);
       }
-    });
+    }
+
+    queueMicrotask(loadFlash);
   }, [flashId]);
 
   if (isLoading) {

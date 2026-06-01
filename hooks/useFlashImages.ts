@@ -5,14 +5,12 @@ import { useState, type ChangeEvent } from "react";
 
 // Libs
 import { uploadFlashImage } from "@/lib/api/flashes";
+import type {
+  Flash,
+  FlashImagesController,
+  ResolvedFlashImages,
+} from "@/types/flash";
 
-// Types
-import type { Flash, FlashImagesController, ResolvedFlashImages } from "@/types/flash";
-
-// useFlashImages owns the primary + reference image pickers: the picked File
-// objects, their preview URLs, and the upload-on-save flow. A reference photo
-// is single-slot, so removing it clears the preview and — for an existing
-// flash — signals the API to drop the stored image.
 export function useFlashImages(
   initialFlash: Flash | null,
 ): FlashImagesController {
@@ -37,9 +35,6 @@ export function useFlashImages(
     setReferencePreviewUrl(file ? URL.createObjectURL(file) : null);
   };
 
-  // Clears whatever reference photo is currently shown — a freshly picked
-  // file or the one loaded from an existing flash. resolveForSave then sees
-  // the empty slot and asks the API to remove it.
   const handleRemoveReference = () => {
     setReferenceFile(null);
     setReferencePreviewUrl(null);
@@ -48,7 +43,6 @@ export function useFlashImages(
   const resolveForSave = async (
     token: string,
   ): Promise<ResolvedFlashImages> => {
-    // Upload any newly picked files first so we have s3_keys to send.
     let primaryKey: string | undefined;
     if (primaryFile) {
       primaryKey = await uploadFlashImage(token, primaryFile);
@@ -58,8 +52,6 @@ export function useFlashImages(
       referenceKey = await uploadFlashImage(token, referenceFile);
     }
 
-    // Had a saved reference, no new one uploaded, preview now empty — the
-    // artist removed it.
     const clearReference =
       Boolean(initialFlash?.reference_image_url) &&
       !referenceFile &&

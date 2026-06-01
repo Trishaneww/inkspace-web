@@ -1,4 +1,3 @@
-/* ── Desktop search field ────────────────────────────────────────────────── */
 .search {
   position: relative;
 
@@ -15,7 +14,6 @@
   height: 1rem;
 
   color: hsl(220, 9%, 46%);
-
   transform: translateY(-50%);
   pointer-events: none;
 }
@@ -29,7 +27,6 @@
   background-color: hsl(220, 13%, 96%);
 }
 
-/* ── Desktop search dropdown ─────────────────────────────────────────────── */
 .panel {
   display: flex;
   flex-direction: column;
@@ -37,16 +34,16 @@
   top: calc(100% + 0.4rem);
   right: 0;
   left: 0;
-  z-index: 30;
   max-height: 24rem;
-
+  
   border-radius: 0.6rem;
-
+  
   border: 1px solid hsl(220, 13%, 90%);
   background-color: white;
   box-shadow: 0 12px 28px -14px hsl(220, 13%, 20%, 0.25);
-
+  
   overflow: hidden auto;
+  z-index: 30;
 }
 
 .mobileSheet[data-slot="sheet-content"] {
@@ -57,6 +54,12 @@
   padding: 0;
 
   background-color: white;
+}
+
+.mobileSearchIcon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
 }
 
 .mobileSearchHeader {
@@ -132,7 +135,6 @@
   white-space: nowrap;
 }
 
-/* ── Shared results list ─────────────────────────────────────────────────── */
 .searchResults {
   display: flex;
   flex-direction: column;
@@ -158,7 +160,7 @@
   gap: 0.6rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  
+
   background-color: transparent;
   cursor: pointer;
   transition: background-color var(--transition-fast) ease;
@@ -192,7 +194,7 @@
   align-items: center;
 
   gap: 0.25rem;
-
+  
   color: hsl(220, 9%, 46%);
 }
 

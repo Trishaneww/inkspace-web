@@ -6,14 +6,14 @@ import { useRef, useState } from "react";
 // CSS
 import styles from "@/styles/GlobalSearch.module.css";
 
-// Components
-import { SearchResultsList } from "@/components/layout/search/SearchResultsList";
-
 // HTML Components
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { ArrowLeft, Search } from "lucide-react";
+
+// Components
+import { SearchResultsList } from "@/components/layout/search/SearchResultsList";
 
 // Libs
 import { useGlobalSearch } from "@/components/layout/search/useGlobalSearch";
@@ -21,7 +21,6 @@ import { useGlobalSearch } from "@/components/layout/search/useGlobalSearch";
 export const MobileSearch = () => {
   const [open, setOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-
   const search = useGlobalSearch({ onNavigate: () => setOpen(false) });
 
   const handleOpenChange = (next: boolean) => {
@@ -37,7 +36,7 @@ export const MobileSearch = () => {
         aria-label="Search"
         onClick={() => setOpen(true)}
       >
-        <Search className="size-[22px]" />
+        <Search className={styles.mobileSearchIcon} />
       </Button>
 
       <Sheet open={open} onOpenChange={handleOpenChange}>

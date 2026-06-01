@@ -47,7 +47,7 @@ import {
   artistWorkNav,
   artistOtherNav,
   type NavLeaf,
-} from "@/lib/sidebar/sidebar-config";
+} from "@/lib/sidebar/sidebarConfig";
 import {
   getDisplayName,
   checkIsLeafActive,
@@ -184,7 +184,6 @@ const LeafNavItem = ({ item, pathname }: LeafNavItemProps) => {
   );
 };
 
-
 const UserMenu = () => {
   const router = useRouter();
   const { user, logout } = useAuth();
@@ -220,7 +219,11 @@ const UserMenu = () => {
           <div className={styles.popoverHeader}>
             <div className={styles.popoverName}>{name}</div>
             <div className={styles.popoverEmail}>{user.email}</div>
-            <Button  variant="ghost" type="button" className={styles.upgradeButton}>
+            <Button
+              variant="ghost"
+              type="button"
+              className={styles.upgradeButton}
+            >
               <Sparkles className={styles.upgradeIcon} />
               <span>Upgrade to Pro+</span>
             </Button>
