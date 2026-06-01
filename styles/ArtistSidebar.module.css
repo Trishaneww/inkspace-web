@@ -122,7 +122,7 @@
 
 .mobileBrandName {
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--foreground);
   letter-spacing: -0.01em;
 }
@@ -289,8 +289,6 @@
   color: var(--muted-foreground);
 }
 
-/* ── Footer copyright ── */
-
 .copyright {
   padding: 8px 4px 0;
   text-align: center;
@@ -303,5 +301,5 @@
 }
 
 .navItemLabel {
-  font-weight: 500;
+  font-weight: 400;
 }
