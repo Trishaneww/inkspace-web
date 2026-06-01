@@ -127,8 +127,10 @@ export interface TierFormRow {
 }
 
 export type FlashStatusFilter = "all" | FlashStatus;
+export type RepeatableFilter = "all" | "repeatable" | "non_repeatable";
+export type PriceSort = "none" | "high_to_low" | "low_to_high";
 
-export interface FilterOption {
-  value: FlashStatusFilter;
+export interface FilterOption<TValue extends string = string> {
+  value: TValue;
   label: string;
 }

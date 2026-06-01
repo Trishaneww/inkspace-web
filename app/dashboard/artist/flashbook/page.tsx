@@ -1,13 +1,14 @@
 "use client";
 
 // Next.js
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 // CSS
 import styles from "@/styles/dashboard/artist/Flashbook.module.css";
 
 // Components
 import { FlashbookHeader } from "@/components/dashboard/artist/flash/FlashbookHeader";
+import { FlashbookStats } from "@/components/dashboard/artist/flash/FlashbookStats";
 import { FlashbookFilters } from "@/components/dashboard/artist/flash/FlashbookFilters";
 import { FlashCard } from "@/components/dashboard/artist/flash/FlashCard";
 import { AddFlashCard } from "@/components/dashboard/artist/flash/AddFlashCard";
@@ -16,20 +17,22 @@ import { FlashFormSheet } from "@/components/dashboard/artist/flash/FlashFormShe
 // Libs
 import { flashesApi } from "@/lib/api/flashes";
 import { useAuth } from "@/lib/auth";
-
-// Types
-import type { Flash, FlashStatusFilter } from "@/types/flash";
+import {
+  computeFlashStats,
+  filterFlashes,
+  EMPTY_FLASH_FILTERS,
+  type FlashFilters,
+} from "@/lib/flashes";
+import type { Flash } from "@/types/flash";
 
 export default function ArtistFlashbookPage() {
   const { token } = useAuth();
 
   const [flashes, setFlashes] = useState<Flash[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [availableCount, setAvailableCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
 
-  const [statusFilter, setStatusFilter] = useState<FlashStatusFilter>("all");
+  const [filters, setFilters] = useState<FlashFilters>(EMPTY_FLASH_FILTERS);
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [editingFlash, setEditingFlash] = useState<Flash | null>(null);
@@ -42,12 +45,9 @@ export default function ArtistFlashbookPage() {
     setLoadError(null);
     try {
       const result = await flashesApi.listForCurrentUser(token, {
-        status: statusFilter === "all" ? undefined : statusFilter,
         limit: 100,
       });
       setFlashes(result.items);
-      setTotalCount(result.total);
-      setAvailableCount(result.available);
     } catch (err) {
       setLoadError(
         err instanceof Error ? err.message : "Failed to load flashes",
@@ -55,16 +55,27 @@ export default function ArtistFlashbookPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [token, statusFilter]);
+  }, [token]);
 
   useEffect(() => {
     // Defer to a microtask so React 19's react-hooks/set-state-in-effect
     // lint sees the setState calls as async-from-the-effect, not synchronous.
-    const fetchKey = `${token ?? "anon"}:${statusFilter}`;
+    const fetchKey = token ?? "anon";
     if (lastFetchKey.current === fetchKey) return;
     lastFetchKey.current = fetchKey;
     void Promise.resolve().then(() => fetchFlashes());
-  }, [fetchFlashes, token, statusFilter]);
+  }, [fetchFlashes, token]);
+
+  const stats = useMemo(() => computeFlashStats(flashes), [flashes]);
+  const visibleFlashes = useMemo(
+    () => filterFlashes(flashes, filters),
+    [flashes, filters],
+  );
+
+  const updateFilters = (patch: Partial<FlashFilters>) =>
+    setFilters((current) => ({ ...current, ...patch }));
+
+  const resetFilters = () => setFilters(EMPTY_FLASH_FILTERS);
 
   const openNewFlashSheet = () => {
     setEditingFlash(null);
@@ -88,15 +99,13 @@ export default function ArtistFlashbookPage() {
 
   return (
     <div className={styles.flashbookPage}>
-      <FlashbookHeader
-        totalCount={totalCount}
-        availableCount={availableCount}
-        onNewFlash={openNewFlashSheet}
-      />
-
+      <FlashbookHeader />
+      <FlashbookStats stats={stats} />
       <FlashbookFilters
-        activeStatus={statusFilter}
-        onStatusChange={setStatusFilter}
+        filters={filters}
+        onFilterChange={updateFilters}
+        onReset={resetFilters}
+        onAddFlash={openNewFlashSheet}
       />
 
       {loadError && <div className={styles.errorBanner}>{loadError}</div>}
@@ -109,7 +118,7 @@ export default function ArtistFlashbookPage() {
         </div>
       ) : (
         <div className={styles.flashGrid}>
-          {flashes.map((flash) => (
+          {visibleFlashes.map((flash) => (
             <FlashCard
               key={flash.id}
               flash={flash}

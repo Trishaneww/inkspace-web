@@ -15,15 +15,6 @@ interface FlashListQuery {
   offset?: number;
 }
 
-function buildListQuery(query: FlashListQuery = {}): string {
-  const params = new URLSearchParams();
-  if (query.status) params.set("status", query.status);
-  if (query.limit !== undefined) params.set("limit", String(query.limit));
-  if (query.offset !== undefined) params.set("offset", String(query.offset));
-  const q = params.toString();
-  return q ? `?${q}` : "";
-}
-
 export const flashesApi = {
   listForCurrentUser(token: string, query?: FlashListQuery) {
     return api.get<FlashListResponse>(
@@ -58,6 +49,10 @@ export const flashesApi = {
     return api.post<Flash>(`/v1/flashes/${flashId}/archive`, {}, token);
   },
 
+  unarchive(token: string, flashId: string) {
+    return api.post<Flash>(`/v1/flashes/${flashId}/unarchive`, {}, token);
+  },
+
   delete(token: string, flashId: string) {
     return api.delete<void>(`/v1/flashes/${flashId}`, token);
   },
@@ -70,6 +65,15 @@ export const flashesApi = {
     );
   },
 };
+
+function buildListQuery(query: FlashListQuery = {}): string {
+  const params = new URLSearchParams();
+  if (query.status) params.set("status", query.status);
+  if (query.limit !== undefined) params.set("limit", String(query.limit));
+  if (query.offset !== undefined) params.set("offset", String(query.offset));
+  const q = params.toString();
+  return q ? `?${q}` : "";
+}
 
 export async function uploadFlashImage(
   token: string,

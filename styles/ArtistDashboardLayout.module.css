@@ -1,0 +1,12 @@
+.inset {
+  height: 100svh;
+
+  overflow: hidden;
+}
+
+.scrollArea {
+  flex: 1;
+  min-height: 0;
+
+  overflow-y: auto;
+}

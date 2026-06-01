@@ -14,6 +14,7 @@ import {
 } from "@/lib/flashes";
 import { DEFAULT_CURRENCY } from "@/constants/flashes";
 import { formatCurrency, parseCsv } from "@/lib/formatters";
+import { displayToast } from "@/lib/toast";
 import {
   type ColorType,
   type CreateFlashPayload,
@@ -38,9 +39,8 @@ export function useFlashForm({
 }: UseFlashFormProps) {
   const { token } = useAuth();
   const isEditMode = initialFlash !== null;
+  const isArchived = initialFlash?.status === "archived";
 
-  // State initialized from props once — no hydration effect needed because
-  // the parent remounts the form via `key` whenever initialFlash changes.
   const [title, setTitle] = useState(initialFlash?.title ?? "");
   const [description, setDescription] = useState(
     initialFlash?.description ?? "",
@@ -79,7 +79,7 @@ export function useFlashForm({
   );
 
   const [isSaving, setIsSaving] = useState(false);
-  const [isArchiving, setIsArchiving] = useState(false);
+  const [isTogglingArchive, setIsTogglingArchive] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
   const updateTierRow = (code: FlashSizeCode, patch: Partial<TierFormRow>) => {
@@ -185,6 +185,20 @@ export function useFlashForm({
         await flashesApi.create(token, payload);
       }
 
+      if (isEditMode) {
+        displayToast(
+          "Flash updated",
+          "success",
+          "Your changes have been saved.",
+        );
+      } else {
+        displayToast(
+          "Flash created",
+          "success",
+          "Your new flash is now in your flashbook.",
+        );
+      }
+
       onSaved();
     } catch (err) {
       setFormError(
@@ -203,16 +217,47 @@ export function useFlashForm({
     if (!initialFlash) return;
 
     setFormError(null);
-    setIsArchiving(true);
+    setIsTogglingArchive(true);
     try {
       await flashesApi.archive(token, initialFlash.id);
+      displayToast(
+        "Flash archived",
+        "success",
+        "It's been moved to your archived flashes and hidden from clients.",
+      );
       onSaved();
     } catch (err) {
       setFormError(
         err instanceof Error ? err.message : "Failed to archive flash.",
       );
     } finally {
-      setIsArchiving(false);
+      setIsTogglingArchive(false);
+    }
+  };
+
+  const handleUnarchive = async () => {
+    if (!token) {
+      setFormError("You must be signed in.");
+      return;
+    }
+    if (!initialFlash) return;
+
+    setFormError(null);
+    setIsTogglingArchive(true);
+    try {
+      await flashesApi.unarchive(token, initialFlash.id);
+      displayToast(
+        "Flash unarchived",
+        "success",
+        "It's back in your flashbook and visible to clients again.",
+      );
+      onSaved();
+    } catch (err) {
+      setFormError(
+        err instanceof Error ? err.message : "Failed to unarchive flash.",
+      );
+    } finally {
+      setIsTogglingArchive(false);
     }
   };
 
@@ -241,9 +286,11 @@ export function useFlashForm({
     placementsText,
     setPlacementsText,
     isSaving,
-    isArchiving,
+    isTogglingArchive,
+    isArchived,
     formError,
     handleSave,
     handleArchive,
+    handleUnarchive,
   };
 }

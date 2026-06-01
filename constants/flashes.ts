@@ -1,7 +1,14 @@
 // Libs
-import { type FilterOption, type FlashSizeOption } from "@/types/flash";
+import {
+  type FilterOption,
+  type FlashSizeOption,
+  type FlashStatusFilter,
+  type PriceSort,
+  type RepeatableFilter,
+} from "@/types/flash";
 
 export const DEFAULT_CURRENCY = "CAD";
+export const ARTIST_DASHBOARD_ROOT = "/dashboard/artist";
 
 export const FLASH_SIZE_OPTIONS: FlashSizeOption[] = [
   { code: "x_small", label: "X-Small", description: "Less than 1 inch" },
@@ -27,9 +34,21 @@ export const DURATION_OPTIONS = [
   { minutes: 480, label: "8 H" },
 ];
 
-export const FILTER_OPTIONS: FilterOption[] = [
-  { value: "all", label: "All" },
+export const STATUS_FILTER_OPTIONS: FilterOption<FlashStatusFilter>[] = [
+  { value: "all", label: "All statuses" },
   { value: "available", label: "Available" },
   { value: "claimed", label: "Claimed" },
   { value: "archived", label: "Archived" },
+];
+
+export const REPEATABLE_FILTER_OPTIONS: FilterOption<RepeatableFilter>[] = [
+  { value: "all", label: "Any type" },
+  { value: "repeatable", label: "Repeatable" },
+  { value: "non_repeatable", label: "Non-repeatable" },
+];
+
+export const PRICE_SORT_OPTIONS: FilterOption<PriceSort>[] = [
+  { value: "none", label: "Sort by price" },
+  { value: "high_to_low", label: "Price: high to low" },
+  { value: "low_to_high", label: "Price: low to high" },
 ];

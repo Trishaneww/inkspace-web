@@ -1,0 +1,33 @@
+.topbar {
+  display: none;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: 0.2rem;
+}
+
+.actionIcon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+
+@media (min-width: 768px) {
+  .topbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+
+    gap: 1rem;
+    padding: 0.75rem 1.5rem;
+
+    z-index: 20;
+    background-color: white;
+  }
+}

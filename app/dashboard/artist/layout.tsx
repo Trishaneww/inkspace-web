@@ -1,5 +1,13 @@
-import { ArtistSidebar } from "@/components/layout/ArtistSidebar";
+// CSS
+import styles from "@/styles/ArtistDashboardLayout.module.css";
+
+// HTML Components
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+
+// Components
+import { ArtistMobileNavbar } from "@/components/layout/ArtistMobileNavbar";
+import { ArtistTopbar } from "@/components/layout/ArtistTopbar";
+import { ArtistSidebar } from "@/components/layout/ArtistSidebar";
 
 export default function ArtistDashboardLayout({
   children,
@@ -9,7 +17,11 @@ export default function ArtistDashboardLayout({
   return (
     <SidebarProvider>
       <ArtistSidebar />
-      <SidebarInset>{children}</SidebarInset>
+      <SidebarInset className={styles.inset}>
+        <ArtistMobileNavbar />
+        <ArtistTopbar />
+        <div className={styles.scrollArea}>{children}</div>
+      </SidebarInset>
     </SidebarProvider>
   );
 }

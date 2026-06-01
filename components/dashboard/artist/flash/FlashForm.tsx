@@ -15,7 +15,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Archive, ImageUp, Info, Loader2, Plus, X } from "lucide-react";
+import {
+  Archive,
+  ArchiveRestore,
+  ImageUp,
+  Info,
+  Loader2,
+  Plus,
+  X,
+} from "lucide-react";
 
 // Components
 import { FlashPricingTable } from "./FlashPricingTable";
@@ -74,10 +82,12 @@ export const FlashForm = ({
     placementsText,
     setPlacementsText,
     isSaving,
-    isArchiving,
+    isTogglingArchive,
+    isArchived,
     formError,
     handleSave,
     handleArchive,
+    handleUnarchive,
   } = useFlashForm({ initialFlash, images, onSaved });
 
   const [isMoreDetailsOpen, setIsMoreDetailsOpen] = useState(false);
@@ -131,10 +141,12 @@ export const FlashForm = ({
       <FlashFormFooter
         onClose={onClose}
         isSaving={isSaving}
-        isArchiving={isArchiving}
+        isTogglingArchive={isTogglingArchive}
         isEditMode={isEditMode}
+        isArchived={isArchived}
         handleSave={handleSave}
         handleArchive={handleArchive}
+        handleUnarchive={handleUnarchive}
       />
     </>
   );
@@ -442,21 +454,25 @@ const FlashDisclaimer = () => {
 interface FlashFormFooterProps {
   onClose: () => void;
   isSaving: boolean;
-  isArchiving: boolean;
+  isTogglingArchive: boolean;
   isEditMode: boolean;
+  isArchived: boolean;
   handleSave: (publish: boolean) => void;
   handleArchive: () => void;
+  handleUnarchive: () => void;
 }
 
 const FlashFormFooter = ({
   onClose,
   isSaving,
-  isArchiving,
+  isTogglingArchive,
   isEditMode,
+  isArchived,
   handleSave,
   handleArchive,
+  handleUnarchive,
 }: FlashFormFooterProps) => {
-  const disabled = isSaving || isArchiving;
+  const disabled = isSaving || isTogglingArchive;
 
   return (
     <div className={styles.footer}>
@@ -473,15 +489,23 @@ const FlashFormFooter = ({
           <Button
             type="button"
             variant="outline"
-            onClick={handleArchive}
+            onClick={isArchived ? handleUnarchive : handleArchive}
             disabled={disabled}
           >
-            {isArchiving ? (
+            {isTogglingArchive ? (
               <Loader2 size={16} className="animate-spin" />
+            ) : isArchived ? (
+              <ArchiveRestore size={16} />
             ) : (
               <Archive size={16} />
             )}
-            {isArchiving ? "Archiving" : "Archive"}
+            {isTogglingArchive
+              ? isArchived
+                ? "Unarchiving"
+                : "Archiving"
+              : isArchived
+                ? "Unarchive"
+                : "Archive"}
           </Button>
         )}
       </div>

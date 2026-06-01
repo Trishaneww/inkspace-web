@@ -8,7 +8,7 @@
   row-gap: 1.5rem;
   padding: 1.5rem;
 
-  background-color: hsl(0, 0%, 98%);
+  background-color: white;
 }
 
 /* ── Header ──────────────────────────────────────────────────────────────── */
@@ -36,33 +36,81 @@
   line-height: 1.2;
 }
 
-.flashCounts {
+.headerSubtitle {
   font-size: 0.9rem;
   color: hsl(220, 9%, 46%);
 }
 
-.headerActions {
+.btnIcon {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ── Stat cards ──────────────────────────────────────────────────────────── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  width: 100%;
+
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.8rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+
+  border: 1px solid hsl(220, 13%, 90%);
+  background-color: white;
+}
+
+.statHeader {
   display: flex;
   flex-direction: row;
   align-items: center;
 
-  column-gap: 0.5rem;
+  gap: 0.5rem;
 }
 
-.previewFlashBtn,
-.addFlashBtn {
+.statIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+
+  border-radius: 0.5rem;
+
+  background-color: hsl(220, 13%, 96%);
+  color: hsl(220, 9%, 35%);
+}
+
+.statLabel {
   font-size: 0.9rem;
-
-  svg {
-    flex-shrink: 0;
-    width: 1rem;
-    height: 1rem;
-  }
+  color: hsl(220, 9%, 46%);
 }
 
-.addFlashBtn {
-  background-color: var(--color-primary);
-  color: white;
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+  line-height: 1.2;
 }
 
 /* ── Filter row ──────────────────────────────────────────────────────────── */
@@ -76,55 +124,57 @@
   width: 100%;
 }
 
-.filterOptions {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
+.searchField {
+  position: relative;
+
+  flex: 1 1 16rem;
+  max-width: 300px;
 }
 
-.option {
-  height: 2rem;
+.searchIcon {
+  position: absolute;
+  top: 50%;
+  left: 0.6rem;
 
-  padding: 0 0.9rem;
-  border-radius: 50px;
+  color: hsl(220, 9%, 46%);
 
-  border: 1px solid hsl(220, 13%, 88%);
-  background-color: white;
-  font-size: 0.9rem;
-  color: hsl(220, 9%, 25%);
-
-  cursor: pointer;
-  transition:
-    background-color var(--transition-base) ease,
-    border-color var(--transition-base) ease;
-
-  &:hover {
-    background-color: hsl(220, 13%, 96%);
-  }
-
-  &.active {
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
-    color: white;
-  }
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
-.sortFlashBtn {
-  display: inline-flex;
-  align-items: center;
+.searchInput[data-slot="input"] {
   height: 2rem;
 
-  gap: 0.3rem;
-  padding: 0 0.9rem;
-  border-radius: 50px;
+  padding-left: 2rem;
 
-  border: 1px solid hsl(220, 13%, 88%);
   background-color: white;
-  font-size: 0.9rem;
-  color: hsl(220, 9%, 25%);
+}
 
-  cursor: pointer;
+.filterSelect[data-slot="select-trigger"] {
+  height: 2rem;
+
+  background-color: white;
+}
+
+.selectPlaceholder {
+  color: hsl(220, 9%, 46%);
+}
+
+.resetBtn {
+  height: 2rem;
+
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.addFlashBtn {
+  height: 2rem;
+
+  margin-left: auto;
+
+  background-color: var(--color-primary);
+  font-size: 0.9rem;
+  color: white;
 }
 
 /* ── Flash grid ──────────────────────────────────────────────────────────── */

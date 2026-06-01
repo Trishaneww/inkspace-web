@@ -31,6 +31,7 @@ export type OAuthCallbackPayload = {
 export type AuthenticatedResponse = {
   status: "authenticated";
   token: string;
+  refreshToken: string;
   user: User;
 };
 
@@ -83,19 +84,12 @@ export const authApi = {
     );
   },
 
-  /**
-   * Resends the SMS code for an in-progress phone verification.
-   */
   resendPhoneCode(verificationId: string) {
     return api.post<{ ok: true }>("/v1/auth/verify-phone/resend", {
       verificationId,
     });
   },
 
-  /**
-   * Exchanges an OAuth provider's id_token / auth code for a session.
-   * The backend verifies with the provider and provisions the user.
-   */
   oauthCallback(payload: OAuthCallbackPayload) {
     return api.post<OAuthCallbackResponse>(
       `/v1/auth/oauth/${payload.provider}`,
@@ -110,10 +104,6 @@ export const authApi = {
     );
   },
 
-  /**
-   * Validates the current session token and returns the user.
-   * Used on app boot to restore auth state.
-   */
   getSession(token: string) {
     return api.get<User>("/v1/auth/current-user", token);
   },

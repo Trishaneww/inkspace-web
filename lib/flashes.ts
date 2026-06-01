@@ -5,9 +5,85 @@ import {
   type FlashPricingTier,
   type FlashSizeCode,
   type FlashStatus,
+  type FlashStatusFilter,
+  type PriceSort,
+  type RepeatableFilter,
 } from "@/types/flash";
 import { FLASH_SIZE_OPTIONS } from "@/constants/flashes";
 import { formatCurrency } from "@/lib/formatters";
+
+export interface FlashStats {
+  available: number;
+  claimed: number;
+  archived: number;
+  totalViews: number;
+}
+
+export interface FlashFilters {
+  search: string;
+  status: FlashStatusFilter;
+  repeatable: RepeatableFilter;
+  priceSort: PriceSort;
+}
+
+export const EMPTY_FLASH_FILTERS: FlashFilters = {
+  search: "",
+  status: "all",
+  repeatable: "all",
+  priceSort: "none",
+};
+
+export function computeFlashStats(flashes: Flash[]): FlashStats {
+  return flashes.reduce<FlashStats>(
+    (stats, flash) => {
+      if (flash.status === "available") stats.available += 1;
+      if (flash.status === "claimed") stats.claimed += 1;
+      if (flash.status === "archived") stats.archived += 1;
+      stats.totalViews += flash.view_count;
+      return stats;
+    },
+    { available: 0, claimed: 0, archived: 0, totalViews: 0 },
+  );
+}
+
+function sortByPrice(flashes: Flash[], priceSort: PriceSort): Flash[] {
+  if (priceSort === "none") return flashes;
+
+  return [...flashes].sort((a, b) => {
+    const priceA = getStartingPrice(a);
+    const priceB = getStartingPrice(b);
+    if (priceA === null) return priceB === null ? 0 : 1;
+    if (priceB === null) return -1;
+    return priceSort === "high_to_low" ? priceB - priceA : priceA - priceB;
+  });
+}
+
+export function filterFlashes(flashes: Flash[], filters: FlashFilters): Flash[] {
+  const search = filters.search.trim().toLowerCase();
+
+  const matched = flashes.filter((flash) => {
+    if (search && !flash.title.toLowerCase().includes(search)) return false;
+    if (filters.status !== "all" && flash.status !== filters.status) {
+      return false;
+    }
+    if (filters.repeatable === "repeatable" && !flash.repeatable) return false;
+    if (filters.repeatable === "non_repeatable" && flash.repeatable) {
+      return false;
+    }
+    return true;
+  });
+
+  return sortByPrice(matched, filters.priceSort);
+}
+
+export function hasActiveFlashFilters(filters: FlashFilters): boolean {
+  return (
+    filters.search.trim() !== "" ||
+    filters.status !== "all" ||
+    filters.repeatable !== "all" ||
+    filters.priceSort !== "none"
+  );
+}
 
 export function getStartingPrice(flash: Flash): number | null {
   if (flash.pricing_mode === "flat") {
