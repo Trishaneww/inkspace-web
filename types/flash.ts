@@ -66,7 +66,6 @@ export interface CreateFlashPayload {
   flat_price_cents?: number | null;
   flat_duration_minutes?: number | null;
   deposit_cents?: number | null;
-  currency: string;
   repeatable: boolean;
   pricing_tiers?: FlashPricingTier[];
   publish: boolean;
@@ -87,7 +86,6 @@ export interface UpdateFlashPayload {
   flat_price_cents?: number | null;
   flat_duration_minutes?: number | null;
   deposit_cents?: number | null;
-  currency?: string;
   repeatable?: boolean;
   pricing_tiers?: FlashPricingTier[];
 }
