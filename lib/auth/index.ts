@@ -11,4 +11,4 @@ export {
   storeOAuthPrefill,
   consumeOAuthPrefill,
   type OAuthPrefill,
-} from "@/lib/auth/oauth-prefill";
+} from "@/lib/auth/oauthPrefill";

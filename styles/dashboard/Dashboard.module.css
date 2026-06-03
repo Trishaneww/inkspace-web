@@ -5,7 +5,7 @@
   width: 100%;
   min-height: 100%;
   padding: 1.5rem;
-  background-color: hsl(0, 0%, 98%);
+  background-color: white;
 }
 
 .dashboardHeaderContainer {
@@ -38,9 +38,11 @@
 }
 
 .primaryBtn {
-  background-color: hsl(240, 100%, 70%);
+  background-color: var(--color-primary);
   color: white;
-  box-shadow:
-    0 8px 28px rgba(100, 100, 255, 0.55),
-    0 2px 8px rgba(100, 100, 255, 0.3);
+
+  &:hover, &:focus {
+    cursor: pointer;
+    background-color: var(--color-primary-hover);
+  }
 }

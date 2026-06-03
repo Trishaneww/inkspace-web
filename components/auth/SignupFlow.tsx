@@ -8,7 +8,7 @@ import { PhoneAuth } from "@/components/auth/PhoneAuth";
 import { SignupForm } from "@/components/auth/SignupForm";
 
 // Hooks
-import { getApiErrorMessage, useAuthForm } from "@/hooks/use-auth-form";
+import { getApiErrorMessage, useAuthForm } from "@/hooks/useAuthForm";
 
 // Libs
 import { consumeOAuthPrefill, useAuth, type OAuthPrefill } from "@/lib/auth";

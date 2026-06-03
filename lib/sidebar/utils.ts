@@ -1,8 +1,6 @@
-import {
-  ARTIST_DASHBOARD_ROOT,
-  type NavItem,
-  type NavParent,
-} from "@/lib/sidebar/sidebar-config";
+// Libs
+import { type NavItem, type NavParent } from "@/lib/sidebar/sidebarConfig";
+import { ARTIST_DASHBOARD_ROOT } from "@/constants/flashes";
 import type { User } from "@/types/index";
 
 export function checkIsParent(item: NavItem): item is NavParent {

@@ -8,6 +8,9 @@ export const OAUTH_STATE_KEY = "inkspace_oauth_state";
 
 export const RESEND_COOLDOWN_SECONDS = 30;
 
+export const ACCESS_TOKEN_KEY = "inkspace_token";
+export const REFRESH_TOKEN_KEY = "inkspace_refresh_token";
+
 export const USER_ROLE_OPTIONS = [
   { value: UserRole.Artist, label: "Tattoo artist" },
   { value: UserRole.StudioAdmin, label: "Studio admin" },

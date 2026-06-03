@@ -5,6 +5,9 @@ import { Inter_Tight } from "next/font/google";
 // CSS
 import "@/styles/globals.css";
 
+// HTML Components
+import { Toaster } from "@/components/ui/sonner";
+
 // Components
 import { TooltipProvider } from "@/components/ui/tooltip";
 
@@ -40,6 +43,7 @@ export default function RootLayout({
         <AuthProvider>
           <TooltipProvider>{children}</TooltipProvider>
         </AuthProvider>
+        <Toaster />
       </body>
     </html>
   );

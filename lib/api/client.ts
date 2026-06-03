@@ -1,7 +1,8 @@
 // Libs
 import { captureApiFailure } from "@/lib/sentryLogs";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
+import { getAccessToken } from "@/lib/auth/session";
+import { refreshAccessToken } from "@/lib/api/refresh";
+import { API_BASE_URL } from "@/constants/api";
 
 type RequestOptions = {
   method?: string;
@@ -28,14 +29,16 @@ export class ApiError extends Error {
 async function request<T>(
   path: string,
   options: RequestOptions = {},
+  allowRetry = true,
 ): Promise<T> {
   const { method = "GET", body, token } = options;
 
   const headers: HeadersInit = {
     "Content-Type": "application/json",
   };
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
+  const authToken = token ? (getAccessToken() ?? token) : undefined;
+  if (authToken) {
+    headers["Authorization"] = `Bearer ${authToken}`;
   }
 
   const url = `${API_BASE_URL}${path}`;
@@ -50,6 +53,13 @@ async function request<T>(
   } catch (err) {
     captureApiFailure({ url, method, status: 0, cause: err });
     throw new ApiError("Network error. Please try again.", 0);
+  }
+
+  if (res.status === 401 && token && allowRetry) {
+    const refreshed = await refreshAccessToken();
+    if (refreshed) {
+      return request<T>(path, options, false);
+    }
   }
 
   if (!res.ok) {

@@ -5,7 +5,7 @@ import { LoginForm } from "@/components/auth/LoginForm";
 import { PhoneAuth } from "@/components/auth/PhoneAuth";
 
 // Hooks
-import { getApiErrorMessage, useAuthForm } from "@/hooks/use-auth-form";
+import { getApiErrorMessage, useAuthForm } from "@/hooks/useAuthForm";
 
 // Libs
 import { useAuth } from "@/lib/auth";

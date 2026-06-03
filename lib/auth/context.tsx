@@ -21,7 +21,8 @@ import type {
   PhoneVerificationRequiredResponse,
   SignupPayload,
 } from "@/lib/api/auth";
-import { clearToken, getToken, setToken } from "@/lib/auth/session";
+import { clearTokens, getAccessToken, setTokens } from "@/lib/auth/session";
+import { onAuthCleared } from "@/lib/api/refresh";
 import type { User } from "@/types/index";
 
 type AuthState = {
@@ -60,7 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   });
 
   useEffect(() => {
-    const token = getToken();
+    const token = getAccessToken();
     const restoreSession: Promise<User | null> = token
       ? authApi.getSession(token)
       : Promise.resolve(null);
@@ -74,13 +75,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       })
       .catch(() => {
-        clearToken();
+        clearTokens();
         setState({ user: null, token: null, isLoading: false });
       });
   }, []);
 
+  useEffect(() => {
+    return onAuthCleared(() => {
+      setState({ user: null, token: null, isLoading: false });
+    });
+  }, []);
+
   const applyAuth = useCallback((res: AuthenticatedResponse) => {
-    setToken(res.token);
+    setTokens(res.token, res.refreshToken);
     setState({ user: res.user, token: res.token, isLoading: false });
     return res;
   }, []);
@@ -131,7 +138,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback<AuthContextValue["logout"]>(async () => {
     const token = state.token;
-    clearToken();
+    clearTokens();
     setState({ user: null, token: null, isLoading: false });
     if (token) authApi.logout(token).catch(() => undefined);
   }, [state.token]);
