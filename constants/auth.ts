@@ -12,7 +12,7 @@ export const ACCESS_TOKEN_KEY = "inkspace_token";
 export const REFRESH_TOKEN_KEY = "inkspace_refresh_token";
 
 export const USER_ROLE_OPTIONS = [
-  { value: UserRole.Artist, label: "Tattoo artist" },
-  { value: UserRole.StudioAdmin, label: "Studio admin" },
+  { value: UserRole.Artist, label: "Tattoo Artist" },
+  { value: UserRole.StudioAdmin, label: "Studio Admin" },
   { value: UserRole.User, label: "User" },
 ];

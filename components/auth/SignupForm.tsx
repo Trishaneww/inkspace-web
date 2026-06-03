@@ -2,7 +2,7 @@
 
 // Next.js
 import Link from "next/link";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 
 // CSS
 import styles from "@/styles/auth/Auth.module.css";
@@ -26,6 +26,7 @@ import { ApiErrorDisplay } from "./ApiErrorDisplay";
 
 // Libs
 import { zodResolver } from "@hookform/resolvers/zod";
+import { formatPhone, formatSelectValue } from "@/lib/formatters";
 import { signupSchema, type SignupFormValues } from "@/lib/validation/auth";
 import { USER_ROLE_OPTIONS } from "@/constants/auth";
 import { UserRole } from "@/types/index";
@@ -56,6 +57,8 @@ export const SignupForm = ({
       phone: "",
       password: "",
       role: undefined as unknown as UserRole,
+      username: "",
+      instagramUrl: "",
     },
   });
 
@@ -65,6 +68,8 @@ export const SignupForm = ({
     handleSubmit,
     formState: { errors, isSubmitting },
   } = detailsForm;
+
+  const isArtist = useWatch({ control, name: "role" }) === UserRole.Artist;
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -124,10 +129,14 @@ export const SignupForm = ({
           id="signup-phone"
           type="tel"
           autoComplete="tel"
-          placeholder="+1 416 123 4567"
+          placeholder="+1 (416) 123-4567"
           disabled={isSubmitting}
           aria-invalid={!!errors.phone}
           {...register("phone")}
+          onChange={(e) => {
+            e.target.value = formatPhone(e.target.value);
+            void register("phone").onChange(e);
+          }}
         />
         {errors.phone && (
           <span className={styles.error}>{errors.phone.message}</span>
@@ -166,7 +175,9 @@ export const SignupForm = ({
                 aria-invalid={!!errors.role}
                 className={styles.selectTrigger}
               >
-                <SelectValue placeholder="Select a role" />
+                <SelectValue placeholder="Select a role">
+                  {(value) => formatSelectValue(value, USER_ROLE_OPTIONS)}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {USER_ROLE_OPTIONS.map((opt) => (
@@ -182,6 +193,43 @@ export const SignupForm = ({
           <span className={styles.error}>{errors.role.message}</span>
         )}
       </div>
+
+      {isArtist && (
+        <>
+          <div className={styles.field}>
+            <Label htmlFor="signup-username">Username</Label>
+            <Input
+              id="signup-username"
+              autoComplete="username"
+              placeholder="your-handle"
+              disabled={isSubmitting}
+              aria-invalid={!!errors.username}
+              {...register("username")}
+            />
+            {errors.username && (
+              <span className={styles.error}>{errors.username.message}</span>
+            )}
+          </div>
+
+          <div className={styles.field}>
+            <Label htmlFor="signup-instagram">Instagram (optional)</Label>
+            <Input
+              id="signup-instagram"
+              type="url"
+              autoComplete="off"
+              placeholder="https://instagram.com/yourhandle"
+              disabled={isSubmitting}
+              aria-invalid={!!errors.instagramUrl}
+              {...register("instagramUrl")}
+            />
+            {errors.instagramUrl && (
+              <span className={styles.error}>
+                {errors.instagramUrl.message}
+              </span>
+            )}
+          </div>
+        </>
+      )}
 
       <Button
         type="submit"
