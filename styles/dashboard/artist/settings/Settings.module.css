@@ -1,0 +1,837 @@
+/* ── Page ──────────────────────────────────────────────────────────── */
+.page {
+  width: 100%;
+  max-width: 78rem;
+
+  padding: 1rem;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: start;
+
+  gap: 1.5rem;
+}
+
+/* ── Settings Navigation ─────────────────────────────────────────────────────── */
+.navColumn {
+  display: none;
+}
+
+.navTitle {
+  margin-bottom: 0.75rem;
+  padding: 0 0.5rem;
+
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.navList {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.1rem;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+
+  gap: 0.6rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+
+  border: none;
+  background: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: hsl(220, 9%, 45%);
+  text-align: left;
+
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+
+  &.active {
+    background-color: hsl(220, 13%, 95%);
+    color: var(--color-primary);
+  }
+
+  &:hover,
+  &:focus {
+    background-color: hsl(220, 13%, 96%);
+    color: var(--color-primary);
+  }
+}
+
+.mobileNav {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  display: flex;
+
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
+  background-color: white;
+
+  overflow-x: auto;
+}
+
+.mobileNavItem {
+  flex-shrink: 0;
+
+  padding: 0.5rem 0.85rem;
+  border-radius: 50px;
+
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  &.active {
+    background-color: hsl(220, 13%, 95%);
+    color: var(--color-primary);
+  }
+}
+
+/* ── Content Panel ───────────────────────────────────────────────────────── */
+.content {
+  min-width: 0;
+  padding: 0 !important;
+}
+
+.contentHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 1rem;
+  padding: 0 0 1.3rem;
+}
+
+.contentTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.tabPanel {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1.2rem;
+}
+
+/* ── Card ────────────────────────────────────────────────────────────────── */
+.card {
+  padding: 1.5rem;
+  border-radius: 0.7rem;
+
+  border: 1px solid hsl(220, 13%, 91%);
+  background-color: white;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 1rem;
+}
+
+.cardHeaderText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  gap: 0.2rem;
+}
+
+.cardTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.cardDescription {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: hsl(220, 9%, 50%);
+}
+
+.cardBody {
+  margin-top: 1rem;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+/* ── Card fields ─────────────────────────────────────────────────────────── */
+.cardGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+
+  gap: 1.2rem 1.5rem;
+}
+
+.gridField {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  gap: 0.4rem;
+}
+
+.gridFieldFull {
+  grid-column: 1 / -1;
+}
+
+.fieldLabel {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 52%);
+}
+
+.fieldValue {
+  font-size: 0.9rem;
+  color: hsl(220, 13%, 18%);
+  word-break: break-word;
+
+  &.muted {
+    color: hsl(220, 9%, 60%);
+  }
+}
+
+.cardRow {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+
+  gap: 0.6rem;
+  padding: 1rem 0;
+
+  border-top: 1px solid hsl(220, 13%, 95%);
+}
+
+.cardRowStacked {
+  flex-direction: column;
+  align-items: stretch;
+
+  gap: 0.6rem;
+}
+
+.cardRowControl {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* ── Rows ────────────────────────────────────────────────────────────────── */
+.rowText {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.rowLabel {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+}
+
+.rowDescription {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: hsl(220, 9%, 52%);
+}
+
+.controlMedium {
+  width: 100%;
+  max-width: 100%;
+}
+
+.controlFull {
+  width: 100%;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.primaryButton {
+  background-color: var(--color-primary);
+
+  &:hover,
+  &:focus {
+    background-color: var(--color-primary-hover);
+  }
+}
+
+.deleteAccountContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1rem 1.2rem;
+  border-radius: 0.7rem;
+
+  border: 1px solid hsl(0, 70%, 90%);
+  background-color: hsl(0, 80%, 98%);
+}
+
+.deleteAccountText {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.2rem;
+}
+
+.deleteAccountTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: hsl(0, 60%, 40%);
+}
+
+.deleteAccountDescription {
+  font-size: 0.8rem;
+  color: hsl(0, 30%, 45%);
+}
+
+.footerActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+/* ── Avatar ──────────────────────────────────────────────────────────────── */
+.avatarRow {
+  display: flex;
+  align-items: center;
+
+  gap: 1rem;
+}
+
+.avatarPreview {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  flex-shrink: 0;
+
+  border-radius: 50px;
+
+  background-color: hsl(220, 13%, 94%);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: hsl(220, 9%, 45%);
+
+  overflow: hidden;
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.hiddenFileInput {
+  display: none;
+}
+
+/* ── Inline field ────────────────────────────────────── */
+.field {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.4rem;
+}
+
+.fieldGrow {
+  flex: 1;
+}
+
+.fieldGrowDouble {
+  flex: 2;
+}
+
+.fieldDuration {
+  width: 9rem;
+}
+
+.fieldError {
+  font-size: 0.8rem;
+  color: hsl(0, 70%, 45%);
+}
+
+.inputPrefix {
+  display: flex;
+  align-items: center;
+
+  border-radius: 0.5rem;
+
+  border: 1px solid hsl(220, 13%, 88%);
+
+  overflow: hidden;
+
+  input {
+    border: none;
+  }
+}
+
+.inputPrefixLabel {
+  padding: 0 0.6rem;
+
+  background-color: hsl(220, 13%, 97%);
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 45%);
+
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+
+/* ── Connection Card ───────────────────────────────────── */
+.connectionCard {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+
+  gap: 1rem;
+  padding: 1.1rem 1.2rem;
+  border-radius: 0.7rem;
+
+  border: 1px solid hsl(220, 13%, 90%);
+  background-color: hsl(220, 13%, 99%);
+}
+
+.connectionLeft {
+  display: flex;
+  align-items: center;
+
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.connectionLogo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
+
+  padding: 0 0.55rem;
+  border-radius: 0.6rem;
+
+  border: 1px solid hsl(220, 13%, 92%);
+  background-color: white;
+
+  overflow: hidden;
+}
+
+.connectionLogoImg {
+  width: 1.9rem;
+  height: 1.9rem;
+}
+
+.connectionLogoStripe {
+  width: auto;
+  height: 1.35rem;
+}
+
+.connectionText {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.connectionTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.connectionSubtitle {
+  font-size: 0.8rem;
+  color: hsl(220, 9%, 52%);
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 50px;
+
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.statusConnected {
+  background-color: hsl(145, 60%, 95%);
+  color: hsl(145, 50%, 30%);
+}
+
+.statusDisconnected {
+  background-color: hsl(220, 13%, 95%);
+  color: hsl(220, 9%, 45%);
+}
+
+/* ── Availability Scheduler ────────────────────────────────────────────── */
+.dayRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: start;
+
+  gap: 1rem;
+  padding: 0.9rem 0;
+
+  border-top: 1px solid hsl(220, 13%, 95%);
+}
+
+.dayToggle {
+  display: flex;
+  align-items: center;
+
+  gap: 0.6rem;
+}
+
+.dayLabel {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+}
+
+.timeRanges {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.5rem;
+}
+
+.timeRangeRow {
+  display: flex;
+  align-items: center;
+
+  gap: 0.5rem;
+}
+
+.timeSeparator {
+  font-size: 0.85rem;
+  color: hsl(220, 9%, 50%);
+}
+
+.dayClosed {
+  font-size: 0.85rem;
+  color: hsl(220, 9%, 60%);
+}
+
+.linkButton {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.3rem;
+
+  border: none;
+  background: none;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-primary);
+
+  cursor: pointer;
+}
+
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+
+  border-radius: 0.45rem;
+
+  border: 1px solid hsl(220, 13%, 90%);
+  background-color: white;
+  color: hsl(220, 9%, 45%);
+
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: hsl(220, 13%, 96%);
+  }
+}
+
+.manager {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1rem;
+}
+
+/* ── Session Type Presets ────────────────────────────────────────────────── */
+.list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.6rem;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 0.6rem;
+
+  border: 1px solid hsl(220, 13%, 92%);
+  background-color: hsl(220, 13%, 99%);
+}
+
+.listItemText {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.listItemTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.listItemSubtitle {
+  font-size: 0.8rem;
+  color: hsl(220, 9%, 52%);
+}
+
+.inlineForm {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 0.7rem;
+
+  border: 1px dashed hsl(220, 13%, 85%);
+  background-color: hsl(220, 13%, 98%);
+}
+
+.inlineFormRow {
+  display: flex;
+  align-items: flex-end;
+
+  gap: 0.75rem;
+}
+
+.emptyState {
+  padding: 1.5rem;
+  border-radius: 0.6rem;
+
+  background-color: hsl(220, 13%, 98%);
+  font-size: 0.85rem;
+  text-align: center;
+  color: hsl(220, 9%, 52%);
+}
+
+/* ── Days off ────────────────────────────────────────────────────────────── */
+.datePickerTrigger {
+  justify-content: flex-start;
+
+  font-weight: 400;
+}
+
+.calendarPopover {
+  width: auto;
+
+  padding: 0;
+}
+
+.chipGrid {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 0.5rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.4rem;
+  padding: 0.4rem 0.4rem 0.4rem 0.75rem;
+  border-radius: 50px;
+
+  border: 1px solid hsl(220, 13%, 88%);
+  background-color: white;
+  font-size: 0.85rem;
+  color: hsl(220, 13%, 25%);
+}
+
+.chipRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.3rem;
+  height: 1.3rem;
+
+  border-radius: 50px;
+
+  border: none;
+  background-color: hsl(220, 13%, 94%);
+  color: hsl(220, 9%, 40%);
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: hsl(0, 75%, 92%);
+    color: hsl(0, 70%, 45%);
+  }
+}
+
+/* ── Loading / Error ─────────────────────────────────────────────────────── */
+.errorBanner {
+  padding: 0.9rem 1.1rem;
+  border-radius: 0.6rem;
+
+  background-color: hsl(0, 80%, 97%);
+  font-size: 0.9rem;
+  color: hsl(0, 70%, 38%);
+}
+
+.skeleton {
+  height: 1rem;
+  border-radius: 0.4rem;
+
+  background-color: hsl(220, 13%, 93%);
+
+  animation: settingsPulse 1.4s ease-in-out infinite;
+}
+
+.skeletonStack {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1rem;
+}
+
+.skeletonTitle {
+  width: 40%;
+  height: 1.4rem;
+}
+
+.skeletonRow {
+  width: 100%;
+  height: 3rem;
+}
+
+.skeletonRowShort {
+  width: 70%;
+  height: 3rem;
+}
+
+@keyframes settingsPulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (min-width: 1024px) {
+  .page {
+    padding: 1.5rem;
+  }
+
+  .layout {
+    grid-template-columns: 15rem 1fr;
+  }
+
+  .navColumn {
+    position: sticky;
+    top: 1.5rem;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.25rem;
+  }
+
+  .mobileNav {
+    display: none;
+  }
+
+  .content {
+    padding-left: 1.5rem;
+  }
+
+  .contentHeader {
+    padding: 1.3rem 0;
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cardRow {
+    flex-direction: row;
+    align-items: center;
+
+    gap: 1.5rem;
+  }
+
+  .cardRowStacked {
+    flex-direction: column;
+    align-items: stretch;
+
+    gap: 0.6rem;
+  }
+
+  .cardRowControl {
+    justify-content: flex-end;
+    width: 18rem;
+  }
+
+  .connectionCard {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .dayRow {
+    grid-template-columns: 9rem 1fr;
+  }
+
+  .controlMedium {
+    width: 16rem;
+  }
+}

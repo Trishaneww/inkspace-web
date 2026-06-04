@@ -94,7 +94,7 @@ export const EditableCard = ({
             onClick={handleSubmit}
             disabled={isSaving || disableSubmit}
           >
-            {isSaving && <Loader2 size={15} className={styles.buttonSpinner} />}
+            {isSaving && <Loader2 size={15} className="animate-spin" />}
             Save changes
           </Button>
         </div>
@@ -150,7 +150,7 @@ interface CardFieldProps {
 
 export const CardField = ({ label, value, children, full }: CardFieldProps) => {
   const isEditing = useIsEditing();
-  
+
   return (
     <div
       className={clsx(styles.gridField, {
@@ -205,7 +205,7 @@ export const CardRow = ({
 const FieldValue = ({ value }: { value: string }) => (
   <span
     className={clsx(styles.fieldValue, {
-      [styles.fieldValueMuted]: !value,
+      [styles.muted]: !value,
     })}
   >
     {value || "—"}
