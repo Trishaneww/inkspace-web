@@ -9,14 +9,10 @@ import GoogleLogo from "@/public/logos/google-logo.svg";
 import MicrosoftLogo from "@/public/logos/microsoft-logo.svg";
 
 // Libs
-import {
-  isProviderConfigured,
-  startOAuthFlow,
-  type OAuthProvider,
-} from "@/lib/auth";
+import { isProviderConfigured, startOAuthFlow } from "@/lib/auth";
+import { OAuthProvider } from "@/types/auth";
 
 interface OAuthButtonsProps {
-  /** Optional callback when a provider isn't configured (e.g. show toast). */
   onUnconfigured?: (provider: OAuthProvider) => void;
 }
 

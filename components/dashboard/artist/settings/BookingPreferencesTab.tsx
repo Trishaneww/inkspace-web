@@ -31,6 +31,7 @@ import { useBookingPreferencesForm } from "@/hooks/useBookingPreferencesForm";
 import { toSelectOptions } from "@/lib/settings";
 import { formatSelectValue } from "@/lib/formatters";
 import { displayToast } from "@/lib/toast";
+import { startGoogleCalendarFlow } from "@/lib/auth";
 import {
   BUFFER_OPTIONS,
   MAX_ADVANCE_OPTIONS,
@@ -52,6 +53,19 @@ export const BookingPreferencesTab = ({
 
   if (!data?.settings) return null;
   const { settings } = data;
+
+  async function handleDisconnectCalendar(controller: ArtistSettingsController) {
+    try {
+      await controller.disconnectGoogleCalendar();
+      displayToast("Google Calendar disconnected", "success");
+    } catch {
+      displayToast(
+        "Couldn't disconnect Google Calendar",
+        "error",
+        "Please try again.",
+      );
+    }
+  }
 
   return (
     <>
@@ -106,13 +120,16 @@ export const BookingPreferencesTab = ({
               : "Calendar synced."
           }
           connectLabel="Connect Google"
-          onConnect={() =>
-            displayToast(
-              "Google Calendar sync is coming soon.",
-              "info",
-              "You'll be able to connect your calendar here shortly.",
-            )
-          }
+          onConnect={() => {
+            if (!startGoogleCalendarFlow()) {
+              displayToast(
+                "Google Calendar isn't available right now.",
+                "error",
+                "Calendar sync hasn't been configured. Please try again later.",
+              );
+            }
+          }}
+          onDisconnect={() => void handleDisconnectCalendar(controller)}
         />
       </StaticCard>
 

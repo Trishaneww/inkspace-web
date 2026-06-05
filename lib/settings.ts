@@ -1,6 +1,7 @@
 // Libs
+import { SETTINGS_TABS } from "@/constants/settings";
 import type { SelectOption } from "@/lib/formatters";
-import type { AvailabilityWindowInput } from "@/types/settings";
+import type { AvailabilityWindowInput, SettingsTabId } from "@/types/settings";
 
 export function getChangedFields<D extends Record<string, unknown>>(
   original: Partial<D>,
@@ -35,4 +36,9 @@ export function availabilityKey(windows: AvailabilityWindowInput[]): string {
     .map((w) => `${w.weekday}:${w.startMinute}-${w.endMinute}`)
     .sort()
     .join("|");
+}
+
+export function getInitialTab(tab: string | null): SettingsTabId {
+  const match = SETTINGS_TABS.find((t) => t.id === tab);
+  return match ? match.id : "personal";
 }

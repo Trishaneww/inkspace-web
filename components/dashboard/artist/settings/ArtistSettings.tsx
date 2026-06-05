@@ -2,6 +2,7 @@
 
 // Next.js
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 // CSS
 import clsx from "clsx";
@@ -26,10 +27,14 @@ import {
 // Libs
 import { SETTINGS_TABS } from "@/constants/settings";
 import type { SettingsTabId } from "@/types/settings";
+import { getInitialTab } from "@/lib/settings";
 
 export const ArtistSettings = () => {
   const controller = useArtistSettings();
-  const [activeTab, setActiveTab] = useState<SettingsTabId>("personal");
+  const searchParams = useSearchParams();
+  const [activeTab, setActiveTab] = useState<SettingsTabId>(() =>
+    getInitialTab(searchParams.get("tab")),
+  );
 
   const activeLabel =
     SETTINGS_TABS.find((tab) => tab.id === activeTab)?.label ?? "Settings";

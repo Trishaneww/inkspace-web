@@ -36,6 +36,7 @@ export interface ArtistSettingsController {
   saveSettings: (patch: UpdateSettingsPayload) => Promise<void>;
   uploadWaiver: (file: File) => Promise<void>;
   saveAvailability: (windows: AvailabilityWindowInput[]) => Promise<void>;
+  disconnectGoogleCalendar: () => Promise<void>;
 
   addPreset: (payload: CreatePresetPayload) => Promise<void>;
   updatePreset: (id: string, payload: UpdatePresetPayload) => Promise<void>;
@@ -139,6 +140,13 @@ export function useArtistSettings(): ArtistSettingsController {
     },
     [token],
   );
+
+  const disconnectGoogleCalendar = useCallback<
+    ArtistSettingsController["disconnectGoogleCalendar"]
+  >(async () => {
+    const settings = await settingsApi.disconnectGoogleCalendar(token!);
+    applySettings(settings);
+  }, [token, applySettings]);
 
   const executeWithFeedback = useCallback(
     async (run: () => Promise<void>, successMessage: string) => {
@@ -256,6 +264,7 @@ export function useArtistSettings(): ArtistSettingsController {
     saveSettings,
     uploadWaiver,
     saveAvailability,
+    disconnectGoogleCalendar,
     addPreset,
     updatePreset,
     deletePreset,

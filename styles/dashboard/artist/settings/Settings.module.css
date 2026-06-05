@@ -505,6 +505,23 @@
   color: hsl(220, 9%, 45%);
 }
 
+.connectButton {
+  &:hover,
+  &:focus {
+    cursor: pointer;
+  }
+}
+
+.disconnectButton {
+  background-color: var(--color-error);
+  color: white;
+
+  &:hover,
+  &:focus {
+    cursor: pointer;
+  }
+}
+
 /* ── Availability Scheduler ────────────────────────────────────────────── */
 .dayRow {
   display: grid;

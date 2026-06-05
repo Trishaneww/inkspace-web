@@ -37,9 +37,7 @@ export const ConnectionCard = ({
           <div className={styles.connectionText}>
             <span className={styles.connectionTitle}>{title}</span>
             <span className={styles.connectionSubtitle}>
-              {connected
-                ? (connectedDetail ?? "Connected")
-                : subtitle}
+              {connected ? (connectedDetail ?? "Connected") : subtitle}
             </span>
           </div>
         </div>
@@ -51,13 +49,21 @@ export const ConnectionCard = ({
               Connected
             </span>
             {onDisconnect && (
-              <Button variant="outline" size="sm" onClick={onDisconnect}>
+              <Button
+                variant="outline"
+                className={styles.disconnectButton}
+                onClick={onDisconnect}
+              >
                 Disconnect
               </Button>
             )}
           </div>
         ) : (
-          <Button variant="outline" onClick={onConnect}>
+          <Button
+            variant="outline"
+            className={styles.connectButton}
+            onClick={onConnect}
+          >
             {connectLabel}
           </Button>
         )}

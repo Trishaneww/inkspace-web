@@ -1,6 +1,13 @@
+// Next.js
+import { Suspense } from "react";
+
 // Components
 import { ArtistSettings } from "@/components/dashboard/artist/settings/ArtistSettings";
 
 export default function ArtistSettingsPage() {
-  return <ArtistSettings />;
+  return (
+    <Suspense>
+      <ArtistSettings />
+    </Suspense>
+  );
 }

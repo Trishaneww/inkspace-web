@@ -161,6 +161,11 @@ export interface CreateBlocklistPayload {
   note: string;
 }
 
+export interface ConnectGoogleCalendarPayload {
+  code: string;
+  redirectUri: string;
+}
+
 export interface PresignUploadResponse {
   url: string;
   s3Key: string;

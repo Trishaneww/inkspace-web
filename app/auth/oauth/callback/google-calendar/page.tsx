@@ -1,41 +1,35 @@
 "use client";
 
-// Next.js
 import { useEffect, useRef, useState } from "react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { ApiError } from "@/lib/api/client";
+import { settingsApi } from "@/lib/api/settings";
 import {
   consumeOAuthState,
-  getRedirectUri,
-  postAuthRedirect,
-  storeOAuthPrefill,
+  getGoogleCalendarRedirectUri,
   useAuth,
 } from "@/lib/auth";
-import { isOAuthProvider } from "@/lib/auth/oauth";
+import { displayToast } from "@/lib/toast";
 
-export default function OAuthCallbackPage() {
+const RETURN_TO = "/dashboard/artist/settings?tab=booking";
+
+export default function GoogleCalendarCallbackPage() {
   const router = useRouter();
-  const params = useParams<{ provider: string }>();
   const searchParams = useSearchParams();
-  const { completeOAuth } = useAuth();
+  const { token, isLoading } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const ranRef = useRef(false);
 
   useEffect(() => {
+    if (isLoading) return;
     if (ranRef.current) return;
     ranRef.current = true;
 
     async function handleCallback() {
-      const provider = params.provider;
-      if (!isOAuthProvider(provider)) {
-        setError("Unknown OAuth provider.");
-        return;
-      }
-
       const providerError = searchParams.get("error");
       if (providerError) {
-        setError(`Sign-in cancelled or denied (${providerError}).`);
+        setError(`Connection cancelled or denied (${providerError}).`);
         return;
       }
 
@@ -52,46 +46,47 @@ export default function OAuthCallbackPage() {
         return;
       }
 
+      if (!token) {
+        setError("Your session expired. Please sign in and try again.");
+        return;
+      }
+
       try {
-        const res = await completeOAuth({
-          provider,
+        await settingsApi.connectGoogleCalendar(token, {
           code,
-          redirectUri: getRedirectUri(provider),
+          redirectUri: getGoogleCalendarRedirectUri(),
         });
-        if (res.status === "authenticated") {
-          router.replace(postAuthRedirect(res.user));
-        } else {
-          storeOAuthPrefill({
-            oauthSession: res.oauthSession,
-            email: res.email,
-            firstName: res.firstName,
-            lastName: res.lastName,
-          });
-          router.replace("/signup");
-        }
+        displayToast(
+          "Google Calendar connected",
+          "success",
+          "Your bookings will sync automatically.",
+        );
+        router.replace(RETURN_TO);
       } catch (err) {
         setError(
-          err instanceof ApiError ? err.message : "Could not complete sign-in.",
+          err instanceof ApiError
+            ? err.message
+            : "Could not connect Google Calendar.",
         );
       }
     }
 
     void handleCallback();
-  }, [completeOAuth, params.provider, router, searchParams]);
+  }, [isLoading, token, router, searchParams]);
 
   if (error) {
     return (
       <div style={{ padding: "2rem", textAlign: "center" }}>
-        <h1>Sign-in failed</h1>
+        <h1>Couldn&apos;t connect Google Calendar</h1>
         <p>{error}</p>
-        <a href="/login">Back to sign in</a>
+        <a href={RETURN_TO}>Back to settings</a>
       </div>
     );
   }
 
   return (
     <div style={{ padding: "2rem", textAlign: "center" }}>
-      <p>Completing sign-in…</p>
+      <p>Connecting your Google Calendar…</p>
     </div>
   );
 }

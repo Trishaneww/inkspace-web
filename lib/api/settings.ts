@@ -7,6 +7,7 @@ import type {
   BlocklistEntry,
   ChangeEmailPayload,
   ChangePasswordPayload,
+  ConnectGoogleCalendarPayload,
   CreateBlocklistPayload,
   CreatePresetPayload,
   PresignUploadResponse,
@@ -113,10 +114,17 @@ export const settingsApi = {
     return api.post<void>(`${BASE}/settings/stripe/connect`, {}, token);
   },
 
-  connectGoogleCalendar(token: string) {
-    return api.post<void>(
+  connectGoogleCalendar(token: string, payload: ConnectGoogleCalendarPayload) {
+    return api.post<ArtistSettings>(
       `${BASE}/settings/google-calendar/connect`,
-      {},
+      payload,
+      token,
+    );
+  },
+
+  disconnectGoogleCalendar(token: string) {
+    return api.delete<ArtistSettings>(
+      `${BASE}/settings/google-calendar`,
       token,
     );
   },
