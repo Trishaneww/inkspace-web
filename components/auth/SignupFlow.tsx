@@ -41,8 +41,6 @@ export const SignupFlow = () => {
             password: values.password,
             phone: values.phone,
             role: values.role,
-            username: values.username,
-            instagramUrl: values.instagramUrl,
           })
         : await signup(values);
       goToPhoneVerification({

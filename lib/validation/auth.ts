@@ -18,33 +18,14 @@ export const loginSchema = z.object({
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
 
-export const signupSchema = z
-  .object({
-    firstName: z.string().trim().min(1, "First name is required").max(50),
-    lastName: z.string().trim().min(1, "Last name is required").max(50),
-    email: z.string().trim().email("Enter a valid email"),
-    phone,
-    password,
-    role: z.nativeEnum(UserRole, { message: "Select a role" }),
-    username: z
-      .string()
-      .trim()
-      .max(30, "Username is too long")
-      .regex(/^[a-zA-Z0-9_]*$/, "Use only letters, numbers, and underscores"),
-    instagramUrl: z.union([
-      z.literal(""),
-      z.string().trim().url("Enter a valid URL").max(255),
-    ]),
-  })
-  .superRefine((values, ctx) => {
-    if (values.role === UserRole.Artist && values.username.length < 3) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["username"],
-        message: "Choose a username (at least 3 characters)",
-      });
-    }
-  });
+export const signupSchema = z.object({
+  firstName: z.string().trim().min(1, "First name is required").max(50),
+  lastName: z.string().trim().min(1, "Last name is required").max(50),
+  email: z.string().trim().email("Enter a valid email"),
+  phone,
+  password,
+  role: z.nativeEnum(UserRole, { message: "Select a role" }),
+});
 
 export type SignupFormValues = z.infer<typeof signupSchema>;
 

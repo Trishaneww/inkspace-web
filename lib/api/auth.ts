@@ -14,8 +14,6 @@ export type SignupPayload = {
   phone: string;
   password: string;
   role: UserRole;
-  username?: string;
-  instagramUrl?: string;
 };
 
 export type VerifyPhonePayload = {
@@ -68,8 +66,6 @@ export type OAuthCompletePayload = {
   password: string;
   phone: string;
   role: UserRole;
-  username?: string;
-  instagramUrl?: string;
 };
 
 export const authApi = {
