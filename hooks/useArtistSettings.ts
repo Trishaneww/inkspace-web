@@ -19,6 +19,7 @@ import type {
   CreateBlocklistPayload,
   CreatePresetPayload,
   SettingsResponse,
+  StripeConnectResponse,
   UpdatePresetPayload,
   UpdateProfilePayload,
   UpdateSettingsPayload,
@@ -36,6 +37,9 @@ export interface ArtistSettingsController {
   saveSettings: (patch: UpdateSettingsPayload) => Promise<void>;
   uploadWaiver: (file: File) => Promise<void>;
   saveAvailability: (windows: AvailabilityWindowInput[]) => Promise<void>;
+  connectStripe: () => Promise<StripeConnectResponse>;
+  refreshStripeStatus: () => Promise<void>;
+  disconnectStripe: () => Promise<void>;
   disconnectGoogleCalendar: () => Promise<void>;
 
   addPreset: (payload: CreatePresetPayload) => Promise<void>;
@@ -140,6 +144,24 @@ export function useArtistSettings(): ArtistSettingsController {
     },
     [token],
   );
+
+  const connectStripe = useCallback<
+    ArtistSettingsController["connectStripe"]
+  >(() => settingsApi.connectStripe(token!), [token]);
+
+  const refreshStripeStatus = useCallback<
+    ArtistSettingsController["refreshStripeStatus"]
+  >(async () => {
+    const settings = await settingsApi.refreshStripe(token!);
+    applySettings(settings);
+  }, [token, applySettings]);
+
+  const disconnectStripe = useCallback<
+    ArtistSettingsController["disconnectStripe"]
+  >(async () => {
+    const settings = await settingsApi.disconnectStripe(token!);
+    applySettings(settings);
+  }, [token, applySettings]);
 
   const disconnectGoogleCalendar = useCallback<
     ArtistSettingsController["disconnectGoogleCalendar"]
@@ -264,6 +286,9 @@ export function useArtistSettings(): ArtistSettingsController {
     saveSettings,
     uploadWaiver,
     saveAvailability,
+    connectStripe,
+    refreshStripeStatus,
+    disconnectStripe,
     disconnectGoogleCalendar,
     addPreset,
     updatePreset,

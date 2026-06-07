@@ -14,6 +14,7 @@ import type {
   SessionPreset,
   SettingsAccount,
   SettingsResponse,
+  StripeConnectResponse,
   UpdatePresetPayload,
   UpdateProfilePayload,
   UpdateSettingsPayload,
@@ -111,7 +112,23 @@ export const settingsApi = {
   },
 
   connectStripe(token: string) {
-    return api.post<void>(`${BASE}/settings/stripe/connect`, {}, token);
+    return api.post<StripeConnectResponse>(
+      `${BASE}/settings/stripe/connect`,
+      {},
+      token,
+    );
+  },
+
+  refreshStripe(token: string) {
+    return api.post<ArtistSettings>(
+      `${BASE}/settings/stripe/refresh`,
+      {},
+      token,
+    );
+  },
+
+  disconnectStripe(token: string) {
+    return api.delete<ArtistSettings>(`${BASE}/settings/stripe`, token);
   },
 
   connectGoogleCalendar(token: string, payload: ConnectGoogleCalendarPayload) {

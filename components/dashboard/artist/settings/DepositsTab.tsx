@@ -14,7 +14,7 @@ import { EditableCard, CardRow } from "./SettingsPrimitives";
 import { OptionsSelect } from "@/components/common/OptionsSelect";
 
 // Libs
-import { FEE_PAYER_OPTIONS } from "@/constants/settings";
+import { FEE_PAYER_OPTIONS, REFUND_POLICY_OPTIONS } from "@/constants/settings";
 import { convertDollarsToCents } from "@/lib/flashes";
 import {
   formatCentsAsInput,
@@ -23,7 +23,12 @@ import {
   formatPriceCents,
 } from "@/lib/formatters";
 import type { ArtistSettingsController } from "@/hooks/useArtistSettings";
-import type { PlatformFeePayer, UpdateSettingsPayload } from "@/types/settings";
+import type {
+  DepositRefundPolicy,
+  PlatformFeePayer,
+  UpdateSettingsPayload,
+} from "@/types/settings";
+import { parseHourCount } from "@/lib/settings";
 
 export const DepositsTab = ({
   controller,
@@ -33,25 +38,34 @@ export const DepositsTab = ({
   const { data, saveSettings } = controller;
   const settings = data?.settings;
 
-  const [feeStr, setFeeStr] = useState(
+  const [feeInput, setFeeInput] = useState(
     formatCentsAsInput(settings?.depositFlatFeeCents ?? null),
   );
   const [feePayer, setFeePayer] = useState<PlatformFeePayer>(
     settings?.platformFeePayer ?? "client",
   );
 
+  const [refundPolicy, setRefundPolicy] = useState<DepositRefundPolicy>(
+    settings?.depositRefundPolicy ?? "non_refundable",
+  );
+  const [noticeHoursInput, setNoticeHoursInput] = useState(
+    settings?.cancellationNoticeHours != null
+      ? String(settings.cancellationNoticeHours)
+      : "",
+  );
+
   if (!settings) return null;
 
-  const nextCents = convertDollarsToCents(feeStr);
+  const nextCents = convertDollarsToCents(feeInput);
   const feeChanged = nextCents !== settings.depositFlatFeeCents;
   const payerChanged = feePayer !== settings.platformFeePayer;
 
-  const reset = () => {
-    setFeeStr(formatCentsAsInput(settings.depositFlatFeeCents));
+  const resetDeposits = () => {
+    setFeeInput(formatCentsAsInput(settings.depositFlatFeeCents));
     setFeePayer(settings.platformFeePayer);
   };
 
-  const handleSubmit = async () => {
+  const handleDepositsSubmit = async () => {
     const patch: UpdateSettingsPayload = {};
     if (payerChanged) patch.platformFeePayer = feePayer;
     if (feeChanged) {
@@ -61,47 +75,134 @@ export const DepositsTab = ({
     await saveSettings(patch);
   };
 
+  const usesWindow = refundPolicy === "refundable_within_window";
+  const savedHours = settings.cancellationNoticeHours;
+  const nextHours = parseHourCount(noticeHoursInput);
+  const policyChanged = refundPolicy !== settings.depositRefundPolicy;
+  const hoursChanged = usesWindow && nextHours !== savedHours;
+
+  const resetRefunds = () => {
+    setRefundPolicy(settings.depositRefundPolicy);
+    setNoticeHoursInput(
+      settings.cancellationNoticeHours != null
+        ? String(settings.cancellationNoticeHours)
+        : "",
+    );
+  };
+
+  const handleRefundsSubmit = async () => {
+    const patch: UpdateSettingsPayload = {};
+    if (policyChanged) patch.depositRefundPolicy = refundPolicy;
+    if (usesWindow) {
+      if (nextHours == null) {
+        throw new Error(
+          "Enter the cancellation notice in whole hours (e.g. 48).",
+        );
+      }
+      if (nextHours !== savedHours) patch.cancellationNoticeHours = nextHours;
+    } else if (savedHours != null) {
+      patch.clearCancellationNotice = true;
+    }
+    await saveSettings(patch);
+  };
+
   return (
-    <EditableCard
-      title="Deposits & fees"
-      description="Set a fixed deposit, or leave it blank to choose a custom amount per client when you send the deposit link."
-      onSubmit={handleSubmit}
-      successToast="Deposits updated"
-      errorToast="Couldn't save deposit settings"
-      onCancel={reset}
-      disableSubmit={!feeChanged && !payerChanged}
-    >
-      <CardRow
-        label="Flat deposit fee"
-        description="Optional. The deposit clients pay to confirm a booking."
-        value={
-          settings.depositFlatFeeCents != null
-            ? formatPriceCents(settings.depositFlatFeeCents, settings.currency)
-            : "No fixed deposit"
-        }
+    <>
+      <EditableCard
+        title="Deposits & fees"
+        description="Set a fixed deposit, or leave it blank to choose a custom amount per client when you send the deposit link."
+        onSubmit={handleDepositsSubmit}
+        successToast="Deposits updated"
+        errorToast="Couldn't save deposit settings"
+        onCancel={resetDeposits}
+        disableSubmit={!feeChanged && !payerChanged}
       >
-        <Input
-          type="text"
-          inputMode="decimal"
-          value={feeStr}
-          placeholder="$0.00"
-          className={styles.controlFull}
-          onChange={(e) => setFeeStr(formatCurrency(e.target.value))}
-        />
-      </CardRow>
-      <CardRow
-        label="Who pays the platform fee"
-        description="Inkspace adds a small fee ($5-20) on top of your deposit. Choose who covers it."
-        value={formatSelectValue(settings.platformFeePayer, FEE_PAYER_OPTIONS)}
+        <CardRow
+          label="Flat deposit fee"
+          description="Optional. The deposit clients pay to confirm a booking."
+          value={
+            settings.depositFlatFeeCents != null
+              ? formatPriceCents(settings.depositFlatFeeCents, settings.currency)
+              : "No fixed deposit"
+          }
+        >
+          <Input
+            type="text"
+            inputMode="decimal"
+            value={feeInput}
+            placeholder="$0.00"
+            className={styles.controlFull}
+            onChange={(e) => setFeeInput(formatCurrency(e.target.value))}
+          />
+        </CardRow>
+        <CardRow
+          label="Who pays the platform fee"
+          description="Inkspace adds a small fee ($5-20) on top of your deposit. Choose who covers it."
+          value={formatSelectValue(
+            settings.platformFeePayer,
+            FEE_PAYER_OPTIONS,
+          )}
+        >
+          <OptionsSelect
+            ariaLabel="Who pays the platform fee"
+            className={styles.controlFull}
+            value={feePayer}
+            options={FEE_PAYER_OPTIONS}
+            onValueChange={(value) => setFeePayer(value as PlatformFeePayer)}
+          />
+        </CardRow>
+      </EditableCard>
+
+      <EditableCard
+        title="Cancellation & refunds"
+        description="What clients agree to when they pay a deposit. The policy shown to them is recorded with each payment as evidence if they later dispute the charge."
+        onSubmit={handleRefundsSubmit}
+        successToast="Refund policy updated"
+        errorToast="Couldn't save refund policy"
+        onCancel={resetRefunds}
+        disableSubmit={!policyChanged && !hoursChanged}
       >
-        <OptionsSelect
-          ariaLabel="Who pays the platform fee"
-          className={styles.controlFull}
-          value={feePayer}
-          options={FEE_PAYER_OPTIONS}
-          onValueChange={(value) => setFeePayer(value as PlatformFeePayer)}
-        />
-      </CardRow>
-    </EditableCard>
+        <CardRow
+          label="Deposit refund policy"
+          description="Whether a client can get their deposit back after paying."
+          value={formatSelectValue(
+            settings.depositRefundPolicy,
+            REFUND_POLICY_OPTIONS,
+          )}
+        >
+          <OptionsSelect
+            ariaLabel="Deposit refund policy"
+            className={styles.controlFull}
+            value={refundPolicy}
+            options={REFUND_POLICY_OPTIONS}
+            onValueChange={(value) =>
+              setRefundPolicy(value as DepositRefundPolicy)
+            }
+          />
+        </CardRow>
+        {usesWindow && (
+          <CardRow
+            label="Cancellation notice"
+            description="How many hours before the appointment a client must cancel to get a refund."
+            value={
+              settings.cancellationNoticeHours != null
+                ? `${settings.cancellationNoticeHours} hours before the appointment`
+                : "Not set"
+            }
+          >
+            <Input
+              type="text"
+              inputMode="numeric"
+              value={noticeHoursInput}
+              placeholder="e.g. 48"
+              className={styles.controlFull}
+              onChange={(e) =>
+                setNoticeHoursInput(e.target.value.replace(/[^0-9]/g, ""))
+              }
+            />
+          </CardRow>
+        )}
+      </EditableCard>
+    </>
   );
 };

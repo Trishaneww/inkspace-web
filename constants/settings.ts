@@ -1,6 +1,7 @@
 // Libs
 import { formatTimeOfDay } from "@/lib/formatters";
 import type {
+  DepositRefundPolicy,
   PayoutFrequency,
   PlatformFeePayer,
   SettingsTabId,
@@ -29,7 +30,6 @@ export const SETTINGS_TABS: SettingsTab[] = [
 
 export const PAYOUT_FREQUENCY_OPTIONS: Option<PayoutFrequency>[] = [
   { value: "weekly", label: "Weekly" },
-  { value: "biweekly", label: "Bi-weekly" },
   { value: "monthly", label: "Monthly" },
 ];
 
@@ -37,6 +37,12 @@ export const FEE_PAYER_OPTIONS: Option<PlatformFeePayer>[] = [
   { value: "client", label: "Client covers" },
   { value: "artist", label: "I cover it" },
   { value: "split", label: "50 / 50 split" },
+];
+
+export const REFUND_POLICY_OPTIONS: Option<DepositRefundPolicy>[] = [
+  { value: "non_refundable", label: "Non-refundable" },
+  { value: "refundable_within_window", label: "Refundable within a window" },
+  { value: "always_refundable", label: "Always refundable" },
 ];
 
 export const CURRENCY_OPTIONS: Option<string>[] = [

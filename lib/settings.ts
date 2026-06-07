@@ -42,3 +42,10 @@ export function getInitialTab(tab: string | null): SettingsTabId {
   const match = SETTINGS_TABS.find((t) => t.id === tab);
   return match ? match.id : "personal";
 }
+
+export function parseHourCount(value: string): number | null {
+  const trimmed = value.trim();
+  if (trimmed === "") return null;
+  const n = Number(trimmed);
+  return Number.isInteger(n) && n > 0 ? n : null;
+}

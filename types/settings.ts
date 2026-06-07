@@ -1,5 +1,9 @@
-export type PayoutFrequency = "weekly" | "biweekly" | "monthly";
+export type PayoutFrequency = "weekly" | "monthly";
 export type PlatformFeePayer = "artist" | "client" | "split";
+export type DepositRefundPolicy =
+  | "non_refundable"
+  | "refundable_within_window"
+  | "always_refundable";
 
 export type SettingsTabId =
   | "personal"
@@ -31,11 +35,16 @@ export interface ArtistSettings {
   studioCountry: string;
 
   stripeConnected: boolean;
+  stripeChargesEnabled: boolean;
+  stripePayoutsEnabled: boolean;
+  stripeDetailsSubmitted: boolean;
   payoutFrequency: PayoutFrequency;
   currency: string;
 
   depositFlatFeeCents: number | null;
   platformFeePayer: PlatformFeePayer;
+  depositRefundPolicy: DepositRefundPolicy;
+  cancellationNoticeHours: number | null;
 
   acceptingBookings: boolean;
   timezone: string;
@@ -115,6 +124,7 @@ export interface UpdateSettingsPayload {
   payoutFrequency?: PayoutFrequency;
   currency?: string;
   platformFeePayer?: PlatformFeePayer;
+  depositRefundPolicy?: DepositRefundPolicy;
   acceptingBookings?: boolean;
   timezone?: string;
   slotIntervalMinutes?: number;
@@ -133,6 +143,8 @@ export interface UpdateSettingsPayload {
   clearMaxAdvance?: boolean;
   waiverFileUrl?: string;
   clearWaiverFile?: boolean;
+  cancellationNoticeHours?: number | null;
+  clearCancellationNotice?: boolean;
 }
 
 export interface AvailabilityWindowInput {
@@ -170,4 +182,8 @@ export interface PresignUploadResponse {
   url: string;
   s3Key: string;
   expiresAt: string;
+}
+
+export interface StripeConnectResponse {
+  url: string;
 }

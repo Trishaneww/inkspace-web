@@ -1,5 +1,9 @@
 "use client";
 
+// Next.js
+import { useEffect, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
 // CSS
 import styles from "@/styles/dashboard/artist/settings/Settings.module.css";
 
@@ -33,15 +37,57 @@ export const PaymentsPayoutsTab = ({
 }: {
   controller: ArtistSettingsController;
 }) => {
-  const { data, saveSettings } = controller;
+  const { data, saveSettings, connectStripe, refreshStripeStatus, disconnectStripe } =
+    controller;
   const settings = data?.settings;
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const { draft, update, reset } = useDraftState<Draft>({
     payoutFrequency: settings?.payoutFrequency ?? "weekly",
     currency: settings?.currency ?? "CAD",
   });
 
+  const stripeReturn = searchParams.get("stripe");
+  const handledReturn = useRef(false);
+  useEffect(() => {
+    if (!stripeReturn || handledReturn.current) return;
+    handledReturn.current = true;
+    void refreshStripeStatus().catch(() => {});
+    router.replace("/dashboard/artist/settings?tab=payments");
+  }, [stripeReturn, refreshStripeStatus, router]);
+
   if (!settings) return null;
+
+  const onboardingIncomplete =
+    settings.stripeConnected && !settings.stripeChargesEnabled;
+
+  const handleConnect = async () => {
+    try {
+      const { url } = await connectStripe();
+      window.location.href = url;
+    } catch {
+      displayToast(
+        "Couldn't start Stripe connection",
+        "error",
+        "Please try again in a moment.",
+      );
+    }
+  };
+
+  const handleDisconnect = async () => {
+    try {
+      await disconnectStripe();
+      displayToast("Stripe disconnected", "success");
+    } catch {
+      displayToast(
+        "Couldn't disconnect Stripe",
+        "error",
+        "Please try again in a moment.",
+      );
+    }
+  };
 
   return (
     <>
@@ -52,17 +98,18 @@ export const PaymentsPayoutsTab = ({
         <ConnectionCard
           logo={<StripeLogo className={styles.connectionLogoStripe} />}
           title="Stripe"
-          subtitle="Not connected — connect to start receiving payouts."
-          connected={settings.stripeConnected}
-          connectedDetail="Payouts are sent to your connected Stripe account."
-          connectLabel="Connect Stripe"
-          onConnect={() =>
-            displayToast(
-              "Stripe Connect is coming soon.",
-              "info",
-              "You'll be able to link your Stripe account here shortly.",
-            )
+          subtitle={
+            onboardingIncomplete
+              ? "Onboarding incomplete — finish setup to receive payouts."
+              : "Not connected — connect to start receiving payouts."
           }
+          connected={settings.stripeChargesEnabled}
+          connectedDetail="Connected — payouts go to your Stripe account."
+          connectLabel={
+            onboardingIncomplete ? "Continue onboarding" : "Connect Stripe"
+          }
+          onConnect={() => void handleConnect()}
+          onDisconnect={() => void handleDisconnect()}
         />
       </StaticCard>
 
