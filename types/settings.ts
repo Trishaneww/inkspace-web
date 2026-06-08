@@ -63,11 +63,13 @@ export interface ArtistSettings {
 
   notifyByEmail: boolean;
   notifyBySms: boolean;
+
+  styles: string[];
 }
 
 export interface AvailabilityWindow {
   id: string;
-  weekday: number; 
+  weekday: number;
   startMinute: number;
   endMinute: number;
 }
@@ -92,7 +94,7 @@ export interface SettingsResponse {
   settings: ArtistSettings;
   availability: AvailabilityWindow[];
   sessionPresets: SessionPreset[];
-  daysOff: string[]; 
+  daysOff: string[];
   blocklist: BlocklistEntry[];
 }
 
@@ -136,6 +138,7 @@ export interface UpdateSettingsPayload {
   waiverRequired?: boolean;
   notifyByEmail?: boolean;
   notifyBySms?: boolean;
+  styles?: string[];
 
   depositFlatFeeCents?: number | null;
   clearDepositFlatFee?: boolean;

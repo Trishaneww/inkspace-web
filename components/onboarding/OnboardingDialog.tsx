@@ -19,6 +19,7 @@ import {
 import { ProfilePhase } from "./ProfilePhase";
 import { StudioPhase } from "./StudioPhase";
 import { AvailabilityPhase } from "./AvailabilityPhase";
+import { StylesPhase } from "./StylesPhase";
 import { BookingsPhase } from "./BookingsPhase";
 import { CompletedPhase } from "./CompletedPhase";
 import { OnboardingDialogFooter } from "./OnboardingDialogFooter";
@@ -60,6 +61,8 @@ export const OnboardingDialog = () => {
         return <StudioPhase form={form} update={update} />;
       case OnboardingPhase.Availability:
         return <AvailabilityPhase form={form} update={update} />;
+      case OnboardingPhase.Styles:
+        return <StylesPhase form={form} update={update} />;
       case OnboardingPhase.Bookings:
         return <BookingsPhase form={form} update={update} />;
       case OnboardingPhase.Complete:
@@ -69,7 +72,7 @@ export const OnboardingDialog = () => {
     }
   };
 
-  const stepContentRef = useSlideTransition(phase);
+  const phaseContentRef = useSlideTransition(phase);
 
   return (
     <Dialog open onOpenChange={() => {}} disablePointerDismissal>
@@ -80,7 +83,7 @@ export const OnboardingDialog = () => {
         <OnboardingHeader progress={progress} />
         <OnboardingContent
           phase={phase}
-          stepContentRef={stepContentRef}
+          phaseContentRef={phaseContentRef}
           renderPhaseContent={renderPhaseContent}
           formError={formError}
         />
@@ -119,14 +122,14 @@ const OnboardingHeader = ({ progress }: { progress: number }) => {
 
 interface OnboardingContentProps {
   phase: OnboardingPhase;
-  stepContentRef: React.RefObject<HTMLDivElement | null>;
+  phaseContentRef: React.RefObject<HTMLDivElement | null>;
   renderPhaseContent: () => React.ReactNode;
   formError: string | null;
 }
 
 const OnboardingContent = ({
   phase,
-  stepContentRef,
+  phaseContentRef,
   renderPhaseContent,
   formError,
 }: OnboardingContentProps) => {
@@ -135,10 +138,10 @@ const OnboardingContent = ({
   return (
     <div className={styles.content}>
       <div
-        className={clsx(styles.stepColumn, {
+        className={clsx(styles.phaseColumn, {
           [styles.fullWidth]: isComplete,
         })}
-        ref={stepContentRef}
+        ref={phaseContentRef}
       >
         <DialogTitle className={styles.heading}>
           <span className={styles.headingLead}>

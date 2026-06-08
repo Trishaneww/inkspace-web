@@ -30,7 +30,7 @@ export const DaysOffPicker = ({ daysOff, controller }: DaysOffPickerProps) => {
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
-  const handleAdd = async () => {
+  const handleAddDate = async () => {
     if (!selectedDate) return;
     await controller.addDayOff(format(selectedDate, "yyyy-MM-dd"));
     setSelectedDate(undefined);
@@ -65,7 +65,11 @@ export const DaysOffPicker = ({ daysOff, controller }: DaysOffPickerProps) => {
             />
           </PopoverContent>
         </Popover>
-        <Button variant="outline" onClick={handleAdd} disabled={!selectedDate}>
+        <Button
+          variant="outline"
+          onClick={handleAddDate}
+          disabled={!selectedDate}
+        >
           <Plus size={15} />
           Block date
         </Button>

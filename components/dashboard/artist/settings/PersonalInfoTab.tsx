@@ -19,7 +19,9 @@ import {
   StaticCard,
   CardGrid,
   CardField,
+  useIsEditing,
 } from "./SettingsPrimitives";
+import { TattooStylesPicker } from "@/components/common/TattooStylesPicker";
 
 // Hooks
 import { useAuth } from "@/lib/auth";
@@ -27,7 +29,12 @@ import { useDraftState } from "@/hooks/useDraftState";
 
 // Libs
 import { formatPhone } from "@/lib/formatters";
-import { getChangedFields, hasUnsavedChanges } from "@/lib/settings";
+import {
+  areStyleArraysEqual,
+  getChangedFields,
+  hasUnsavedChanges,
+} from "@/lib/settings";
+import { TATTOO_STYLE_LABELS } from "@/constants/tattooStyles";
 import { displayToast } from "@/lib/toast";
 import type { ArtistSettingsController } from "@/hooks/useArtistSettings";
 import type { ArtistSettings, SettingsAccount } from "@/types/settings";
@@ -87,6 +94,9 @@ export const PersonalInfoTab = ({
     studioProvince: settings?.studioProvince ?? "",
     studioPostalCode: settings?.studioPostalCode ?? "",
     studioCountry: settings?.studioCountry ?? "",
+  });
+  const stylesDraft = useDraftState<{ styles: string[] }>({
+    styles: settings?.styles ?? [],
   });
 
   if (!account || !settings) return null;
@@ -216,6 +226,24 @@ export const PersonalInfoTab = ({
         </CardGrid>
       </EditableCard>
 
+      <EditableCard
+        title="Styles"
+        description="The styles you specialize in. Clients booking a custom piece can only choose from these."
+        onSubmit={() => saveSettings({ styles: stylesDraft.draft.styles })}
+        successToast="Styles updated"
+        errorToast="Couldn't save styles"
+        onCancel={stylesDraft.reset}
+        disableSubmit={
+          stylesDraft.draft.styles.length === 0 ||
+          areStyleArraysEqual(settings.styles ?? [], stylesDraft.draft.styles)
+        }
+      >
+        <StylesField
+          selected={stylesDraft.draft.styles}
+          onChange={(next) => stylesDraft.update({ styles: next })}
+        />
+      </EditableCard>
+
       <AccountCard />
     </>
   );
@@ -323,5 +351,36 @@ const AccountCard = () => {
         </Button>
       </div>
     </StaticCard>
+  );
+};
+
+const StylesField = ({
+  selected,
+  onChange,
+}: {
+  selected: string[];
+  onChange: (next: string[]) => void;
+}) => {
+  const isEditing = useIsEditing();
+
+  if (isEditing) {
+    return (
+      <>
+        <TattooStylesPicker value={selected} onChange={onChange} />
+        {selected.length === 0 && (
+          <span className={styles.fieldError}>
+            Select at least one style so clients can book with you.
+          </span>
+        )}
+      </>
+    );
+  }
+
+  return (
+    <span className={styles.fieldValue}>
+      {selected.length
+        ? selected.map((slug) => TATTOO_STYLE_LABELS[slug] ?? slug).join(", ")
+        : "—"}
+    </span>
   );
 };

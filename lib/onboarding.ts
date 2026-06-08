@@ -38,6 +38,7 @@ export function buildOnboardingPayload(
     studioCountry: form.studioCountry.trim(),
     timezone: form.timezone.trim(),
     availability: form.availability,
+    styles: form.styles,
     depositFlatFeeCents: form.deposit
       ? Math.round(parseFloat(form.deposit) * 100)
       : null,

@@ -28,7 +28,7 @@ import { BlocklistManager } from "./BlocklistManager";
 import { useBookingPreferencesForm } from "@/hooks/useBookingPreferencesForm";
 
 // Libs
-import { toSelectOptions } from "@/lib/settings";
+import { formatSelectOptions } from "@/lib/settings";
 import { formatSelectValue } from "@/lib/formatters";
 import { displayToast } from "@/lib/toast";
 import { startGoogleCalendarFlow } from "@/lib/auth";
@@ -168,7 +168,7 @@ export const BookingPreferencesTab = ({
             ariaLabel="Slot interval"
             className={styles.controlFull}
             value={String(form.schedulingRules.draft.slotIntervalMinutes)}
-            options={toSelectOptions(SLOT_INTERVAL_OPTIONS)}
+            options={formatSelectOptions(SLOT_INTERVAL_OPTIONS)}
             onValueChange={(v) =>
               form.schedulingRules.update({ slotIntervalMinutes: Number(v) })
             }
@@ -183,7 +183,7 @@ export const BookingPreferencesTab = ({
             ariaLabel="Buffer time"
             className={styles.controlFull}
             value={String(form.schedulingRules.draft.bufferMinutes)}
-            options={toSelectOptions(BUFFER_OPTIONS)}
+            options={formatSelectOptions(BUFFER_OPTIONS)}
             onValueChange={(v) =>
               form.schedulingRules.update({ bufferMinutes: Number(v) })
             }
@@ -201,7 +201,7 @@ export const BookingPreferencesTab = ({
             ariaLabel="Minimum notice"
             className={styles.controlFull}
             value={String(form.schedulingRules.draft.minNoticeMinutes)}
-            options={toSelectOptions(MIN_NOTICE_OPTIONS)}
+            options={formatSelectOptions(MIN_NOTICE_OPTIONS)}
             onValueChange={(v) =>
               form.schedulingRules.update({ minNoticeMinutes: Number(v) })
             }

@@ -4,6 +4,7 @@ export enum OnboardingPhase {
   Profile,
   Studio,
   Availability,
+  Styles,
   Bookings,
   Complete,
 }
@@ -27,6 +28,7 @@ export interface OnboardingPayload {
   timezone: string;
 
   availability: OnboardingAvailabilityWindow[];
+  styles: string[];
 
   depositFlatFeeCents?: number | null;
   schedulingMode: SchedulingMode;
@@ -54,6 +56,7 @@ export type OnboardingFormState = {
   studioCountry: string;
   timezone: string;
   availability: OnboardingAvailabilityWindow[];
+  styles: string[];
   deposit: string;
   schedulingMode: SchedulingMode | "";
 };

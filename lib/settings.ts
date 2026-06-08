@@ -25,7 +25,7 @@ export function hasUnsavedChanges<D extends Record<string, unknown>>(
   return keys.some((key) => draft[key] !== original[key]);
 }
 
-export function toSelectOptions(
+export function formatSelectOptions(
   options: { value: number; label: string }[],
 ): SelectOption[] {
   return options.map((o) => ({ value: String(o.value), label: o.label }));
@@ -48,4 +48,10 @@ export function parseHourCount(value: string): number | null {
   if (trimmed === "") return null;
   const n = Number(trimmed);
   return Number.isInteger(n) && n > 0 ? n : null;
+}
+
+export function areStyleArraysEqual(a: string[], b: string[]): boolean {
+  return (
+    a.length === b.length && [...a].sort().join("|") === [...b].sort().join("|")
+  );
 }

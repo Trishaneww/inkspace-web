@@ -31,10 +31,10 @@ export const SessionTypePresets = ({
   const [description, setDescription] = useState("");
   const [duration, setDuration] = useState("");
 
-  const canAdd = name.trim() !== "" && Number(duration) > 0;
+  const canAddPreset = name.trim() !== "" && Number(duration) > 0;
 
   const handleAdd = async () => {
-    if (!canAdd) return;
+    if (!canAddPreset) return;
     await controller.addPreset({
       name: name.trim(),
       description: description.trim(),
@@ -105,7 +105,7 @@ export const SessionTypePresets = ({
           />
         </div>
         <div className={styles.footerActions}>
-          <Button variant="outline" onClick={handleAdd} disabled={!canAdd}>
+          <Button variant="outline" onClick={handleAdd} disabled={!canAddPreset}>
             <Plus size={15} />
             Add preset
           </Button>

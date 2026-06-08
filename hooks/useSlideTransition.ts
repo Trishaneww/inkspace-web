@@ -1,6 +1,6 @@
 "use client";
 
-// React
+// Next.js
 import { useLayoutEffect, useRef } from "react";
 
 type SlideTransitionOptions = {
@@ -12,7 +12,7 @@ type SlideTransitionOptions = {
 const DEFAULTS = {
   distance: 24,
   duration: 240,
-  easing: "cubic-bezier(0.33, 1, 0.68, 1)", 
+  easing: "cubic-bezier(0.33, 1, 0.68, 1)",
 };
 
 export function useSlideTransition<T extends HTMLElement = HTMLDivElement>(

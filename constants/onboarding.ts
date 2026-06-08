@@ -42,6 +42,7 @@ export const ONBOARDING_INPUT_PHASES = [
   OnboardingPhase.Profile,
   OnboardingPhase.Studio,
   OnboardingPhase.Availability,
+  OnboardingPhase.Styles,
   OnboardingPhase.Bookings,
 ];
 
@@ -60,6 +61,10 @@ export const ONBOARDING_PHASE_META: Record<
   [OnboardingPhase.Availability]: {
     lead: "Your hours.",
     rest: "Roughly when you take clients — you can fine-tune this later.",
+  },
+  [OnboardingPhase.Styles]: {
+    lead: "Your styles.",
+    rest: "What you specialize in — clients pick from these for custom work.",
   },
   [OnboardingPhase.Bookings]: {
     lead: "Bookings.",

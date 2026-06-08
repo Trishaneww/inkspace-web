@@ -56,8 +56,8 @@ export const DepositsTab = ({
 
   if (!settings) return null;
 
-  const nextCents = convertDollarsToCents(feeInput);
-  const feeChanged = nextCents !== settings.depositFlatFeeCents;
+  const parsedFeeCents = convertDollarsToCents(feeInput);
+  const feeChanged = parsedFeeCents !== settings.depositFlatFeeCents;
   const payerChanged = feePayer !== settings.platformFeePayer;
 
   const resetDeposits = () => {
@@ -69,17 +69,17 @@ export const DepositsTab = ({
     const patch: UpdateSettingsPayload = {};
     if (payerChanged) patch.platformFeePayer = feePayer;
     if (feeChanged) {
-      if (nextCents == null) patch.clearDepositFlatFee = true;
-      else patch.depositFlatFeeCents = nextCents;
+      if (parsedFeeCents == null) patch.clearDepositFlatFee = true;
+      else patch.depositFlatFeeCents = parsedFeeCents;
     }
     await saveSettings(patch);
   };
 
   const usesWindow = refundPolicy === "refundable_within_window";
   const savedHours = settings.cancellationNoticeHours;
-  const nextHours = parseHourCount(noticeHoursInput);
+  const parsedNoticeHours = parseHourCount(noticeHoursInput);
   const policyChanged = refundPolicy !== settings.depositRefundPolicy;
-  const hoursChanged = usesWindow && nextHours !== savedHours;
+  const hoursChanged = usesWindow && parsedNoticeHours !== savedHours;
 
   const resetRefunds = () => {
     setRefundPolicy(settings.depositRefundPolicy);
@@ -94,12 +94,12 @@ export const DepositsTab = ({
     const patch: UpdateSettingsPayload = {};
     if (policyChanged) patch.depositRefundPolicy = refundPolicy;
     if (usesWindow) {
-      if (nextHours == null) {
+      if (parsedNoticeHours == null) {
         throw new Error(
           "Enter the cancellation notice in whole hours (e.g. 48).",
         );
       }
-      if (nextHours !== savedHours) patch.cancellationNoticeHours = nextHours;
+      if (parsedNoticeHours !== savedHours) patch.cancellationNoticeHours = parsedNoticeHours;
     } else if (savedHours != null) {
       patch.clearCancellationNotice = true;
     }

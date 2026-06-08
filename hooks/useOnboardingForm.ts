@@ -2,6 +2,7 @@
 
 // Next.js
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
 // Hooks
 import { getApiErrorMessage } from "@/hooks/useAuthForm";
@@ -40,12 +41,14 @@ const initialForm = (): OnboardingFormState => ({
     startMinute: DEFAULT_START_MINUTE,
     endMinute: DEFAULT_END_MINUTE,
   })),
+  styles: [],
   deposit: "",
   schedulingMode: "",
 });
 
 export const useOnboardingForm = () => {
   const { token, refreshUser } = useAuth();
+  const router = useRouter();
 
   const [phase, setPhase] = useState<OnboardingPhase>(OnboardingPhase.Profile);
   const [form, setForm] = useState<OnboardingFormState>(initialForm);
@@ -111,6 +114,8 @@ export const useOnboardingForm = () => {
           form.availability.length > 0 &&
           form.availability.every((w) => w.endMinute > w.startMinute)
         );
+      case OnboardingPhase.Styles:
+        return form.styles.length > 0;
       case OnboardingPhase.Bookings:
         return form.schedulingMode !== "";
       default:
@@ -156,6 +161,7 @@ export const useOnboardingForm = () => {
   const onDismiss = async () => {
     setSubmitting(true);
     await refreshUser();
+    router.push("/dashboard/artist/bookings");
   };
 
   return {
