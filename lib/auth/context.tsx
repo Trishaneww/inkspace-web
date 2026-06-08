@@ -48,6 +48,7 @@ type AuthContextValue = AuthState & {
   completeOAuthSignup: (
     payload: OAuthCompletePayload,
   ) => Promise<PhoneVerificationRequiredResponse>;
+  refreshUser: () => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -136,6 +137,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return authApi.completeOAuthSignup(payload);
   }, []);
 
+  const refreshUser = useCallback<AuthContextValue["refreshUser"]>(async () => {
+    const token = getAccessToken();
+    if (!token) return;
+    const user = await authApi.getSession(token);
+    setState((s) => ({ ...s, user, token }));
+  }, []);
+
   const logout = useCallback<AuthContextValue["logout"]>(async () => {
     const token = state.token;
     clearTokens();
@@ -154,6 +162,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         resendPhoneCode,
         completeOAuth,
         completeOAuthSignup,
+        refreshUser,
         logout,
       }}
     >
