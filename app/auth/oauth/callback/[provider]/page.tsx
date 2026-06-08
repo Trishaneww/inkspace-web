@@ -1,5 +1,6 @@
 "use client";
 
+// Next.js
 import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 
@@ -10,20 +11,9 @@ import {
   postAuthRedirect,
   storeOAuthPrefill,
   useAuth,
-  type OAuthProvider,
 } from "@/lib/auth";
+import { isOAuthProvider } from "@/lib/auth/oauth";
 
-const VALID_PROVIDERS: OAuthProvider[] = ["google", "microsoft"];
-
-function isOAuthProvider(value: string): value is OAuthProvider {
-  return (VALID_PROVIDERS as string[]).includes(value);
-}
-
-/**
- * OAuth landing page. The provider redirects here with ?code=... &state=...
- * We hand the code off to the Go backend (which does the token exchange and
- * verifies with the provider) and then complete the session.
- */
 export default function OAuthCallbackPage() {
   const router = useRouter();
   const params = useParams<{ provider: string }>();
@@ -36,10 +26,7 @@ export default function OAuthCallbackPage() {
     if (ranRef.current) return;
     ranRef.current = true;
 
-    // Wrap in a microtask so every setError fires asynchronously from the
-    // effect's perspective — a synchronous setState in the effect body
-    // would trip react-hooks/set-state-in-effect under React 19.
-    void Promise.resolve().then(async () => {
+    async function handleCallback() {
       const provider = params.provider;
       if (!isOAuthProvider(provider)) {
         setError("Unknown OAuth provider.");
@@ -74,8 +61,6 @@ export default function OAuthCallbackPage() {
         if (res.status === "authenticated") {
           router.replace(postAuthRedirect(res.user));
         } else {
-          // First-time OAuth user — hand off to the signup form to
-          // collect password / phone / role.
           storeOAuthPrefill({
             oauthSession: res.oauthSession,
             email: res.email,
@@ -86,12 +71,12 @@ export default function OAuthCallbackPage() {
         }
       } catch (err) {
         setError(
-          err instanceof ApiError
-            ? err.message
-            : "Could not complete sign-in.",
+          err instanceof ApiError ? err.message : "Could not complete sign-in.",
         );
       }
-    });
+    }
+
+    void handleCallback();
   }, [completeOAuth, params.provider, router, searchParams]);
 
   if (error) {

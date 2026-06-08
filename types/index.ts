@@ -1,9 +1,4 @@
 // ─── User / Auth ──────────────────────────────────────────────────────────────
-
-// IMPORTANT: these string values are the wire format sent to the Go API
-// and stored in the `users.role` column. They MUST match the backend's
-// CHECK constraint exactly. For user-facing labels, map separately
-// (see roleOptions in SignupForm.tsx).
 export enum UserRole {
   Artist = "artist",
   StudioAdmin = "studio_admin",
@@ -19,11 +14,11 @@ export interface User {
   phone?: string;
   avatarUrl?: string;
   phoneVerifiedAt?: string;
+  onboardedAt?: string;
   createdAt: string;
 }
 
 // ─── Artist ───────────────────────────────────────────────────────────────────
-
 export type TattooStyle =
   | "traditional"
   | "neo_traditional"
@@ -91,7 +86,6 @@ export interface TattooRequest {
 }
 
 // ─── Inquiry / CRM Pipeline ───────────────────────────────────────────────────
-
 export type InquiryStatus =
   | "inquiry"
   | "consultation_booked"
@@ -128,12 +122,9 @@ export interface Appointment {
 }
 
 // ─── Flash ────────────────────────────────────────────────────────────────────
-// See types/flash.ts for the up-to-date wire types (matches /v1/flashes).
-
 export type { Flash, FlashStatus, FlashPricingTier } from "@/types/flash";
 
 // ─── Messaging ────────────────────────────────────────────────────────────────
-
 export interface Message {
   id: string;
   inquiryId: string;
@@ -143,7 +134,6 @@ export interface Message {
 }
 
 // ─── Notifications ────────────────────────────────────────────────────────────
-
 export type NotificationType =
   | "new_lead"
   | "artist_interest"

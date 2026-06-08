@@ -1,0 +1,26 @@
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  padding: 0.4rem 0.8rem;
+
+  font-size: 0.85rem;
+  color: var(--color-neutral-foreground);
+
+  background-color: var(--color-neutral-background);
+  border: 1px solid var(--color-neutral-border);
+  border-radius: 9999px;
+  cursor: pointer;
+
+  transition: all 150ms ease;
+}
+
+.chipActive {
+  color: hsl(0, 0%, 100%);
+
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}

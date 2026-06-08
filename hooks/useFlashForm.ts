@@ -12,7 +12,6 @@ import {
   buildTierRowsFromFlash,
   convertDollarsToCents,
 } from "@/lib/flashes";
-import { DEFAULT_CURRENCY } from "@/constants/flashes";
 import { formatCurrency, parseCsv } from "@/lib/formatters";
 import { displayToast } from "@/lib/toast";
 
@@ -66,9 +65,6 @@ export function useFlashForm({
     initialFlash
       ? buildTierRowsFromFlash(initialFlash.pricing_tiers)
       : buildBlankTierRows(),
-  );
-  const [currency, setCurrency] = useState(
-    initialFlash?.currency || DEFAULT_CURRENCY,
   );
   const [colorType, setColorType] = useState<ColorType>(
     initialFlash?.color_type ?? "both",
@@ -149,7 +145,6 @@ export function useFlashForm({
             pricingMode === "flat"
               ? parseInt(flatDurationMinutes, 10) || null
               : null,
-          currency,
           repeatable,
           pricing_tiers: pricingMode === "per_size" ? enabledTiers : [],
         };
@@ -179,7 +174,6 @@ export function useFlashForm({
             pricingMode === "flat"
               ? parseInt(flatDurationMinutes, 10) || null
               : null,
-          currency,
           repeatable,
           pricing_tiers: pricingMode === "per_size" ? enabledTiers : [],
           publish,
@@ -279,8 +273,6 @@ export function useFlashForm({
     setFlatDurationMinutes,
     tierRows,
     updateTierRow,
-    currency,
-    setCurrency,
     colorType,
     setColorType,
     stylesText,

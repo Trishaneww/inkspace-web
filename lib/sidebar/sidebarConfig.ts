@@ -6,6 +6,7 @@ import {
   Home,
   Image as ImageIcon,
   Receipt,
+  Settings,
   Star,
   Users,
   Zap,
@@ -77,4 +78,5 @@ export const artistOtherNav: NavLeaf[] = [
     icon: BarChart3,
   },
   { href: "/dashboard/artist/reviews", label: "Reviews", icon: Star },
+  { href: "/dashboard/artist/settings", label: "Settings", icon: Settings },
 ];

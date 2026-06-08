@@ -1,7 +1,13 @@
 // Libs
-import { GOOGLE_AUTH_URL, MICROSOFT_AUTH_URL, OAUTH_STATE_KEY } from "@/constants/auth";
-
-export type OAuthProvider = "google" | "microsoft";
+import {
+  GOOGLE_AUTH_URL,
+  GOOGLE_CALENDAR_PROVIDER,
+  GOOGLE_CALENDAR_SCOPE,
+  MICROSOFT_AUTH_URL,
+  OAUTH_STATE_KEY,
+  VALID_PROVIDERS,
+} from "@/constants/auth";
+import { OAuthProvider } from "@/types/auth";
 
 type ProviderConfig = {
   clientId: string | undefined;
@@ -24,6 +30,10 @@ const providers: Record<OAuthProvider, ProviderConfig> = {
     extraParams: { response_mode: "query", prompt: "select_account" },
   },
 };
+
+export function isOAuthProvider(value: string): value is OAuthProvider {
+  return (VALID_PROVIDERS as string[]).includes(value);
+}
 
 export function getRedirectUri(provider: OAuthProvider): string {
   if (typeof window === "undefined") return "";
@@ -64,6 +74,42 @@ export function consumeOAuthState(): string | null {
 
 export function isProviderConfigured(provider: OAuthProvider): boolean {
   return !!providers[provider].clientId;
+}
+
+export function getGoogleCalendarRedirectUri(): string {
+  if (typeof window === "undefined") return "";
+  return `${window.location.origin}/auth/oauth/callback/${GOOGLE_CALENDAR_PROVIDER}`;
+}
+
+export function startGoogleCalendarFlow(): boolean {
+  const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  if (!clientId) {
+    console.warn(
+      "[oauth] google calendar not configured — set NEXT_PUBLIC_GOOGLE_CLIENT_ID.",
+    );
+    return false;
+  }
+
+  const state = generateState();
+  window.sessionStorage.setItem(OAUTH_STATE_KEY, state);
+
+  const params = new URLSearchParams({
+    client_id: clientId,
+    redirect_uri: getGoogleCalendarRedirectUri(),
+    response_type: "code",
+    scope: GOOGLE_CALENDAR_SCOPE,
+    state,
+    access_type: "offline",
+    prompt: "consent",
+    include_granted_scopes: "true",
+  });
+
+  window.location.assign(`${GOOGLE_AUTH_URL}?${params.toString()}`);
+  return true;
+}
+
+export function isGoogleCalendarConfigured(): boolean {
+  return !!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 }
 
 function generateState(): string {

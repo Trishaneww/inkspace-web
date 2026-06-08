@@ -30,7 +30,6 @@ import { FlashPricingTable } from "./FlashPricingTable";
 import { DurationSelect } from "./DurationSelect";
 import { PriceInput } from "./PricingInput";
 import { FlashMoreDetails } from "./FlashMoreDetails";
-import { CurrencySelect } from "@/components/common/CurrencySelect";
 
 // Hooks
 import { useFlashImages } from "@/hooks/useFlashImages";
@@ -73,8 +72,6 @@ export const FlashForm = ({
     setFlatDurationMinutes,
     tierRows,
     updateTierRow,
-    currency,
-    setCurrency,
     colorType,
     setColorType,
     stylesText,
@@ -121,8 +118,6 @@ export const FlashForm = ({
           setFlatDurationMinutes={setFlatDurationMinutes}
           flatPriceDollars={flatPriceDollars}
           setFlatPriceDollars={setFlatPriceDollars}
-          currency={currency}
-          setCurrency={setCurrency}
         />
         <FlashMoreDetails
           isOpen={isMoreDetailsOpen}
@@ -345,8 +340,6 @@ interface FlashPricingProps {
   setFlatDurationMinutes: (flatDurationMinutes: string) => void;
   flatPriceDollars: string;
   setFlatPriceDollars: (flatPriceDollars: string) => void;
-  currency: string;
-  setCurrency: (currency: string) => void;
 }
 
 const FlashPricing = ({
@@ -358,8 +351,6 @@ const FlashPricing = ({
   setFlatDurationMinutes,
   flatPriceDollars,
   setFlatPriceDollars,
-  currency,
-  setCurrency,
 }: FlashPricingProps) => {
   return (
     <div className={styles.section}>
@@ -391,8 +382,6 @@ const FlashPricing = ({
           />
         </div>
       )}
-
-      <CurrencySelect currency={currency} setCurrency={setCurrency} />
     </div>
   );
 };

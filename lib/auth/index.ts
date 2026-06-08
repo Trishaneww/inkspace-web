@@ -5,7 +5,9 @@ export {
   consumeOAuthState,
   getRedirectUri,
   isProviderConfigured,
-  type OAuthProvider,
+  startGoogleCalendarFlow,
+  getGoogleCalendarRedirectUri,
+  isGoogleCalendarConfigured,
 } from "@/lib/auth/oauth";
 export {
   storeOAuthPrefill,

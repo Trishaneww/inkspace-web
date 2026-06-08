@@ -26,6 +26,7 @@ import { ApiErrorDisplay } from "./ApiErrorDisplay";
 
 // Libs
 import { zodResolver } from "@hookform/resolvers/zod";
+import { formatPhone, formatSelectValue } from "@/lib/formatters";
 import { signupSchema, type SignupFormValues } from "@/lib/validation/auth";
 import { USER_ROLE_OPTIONS } from "@/constants/auth";
 import { UserRole } from "@/types/index";
@@ -124,10 +125,14 @@ export const SignupForm = ({
           id="signup-phone"
           type="tel"
           autoComplete="tel"
-          placeholder="+1 416 123 4567"
+          placeholder="+1 (416) 123-4567"
           disabled={isSubmitting}
           aria-invalid={!!errors.phone}
           {...register("phone")}
+          onChange={(e) => {
+            e.target.value = formatPhone(e.target.value);
+            void register("phone").onChange(e);
+          }}
         />
         {errors.phone && (
           <span className={styles.error}>{errors.phone.message}</span>
@@ -166,7 +171,13 @@ export const SignupForm = ({
                 aria-invalid={!!errors.role}
                 className={styles.selectTrigger}
               >
-                <SelectValue placeholder="Select a role" />
+                <SelectValue placeholder="Select a role">
+                  {(value) =>
+                    value
+                      ? formatSelectValue(value, USER_ROLE_OPTIONS)
+                      : "Select a role"
+                  }
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {USER_ROLE_OPTIONS.map((opt) => (
