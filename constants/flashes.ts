@@ -1,11 +1,11 @@
 // Libs
 import {
-  type FilterOption,
   type FlashSizeOption,
   type FlashStatusFilter,
   type PriceSort,
   type RepeatableFilter,
 } from "@/types/flash";
+import type { FilterOption } from "@/types/filters";
 
 export const DEFAULT_CURRENCY = "CAD";
 export const ARTIST_DASHBOARD_ROOT = "/dashboard/artist";
