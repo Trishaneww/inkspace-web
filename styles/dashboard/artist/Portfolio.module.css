@@ -1,5 +1,4 @@
-/* ── Page ──────────────────────────────────────────────────────────────── */
-.flashbookPage {
+.portfolioPage {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -11,13 +10,12 @@
   background-color: white;
 }
 
-/* ── Header ──────────────────────────────────────────────────────────────── */
 .header {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
   align-items: flex-start;
+  justify-content: space-between;
 
   gap: 0.8rem;
   width: 100%;
@@ -32,8 +30,8 @@
 .headerTitle {
   font-size: 1.5rem;
   font-weight: 600;
-  color: hsl(220, 13%, 18%);
   line-height: 1.2;
+  color: hsl(220, 13%, 18%);
 }
 
 .headerSubtitle {
@@ -41,7 +39,6 @@
   color: hsl(220, 9%, 46%);
 }
 
-/* ── Stat cards ──────────────────────────────────────────────────────────── */
 .stats {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -50,35 +47,22 @@
   gap: 1rem;
 }
 
-@media (min-width: 640px) {
-  .stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1024px) {
-  .stats {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
 .statCard {
   display: flex;
   flex-direction: column;
 
   gap: 0.8rem;
   padding: 1rem;
-  border-radius: 0.75rem;
 
-  border: 1px solid hsl(220, 13%, 90%);
   background-color: white;
+  border: 1px solid hsl(220, 13%, 90%);
+  border-radius: 0.75rem;
 }
 
 .statHeader {
   display: flex;
   flex-direction: row;
   align-items: center;
-
   gap: 0.5rem;
 }
 
@@ -89,10 +73,10 @@
   width: 1.75rem;
   height: 1.75rem;
 
-  border-radius: 0.5rem;
+  color: hsl(220, 9%, 35%);
 
   background-color: hsl(220, 13%, 96%);
-  color: hsl(220, 9%, 35%);
+  border-radius: 0.5rem;
 }
 
 .statLabel {
@@ -103,12 +87,11 @@
 .statValue {
   font-size: 1.5rem;
   font-weight: 600;
-  color: hsl(220, 13%, 18%);
   line-height: 1.2;
+  color: hsl(220, 13%, 18%);
 }
 
-/* ── Flash grid ──────────────────────────────────────────────────────────── */
-.flashGrid {
+.grid {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   width: 100%;
@@ -116,30 +99,14 @@
   gap: 1rem;
 }
 
-@media (min-width: 720px) {
-  .flashGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1024px) {
-  .flashGrid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1440px) {
-  .flashGrid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
 .errorBanner {
   padding: 0.9rem 1rem;
-  border-radius: 0.5rem;
-  background-color: hsl(0, 80%, 96%);
-  color: hsl(0, 75%, 35%);
+
   font-size: 0.9rem;
+  color: hsl(0, 75%, 35%);
+
+  background-color: hsl(0, 80%, 96%);
+  border-radius: 0.5rem;
 }
 
 .loadingRow {
@@ -150,7 +117,7 @@
 
 .loadingCard {
   aspect-ratio: 1 / 1;
-  border-radius: 0.75rem;
+
   background: linear-gradient(
     90deg,
     hsl(220, 13%, 96%) 0%,
@@ -158,6 +125,7 @@
     hsl(220, 13%, 96%) 100%
   );
   background-size: 200% 100%;
+  border-radius: 0.75rem;
   animation: shimmer 1.4s linear infinite;
 }
 
@@ -167,5 +135,29 @@
   }
   to {
     background-position: -200% 0;
+  }
+}
+
+@media (min-width: 640px) {
+  .stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 720px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1440px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }

@@ -76,8 +76,6 @@ export interface UpdateFlashPayload {
   description?: string | null;
   s3_key?: string | null;
   reference_s3_key?: string | null;
-  // Removes the existing reference image. Distinct from reference_s3_key
-  // being null/absent, which leaves the current image untouched.
   clear_reference_image?: boolean;
   color_type?: ColorType;
   styles?: string[];
@@ -127,8 +125,3 @@ export interface TierFormRow {
 export type FlashStatusFilter = "all" | FlashStatus;
 export type RepeatableFilter = "all" | "repeatable" | "non_repeatable";
 export type PriceSort = "none" | "high_to_low" | "low_to_high";
-
-export interface FilterOption<TValue extends string = string> {
-  value: TValue;
-  label: string;
-}

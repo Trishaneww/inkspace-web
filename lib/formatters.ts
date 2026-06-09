@@ -120,6 +120,19 @@ export function formatDurationMinutes(minutes: number): string {
 }
 
 /**
+ * Parses an ISO 8601 date string (YYYY-MM-DD) into a local-timezone Date,
+ * e.g. "2026-06-03" -> new Date(2026, 5, 3).
+ * Using the Date constructor directly with a YYYY-MM-DD string parses as UTC
+ * midnight, which can shift the calendar date in negative-offset timezones.
+ * @param value - The ISO 8601 date string to parse.
+ * @returns The parsed Date in local timezone.
+ */
+export function parseISODate(value: string): Date {
+  const [year, month, day] = value.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
+/**
  * Parses a comma-separated string into an array of strings,
  * e.g. "apple,banana,cherry" -> ["apple", "banana", "cherry"].
  * @param input - The comma-separated string to parse.

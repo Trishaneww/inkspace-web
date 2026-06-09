@@ -1,0 +1,240 @@
+/* ── Portfolio form sheet ─────────────────────────────────────────────────── */
+.formSheet {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 32rem;
+  height: 100%;
+
+  padding: 0;
+}
+
+.sheetContent {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+
+  gap: 1.5rem;
+  padding: 0 1.3rem 1rem;
+
+  overflow-y: auto;
+}
+
+.sheetTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+/* ── Form sections ───────────────────────────────────────────────────────── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sectionHeading {
+  font-size: 1rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+}
+
+.sectionHelper {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 50%);
+}
+
+.labelOptional {
+  margin-left: 0.25rem;
+
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: hsl(220, 9%, 55%);
+}
+
+.required {
+  color: hsl(0, 70%, 50%);
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+/* ── Completion date picker ──────────────────────────────────────────────── */
+.dateRow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.datePickerTrigger {
+  flex: 1;
+  justify-content: flex-start;
+  gap: 0.5rem;
+
+  font-weight: 400;
+}
+
+.calendarPopover {
+  width: auto;
+
+  padding: 0;
+}
+
+/* ── Photo tiles ─────────────────────────────────────────────────────────── */
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+.photoTile {
+  position: relative;
+
+  aspect-ratio: 1 / 1;
+
+  background-color: hsl(220, 13%, 96%);
+  border: 1px solid hsl(220, 13%, 90%);
+  border-radius: 0.6rem;
+  overflow: hidden;
+}
+
+.photoImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.thumbBadge {
+  position: absolute;
+  bottom: 0.3rem;
+  left: 0.3rem;
+
+  padding: 0.1rem 0.4rem;
+
+  font-size: 0.7rem;
+  color: white;
+
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 50px;
+}
+
+.photoRemove {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+
+  width: 1.5rem;
+  height: 1.5rem;
+
+  color: white;
+
+  background-color: rgba(0, 0, 0, 0.55);
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+}
+
+.addPhotoTile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  aspect-ratio: 1 / 1;
+  gap: 0.4rem;
+
+  font-size: 0.85rem;
+  color: hsl(220, 9%, 45%);
+
+  background-color: hsl(220, 13%, 98%);
+  border: 1px dashed hsl(220, 13%, 80%);
+  border-radius: 0.6rem;
+  cursor: pointer;
+}
+
+.addPhotoTile input[type="file"] {
+  position: absolute;
+  inset: 0;
+
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* ── Healed toggle card ──────────────────────────────────────────────────── */
+.toggleCard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+
+  background-color: hsl(220, 13%, 96%);
+  border-radius: 0.7rem;
+}
+
+.toggleText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.toggleLabel {
+  font-size: 1rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+}
+
+.toggleHelper {
+  font-size: 0.8rem;
+  color: hsl(220, 9%, 50%);
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 0.5rem;
+  padding: 0.9rem 1.2rem;
+
+  border-top: 1px solid hsl(220, 13%, 92%);
+}
+
+.footerLeft,
+.footerRight {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.saveBtn {
+  background-color: var(--color-primary);
+
+  &:hover,
+  &:focus {
+    background-color: var(--color-primary-hover);
+  }
+}
+
+.formError {
+  padding: 0.75rem 1rem;
+
+  font-size: 0.9rem;
+  color: hsl(0, 75%, 35%);
+
+  background-color: hsl(0, 80%, 96%);
+  border-radius: 0.5rem;
+}
