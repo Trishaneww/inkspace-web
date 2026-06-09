@@ -1,0 +1,55 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 0.15rem 0.55rem;
+
+  font-size: 0.78rem;
+  font-weight: 500;
+  white-space: nowrap;
+
+  border: 1px solid transparent;
+  border-radius: 9999px;
+}
+
+.pending {
+  color: var(--color-pending-foreground);
+
+  background-color: var(--color-pending-background);
+  border-color: var(--color-pending-border);
+}
+
+.success {
+  color: var(--color-success-foreground);
+
+  background-color: var(--color-success-background);
+  border-color: var(--color-success-border);
+}
+
+.warning {
+  color: var(--color-warning-foreground);
+
+  background-color: var(--color-warning-background);
+  border-color: var(--color-warning-border);
+}
+
+.failure {
+  color: var(--color-failure-foreground);
+
+  background-color: var(--color-failure-background);
+  border-color: var(--color-failure-border);
+}
+
+.neutral {
+  color: var(--color-neutral-foreground);
+
+  background-color: var(--color-neutral-background);
+  border-color: var(--color-neutral-border);
+}
+
+.inactive {
+  color: var(--color-inactive-foreground);
+
+  background-color: var(--color-inactive-background);
+  border-color: var(--color-inactive-border);
+}

@@ -7,15 +7,17 @@ import { FiltersRow } from "@/components/dashboard/artist/FiltersRow";
 // Libs
 import type { FilterAction, FilterSelectConfig } from "@/types/filters";
 import {
-  hasActiveBookingFilters,
   RECENCY_FILTER_OPTIONS,
   SORT_OPTIONS,
   STATUS_FILTER_OPTIONS,
-  type BookingFilters,
-  type RecencyFilter,
-  type SortOrder,
-  type StatusFilter,
-} from "@/lib/bookings";
+} from "@/constants/bookings";
+import { hasActiveBookingFilters } from "@/lib/bookings";
+import type {
+  BookingFilters,
+  RecencyFilter,
+  SortOrder,
+  StatusFilter,
+} from "@/types/booking";
 
 interface BookingsFiltersProps {
   filters: BookingFilters;

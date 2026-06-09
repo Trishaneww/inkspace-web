@@ -1,0 +1,540 @@
+/* ── Page ──────────────────────────────────────────────────────────────── */
+.bookingsPage {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+
+  row-gap: 1.5rem;
+  padding: 1.5rem;
+
+  background-color: white;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.headerTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: hsl(220, 13%, 18%);
+}
+
+.headerSubtitle {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 46%);
+}
+
+/* ── Open Book link pill ──────────────────────────────────────────────── */
+.linkPill {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  padding: 0.5rem 0.75rem;
+
+  background-color: white;
+  border: 1px solid hsl(220, 13%, 88%);
+  border-radius: 0.85rem;
+}
+
+.linkStatus {
+  flex-shrink: 0;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.linkStatusOpen {
+  color: var(--color-success-foreground);
+}
+
+.linkStatusClosed {
+  color: var(--color-muted-foreground);
+}
+
+.linkUrlField {
+  flex: 1;
+  min-width: 0;
+
+  padding: 0.45rem 0.75rem;
+
+  font-size: 0.9rem;
+  color: hsl(220, 13%, 25%);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  background-color: var(--color-neutral-background);
+  border-radius: 0.6rem;
+}
+
+.linkCopyBtn {
+  flex-shrink: 0;
+  color: hsl(220, 9%, 46%);
+}
+
+.linkDivider {
+  flex-shrink: 0;
+  width: 1px;
+  height: 1.4rem;
+
+  background-color: hsl(220, 13%, 88%);
+}
+
+.linkEditBtn {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.3rem;
+
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.toggleText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.toggleLabel {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+}
+
+/* ── Stat cards ──────────────────────────────────────────────────────────── */
+.stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+
+  gap: 1rem;
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.8rem;
+  padding: 1rem;
+
+  background-color: white;
+  border: 1px solid hsl(220, 13%, 90%);
+  border-radius: 0.75rem;
+}
+
+.statHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+
+  color: var(--color-primary);
+
+  background-color: var(--color-neutral-background);
+  border-radius: 0.5rem;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: hsl(220, 13%, 18%);
+}
+
+/* ── Table ─────────────────────────────────────────────────────────────── */
+.tableCard {
+  width: 100%;
+
+  border: 1px solid hsl(220, 13%, 90%);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.row {
+  cursor: pointer;
+}
+
+.pagination {
+  margin-top: 1rem;
+}
+
+.clientName {
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+}
+
+.clientEmail {
+  display: inline-block;
+
+  font-size: 0.8rem;
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.viewBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: white;
+
+  background-color: var(--color-primary);
+
+  &:hover {
+    background-color: var(--color-primary-hover);
+  }
+}
+
+.actionsCell {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.requestType {
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+}
+
+.requestMeta {
+  font-size: 0.8rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.muted {
+  color: hsl(220, 9%, 60%);
+}
+
+.submitted {
+  font-size: 0.85rem;
+  color: hsl(220, 9%, 46%);
+}
+
+/* ── States ────────────────────────────────────────────────────────────── */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.emptyTitle {
+  font-size: 1rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+}
+
+.emptyText {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.errorBanner {
+  padding: 0.9rem 1rem;
+
+  font-size: 0.9rem;
+  color: hsl(0, 75%, 35%);
+
+  background-color: hsl(0, 80%, 96%);
+  border-radius: 0.5rem;
+}
+
+/* ── Open Book edit sheet ──────────────────────────────────────────────── */
+.editSheet {
+  width: 100%;
+  max-width: 30rem;
+  padding: 1.5rem;
+}
+
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  height: 100%;
+}
+
+.editTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.editFields {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  flex: 1;
+  overflow-y: auto;
+}
+
+.editField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  input {
+    height: 38px;
+  }
+}
+
+.editHint {
+  font-size: 0.8rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.questionList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.questionRow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.removeQuestionBtn {
+  flex-shrink: 0;
+  color: hsl(220, 9%, 46%);
+}
+
+.addQuestionBtn {
+  align-self: flex-start;
+  font-size: 0.85rem;
+}
+
+.editFooter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.actionBtnIcon {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .actionBtnIcon {
+    display: block;
+  }
+}
+
+.acceptBtn {
+  color: white;
+
+  background-color: var(--color-success-foreground);
+
+  &:hover {
+    background-color: hsl(100, 35%, 36%);
+  }
+}
+
+.editError {
+  font-size: 0.85rem;
+  color: var(--color-error);
+}
+
+.saveBtn {
+  background-color: var(--color-primary);
+
+  &:hover {
+    background-color: var(--color-primary-hover);
+  }
+}
+
+/* ── Inquiry detail sheet ──────────────────────────────────────────────── */
+.detailHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.detailTitleRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.detailTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.detailSub {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.detailCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  padding: 1.25rem;
+
+  border: 1px solid hsl(220, 13%, 90%);
+  border-radius: 0.75rem;
+}
+
+.detailCardTitle {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: hsl(220, 9%, 46%);
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+
+  font-size: 0.9rem;
+}
+
+.detailRowLabel {
+  color: hsl(220, 9%, 46%);
+}
+
+.detailRowValue {
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+  text-align: right;
+}
+
+.detailDescription {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: hsl(220, 13%, 25%);
+}
+
+.detailEmpty {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 60%);
+}
+
+/* ── Reference photos ──────────────────────────────────────────────────── */
+.referenceGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.referenceThumb {
+  position: relative;
+
+  aspect-ratio: 1;
+  padding: 0;
+
+  background-color: var(--color-neutral-background);
+  border: 1px solid hsl(220, 13%, 88%);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.referenceImg {
+  object-fit: cover;
+}
+
+.lightbox {
+  width: auto;
+  max-width: calc(100% - 2rem);
+  padding: 0.5rem;
+}
+
+.lightboxFrame {
+  position: relative;
+
+  width: min(80vw, 56rem);
+  height: min(80vh, 56rem);
+}
+
+.lightboxImg {
+  object-fit: contain;
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  padding: 0.2rem 0.6rem;
+
+  font-size: 0.8rem;
+  color: var(--color-neutral-foreground);
+
+  background-color: var(--color-neutral-background);
+  border-radius: 9999px;
+}
+
+.qaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.qaPrompt {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+}
+
+.qaAnswer {
+  font-size: 0.9rem;
+  color: hsl(220, 13%, 30%);
+}
+
+.detailState {
+  padding: 3rem 1.5rem;
+
+  font-size: 0.95rem;
+  color: hsl(220, 9%, 46%);
+}
+
+@media (min-width: 640px) {
+  .stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
