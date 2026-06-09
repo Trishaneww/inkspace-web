@@ -76,8 +76,6 @@ export interface UpdateFlashPayload {
   description?: string | null;
   s3_key?: string | null;
   reference_s3_key?: string | null;
-  // Removes the existing reference image. Distinct from reference_s3_key
-  // being null/absent, which leaves the current image untouched.
   clear_reference_image?: boolean;
   color_type?: ColorType;
   styles?: string[];

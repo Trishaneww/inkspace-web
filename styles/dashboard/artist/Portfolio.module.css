@@ -1,0 +1,163 @@
+.portfolioPage {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+
+  row-gap: 1.5rem;
+  padding: 1.5rem;
+
+  background-color: white;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 0.8rem;
+  width: 100%;
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.headerTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: hsl(220, 13%, 18%);
+}
+
+.headerSubtitle {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  width: 100%;
+
+  gap: 1rem;
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.8rem;
+  padding: 1rem;
+
+  background-color: white;
+  border: 1px solid hsl(220, 13%, 90%);
+  border-radius: 0.75rem;
+}
+
+.statHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+
+  color: hsl(220, 9%, 35%);
+
+  background-color: hsl(220, 13%, 96%);
+  border-radius: 0.5rem;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: hsl(220, 13%, 18%);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  width: 100%;
+
+  gap: 1rem;
+}
+
+.errorBanner {
+  padding: 0.9rem 1rem;
+
+  font-size: 0.9rem;
+  color: hsl(0, 75%, 35%);
+
+  background-color: hsl(0, 80%, 96%);
+  border-radius: 0.5rem;
+}
+
+.loadingRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.loadingCard {
+  aspect-ratio: 1 / 1;
+
+  background: linear-gradient(
+    90deg,
+    hsl(220, 13%, 96%) 0%,
+    hsl(220, 13%, 92%) 50%,
+    hsl(220, 13%, 96%) 100%
+  );
+  background-size: 200% 100%;
+  border-radius: 0.75rem;
+  animation: shimmer 1.4s linear infinite;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (min-width: 640px) {
+  .stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 720px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1440px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
