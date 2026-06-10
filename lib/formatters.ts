@@ -132,19 +132,6 @@ export function parseISODate(value: string): Date {
   return new Date(year, month - 1, day);
 }
 
-/**
- * Parses a comma-separated string into an array of strings,
- * e.g. "apple,banana,cherry" -> ["apple", "banana", "cherry"].
- * @param input - The comma-separated string to parse.
- * @returns The parsed array of strings.
- */
-export function parseCsv(input: string): string[] {
-  return input
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
-}
-
 export interface SelectOption {
   value: string;
   label: string;

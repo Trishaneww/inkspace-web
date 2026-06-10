@@ -169,8 +169,10 @@ const MetadataCard = ({ flash }: { flash: Flash }) => {
       />
       <MetaRow
         icon={<MapPin size={14} />}
-        label="Placement"
-        value={flash.placements.length ? flash.placements.join(", ") : "—"}
+        label="Allowed placements"
+        value={
+          flash.placements.length ? flash.placements.join(", ") : "All areas"
+        }
       />
       <MetaRow
         icon={<Tag size={14} />}

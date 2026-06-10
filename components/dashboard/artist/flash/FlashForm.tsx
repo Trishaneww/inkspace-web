@@ -74,10 +74,10 @@ export const FlashForm = ({
     updateTierRow,
     colorType,
     setColorType,
-    stylesText,
-    setStylesText,
-    placementsText,
-    setPlacementsText,
+    styleTags,
+    setStyleTags,
+    placements,
+    setPlacements,
     isSaving,
     isTogglingArchive,
     isArchived,
@@ -124,10 +124,10 @@ export const FlashForm = ({
           onOpenChange={setIsMoreDetailsOpen}
           colorType={colorType}
           setColorType={setColorType}
-          placementsText={placementsText}
-          setPlacementsText={setPlacementsText}
-          stylesText={stylesText}
-          setStylesText={setStylesText}
+          placements={placements}
+          setPlacements={setPlacements}
+          styleTags={styleTags}
+          setStyleTags={setStyleTags}
         />
         <FlashDisclaimer />
         {formError && <div className={styles.formError}>{formError}</div>}

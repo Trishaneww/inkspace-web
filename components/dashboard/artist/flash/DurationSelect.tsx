@@ -9,6 +9,7 @@ import {
 
 // Libs
 import { DURATION_OPTIONS } from "@/constants/flashes";
+import { formatSelectValue } from "@/lib/formatters";
 
 interface DurationSelectProps {
   value: string;
@@ -29,11 +30,13 @@ export const DurationSelect = ({
     disabled={disabled}
   >
     <SelectTrigger aria-label={ariaLabel} className="w-full">
-      <SelectValue placeholder="—" />
+      <SelectValue placeholder="—">
+        {(selected) => formatSelectValue(Number(selected), DURATION_OPTIONS)}
+      </SelectValue>
     </SelectTrigger>
     <SelectContent>
       {DURATION_OPTIONS.map((option) => (
-        <SelectItem key={option.minutes} value={String(option.minutes)}>
+        <SelectItem key={option.value} value={String(option.value)}>
           {option.label}
         </SelectItem>
       ))}
