@@ -1,7 +1,11 @@
 // Libs
 import { SETTINGS_TABS } from "@/constants/settings";
 import type { SelectOption } from "@/lib/formatters";
-import type { AvailabilityWindowInput, SettingsTabId } from "@/types/settings";
+import type {
+  AvailabilityWindowInput,
+  FaqItem,
+  SettingsTabId,
+} from "@/types/settings";
 
 export function getChangedFields<D extends Record<string, unknown>>(
   original: Partial<D>,
@@ -53,5 +57,23 @@ export function parseHourCount(value: string): number | null {
 export function areStyleArraysEqual(a: string[], b: string[]): boolean {
   return (
     a.length === b.length && [...a].sort().join("|") === [...b].sort().join("|")
+  );
+}
+
+export function sanitizeFaqs(faqs: FaqItem[]): FaqItem[] {
+  return faqs
+    .map((faq) => ({
+      question: faq.question.trim(),
+      answer: faq.answer.trim(),
+    }))
+    .filter((faq) => faq.question !== "" && faq.answer !== "");
+}
+
+export function areFaqArraysEqual(a: FaqItem[], b: FaqItem[]): boolean {
+  return (
+    a.length === b.length &&
+    a.every(
+      (faq, i) => faq.question === b[i].question && faq.answer === b[i].answer,
+    )
   );
 }

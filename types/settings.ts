@@ -61,10 +61,18 @@ export interface ArtistSettings {
   waiverFileUrl: string;
   waiverRequired: boolean;
 
+  aftercare: string;
+  faqs: FaqItem[];
+
   notifyByEmail: boolean;
   notifyBySms: boolean;
 
   styles: string[];
+}
+
+export interface FaqItem {
+  question: string;
+  answer: string;
 }
 
 export interface AvailabilityWindow {
@@ -136,6 +144,8 @@ export interface UpdateSettingsPayload {
   termsShowOnBooking?: boolean;
   termsShowAtDeposit?: boolean;
   waiverRequired?: boolean;
+  aftercare?: string;
+  faqs?: FaqItem[];
   notifyByEmail?: boolean;
   notifyBySms?: boolean;
   styles?: string[];
