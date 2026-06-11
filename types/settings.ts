@@ -27,12 +27,7 @@ export interface SettingsAccount {
 }
 
 export interface ArtistSettings {
-  studioName: string;
-  studioAddress: string;
-  studioCity: string;
-  studioProvince: string;
-  studioPostalCode: string;
-  studioCountry: string;
+  currentLocationId: string;
 
   stripeConnected: boolean;
   stripeChargesEnabled: boolean;
@@ -70,6 +65,20 @@ export interface ArtistSettings {
   styles: string[];
 }
 
+export interface Location {
+  id: string;
+  label: string;
+  address: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  country: string;
+  timezone: string;
+  isPrimary: boolean;
+  startDate: string | null;
+  endDate: string | null;
+}
+
 export interface FaqItem {
   question: string;
   answer: string;
@@ -99,11 +108,37 @@ export interface BlocklistEntry {
 
 export interface SettingsResponse {
   account: SettingsAccount;
+  locations: Location[];
   settings: ArtistSettings;
   availability: AvailabilityWindow[];
   sessionPresets: SessionPreset[];
   daysOff: string[];
   blocklist: BlocklistEntry[];
+}
+
+export interface CreateLocationPayload {
+  label: string;
+  address: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  country: string;
+  timezone: string;
+  startDate: string;
+  endDate: string;
+}
+
+export interface UpdateLocationPayload {
+  label?: string;
+  address?: string;
+  city?: string;
+  province?: string;
+  postalCode?: string;
+  country?: string;
+  timezone?: string;
+  startDate?: string;
+  endDate?: string;
+  clearDates?: boolean;
 }
 
 // ─── Request payloads ───────────────────────────────────────────────────────
@@ -125,12 +160,6 @@ export interface ChangePasswordPayload {
 }
 
 export interface UpdateSettingsPayload {
-  studioName?: string;
-  studioAddress?: string;
-  studioCity?: string;
-  studioProvince?: string;
-  studioPostalCode?: string;
-  studioCountry?: string;
   payoutFrequency?: PayoutFrequency;
   currency?: string;
   platformFeePayer?: PlatformFeePayer;

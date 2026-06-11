@@ -105,7 +105,6 @@ export function formatTimeOfDay(minutes: number): string {
   return `${hour12}:${mins.toString().padStart(2, "0")} ${period}`;
 }
 
-
 /**
  * Formats a duration in minutes as a compact human-readable string,
  * e.g. 45 -> "~45 min", 60 -> "~1 hour", 90 -> "~1.5 hours".
@@ -161,4 +160,75 @@ export function formatSelectValue<T>(
  */
 export function formatOnOffLabel(bool: boolean): string {
   return bool ? "On" : "Off";
+}
+
+/**
+ * Formats a date range as a human-readable string,
+ * e.g. "2026-06-03" -> "Jun 3, 2026 – Jun 5, 2026".
+ * @param start - The start date in ISO 8601 format.
+ * @param end - The end date in ISO 8601 format.
+ * @returns The formatted date range string.
+ */
+export function formatDateRange(
+  start: string | null,
+  end: string | null,
+): string {
+  if (!start || !end) return "";
+  return `${formatDate(start)} – ${formatDate(end)}`;
+}
+
+export interface FormattableLocation {
+  address?: string | null;
+  city: string;
+  country: string;
+  label?: string;
+}
+
+/**
+ * Formats a location as a plain place string — the street address first when
+ * present, then the city and country, e.g.
+ * { address: "123 Main St", city: "Chicago", country: "USA" } -> "123 Main St, Chicago, USA".
+ * Falls back to the label when address, city, and country are all absent.
+ * @param location - The location to format.
+ * @returns The formatted location string.
+ */
+export function formatLocation(location: FormattableLocation): string {
+  const parts = [location.address, location.city, location.country]
+    .map((part) => part?.trim())
+    .filter(Boolean);
+
+  return parts.length > 0 ? parts.join(", ") : (location.label ?? "");
+}
+
+export interface DatedLocation {
+  city: string;
+  country: string;
+  label: string;
+  isPrimary: boolean;
+  startDate?: string | null;
+  endDate?: string | null;
+}
+
+/**
+ * Formats a location with the dates it's active, for places where the time
+ * range matters (e.g. the studio travel & guest spots picker). The home studio
+ * is tagged "(home)"; guest spots carry their date range, e.g.
+ * { city: "Bali", country: "Indonesia", startDate: "2026-06-18", endDate: "2026-06-20" }
+ *   -> "Bali, Indonesia · Jun 18, 2026 – Jun 20, 2026".
+ * Falls back to label when city and country are both absent.
+ * @param location - The location to format.
+ * @returns The formatted location string.
+ */
+export function formatLocationWithTimeRange(location: DatedLocation): string {
+  const place =
+    [location.city, location.country].filter(Boolean).join(", ") ||
+    location.label;
+
+  if (location.isPrimary) {
+    return place ? `${place} (home)` : "Home studio";
+  }
+
+  return location.startDate
+    ? `${place} · ${formatDateRange(location.startDate, location.endDate ?? null)}`
+    : place;
 }

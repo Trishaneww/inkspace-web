@@ -1,6 +1,6 @@
 // Libs
 import { SETTINGS_TABS } from "@/constants/settings";
-import type { SelectOption } from "@/lib/formatters";
+import { type SelectOption } from "@/lib/formatters";
 import type {
   AvailabilityWindowInput,
   FaqItem,
@@ -77,3 +77,4 @@ export function areFaqArraysEqual(a: FaqItem[], b: FaqItem[]): boolean {
     )
   );
 }
+

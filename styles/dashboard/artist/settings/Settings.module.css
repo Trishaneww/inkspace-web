@@ -750,6 +750,7 @@
 .datePickerTrigger {
   justify-content: flex-start;
 
+  height: 2.25rem;
   font-weight: 400;
 }
 
