@@ -3,7 +3,7 @@ import clsx from "clsx";
 import styles from "@/styles/dashboard/artist/StatusBadge.module.css";
 
 // Libs
-import type { BadgeVariant } from "@/types/booking";
+import type { BadgeVariant } from "@/types/bookings";
 
 interface StatusBadgeProps {
   label: string;

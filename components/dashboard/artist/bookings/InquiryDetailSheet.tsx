@@ -29,11 +29,7 @@ import {
   WAIVER_META,
 } from "@/constants/bookings";
 import { formatRelativeDate, getInquiryActions } from "@/lib/bookings";
-import type {
-  Inquiry,
-  InquiryAction,
-  InquiryActionId,
-} from "@/types/booking";
+import type { Inquiry, InquiryAction, InquiryActionId } from "@/types/bookings";
 import { formatLocation } from "@/lib/formatters";
 
 interface InquiryDetailSheetProps {

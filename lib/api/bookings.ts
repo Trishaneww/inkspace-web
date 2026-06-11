@@ -1,6 +1,6 @@
 // Libs
 import { api } from "@/lib/api/client";
-import type { Inquiry, InquiryListResponse } from "@/types/booking";
+import type { Inquiry, InquiryListResponse } from "@/types/bookings";
 
 export const bookingsApi = {
   list(token: string) {

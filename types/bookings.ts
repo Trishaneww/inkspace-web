@@ -21,6 +21,16 @@ export interface CustomAnswer {
   answer: string;
 }
 
+export interface InquiryLocation {
+  label: string;
+  address: string;
+  city: string;
+  country: string;
+  isPrimary: boolean;
+  startDate?: string;
+  endDate?: string;
+}
+
 export interface Inquiry {
   id: string;
   type: RequestType;
@@ -30,6 +40,8 @@ export interface Inquiry {
   referenceImageUrls: string[];
   placement: string;
   approxSizeInches?: number;
+  colorType: string;
+  location: InquiryLocation | null;
   styles: string[];
   clientAvailability: unknown;
   customAnswers: CustomAnswer[];
@@ -65,6 +77,76 @@ export interface UpdateOpenBookPayload {
   slug?: string;
   schedulingMode?: SchedulingMode;
   customQuestions?: string[];
+}
+
+export interface OpenBookFaq {
+  question: string;
+  answer: string;
+}
+
+export interface OpenBookAvailabilityWindow {
+  weekday: number;
+  startMinute: number;
+  endMinute: number;
+}
+
+export interface OpenBookProfile {
+  username: string;
+  displayName: string;
+  avatarUrl: string;
+  location: string;
+  instagramUrl: string;
+  acceptingBookings: boolean;
+  schedulingMode: SchedulingMode;
+  styles: string[];
+  customQuestions: string[];
+  aftercare: string;
+  faqs: OpenBookFaq[];
+  availability: OpenBookAvailabilityWindow[];
+  locations: OpenBookLocation[];
+}
+
+export interface OpenBookLocation {
+  id: string;
+  label: string;
+  city: string;
+  country: string;
+  isPrimary: boolean;
+  isCurrent: boolean;
+  startDate: string | null;
+  endDate: string | null;
+}
+
+export interface OpenBookCustomAnswer {
+  prompt: string;
+  answer: string;
+}
+
+export interface CreateBookingRequestPayload {
+  locationId: string;
+  description: string;
+  referenceImageKeys: string[];
+  placement: string;
+  approxSizeInches?: number;
+  colorType: string;
+  styles: string[];
+  customAnswers: OpenBookCustomAnswer[];
+  clientAvailability: OpenBookAvailabilityWindow[];
+  clientName: string;
+  clientEmail: string;
+  clientPhone: string;
+}
+
+export interface CreateBookingRequestResult {
+  id: string;
+  status: string;
+  createdAt: string;
+}
+
+export interface PresignReferenceResult {
+  url: string;
+  key: string;
+  expiresAt: string;
 }
 
 export type BadgeVariant =

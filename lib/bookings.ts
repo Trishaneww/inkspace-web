@@ -5,7 +5,7 @@ import type {
   InquiryAction,
   RecencyFilter,
   Inquiry,
-} from "@/types/booking";
+} from "@/types/bookings";
 
 const RECENCY_WINDOW_DAYS: Record<Exclude<RecencyFilter, "all">, number> = {
   "24h": 1,

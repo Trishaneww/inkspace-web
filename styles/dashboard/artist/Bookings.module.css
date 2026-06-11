@@ -241,6 +241,11 @@
   color: hsl(220, 9%, 46%);
 }
 
+.location {
+  font-size: 0.8rem;
+  color: hsl(220, 9%, 46%);
+}
+
 /* ── States ────────────────────────────────────────────────────────────── */
 .emptyState {
   display: flex;

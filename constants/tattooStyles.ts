@@ -1,6 +1,6 @@
 // Libs
 import { ColorType } from "@/types/flash";
-import { BOOKING_PLACEMENTS, PLACEMENT_OTHER } from "./booking";
+import { BOOKING_PLACEMENTS, PLACEMENT_OTHER } from "./bookings";
 
 export const TATTOO_STYLE_OPTIONS: { value: string; label: string }[] = [
   { value: "black_grey_realism", label: "Black & Grey Realism" },

@@ -17,7 +17,7 @@ import type {
   RecencyFilter,
   SortOrder,
   StatusFilter,
-} from "@/types/booking";
+} from "@/types/bookings";
 
 interface BookingsFiltersProps {
   filters: BookingFilters;

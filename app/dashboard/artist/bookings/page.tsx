@@ -22,8 +22,8 @@ import { useArtistSettings } from "@/hooks/useArtistSettings";
 import { useAuth } from "@/lib/auth";
 import { EMPTY_BOOKING_FILTERS } from "@/constants/bookings";
 import { filterInquiries } from "@/lib/bookings";
-import type { BookingFilters } from "@/types/booking";
-import type { BookingStats, Inquiry, OpenBook } from "@/types/booking";
+import type { BookingFilters } from "@/types/bookings";
+import type { BookingStats, Inquiry, OpenBook } from "@/types/bookings";
 import { isLocalEnv } from "@/constants/env";
 
 const EMPTY_STATS: BookingStats = {

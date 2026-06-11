@@ -31,7 +31,7 @@ import { useAuth } from "@/lib/auth";
 import { openBookApi } from "@/lib/api/openBook";
 import type { ArtistSettingsController } from "@/hooks/useArtistSettings";
 import type { AvailabilityWindowInput } from "@/types/settings";
-import type { OpenBook, SchedulingMode } from "@/types/booking";
+import type { OpenBook, SchedulingMode } from "@/types/bookings";
 
 const MAX_QUESTIONS = 3;
 

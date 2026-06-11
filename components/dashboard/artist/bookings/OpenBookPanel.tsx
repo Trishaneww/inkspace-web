@@ -35,7 +35,7 @@ export const OpenBookPanel = ({
     return () => cancelAnimationFrame(frame);
   }, []);
 
-  const path = `/book/${slug}`;
+  const path = `/@${slug}`;
   const fullUrl = `${origin}${path}`;
   const display = origin
     ? `${origin.replace(/^https?:\/\//, "")}${path}`

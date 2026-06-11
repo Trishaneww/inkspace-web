@@ -21,8 +21,8 @@ import type {
   SortOrder,
   StatusFilter,
   WaiverStatus,
-} from "@/types/booking";
-import type { Inquiry } from "@/types/booking";
+} from "@/types/bookings";
+import type { Inquiry } from "@/types/bookings";
 
 export const STATUS_META: Record<InquiryStatus, BadgeMeta> = {
   pending: { label: "New", variant: "pending" },
@@ -49,6 +49,12 @@ export const WAIVER_META: Record<WaiverStatus, BadgeMeta> = {
 export const TYPE_LABELS: Record<RequestType, string> = {
   flash: "Flash",
   custom: "Custom",
+};
+
+export const COLOR_TYPE_LABELS: Record<string, string> = {
+  black_and_grey: "Black & grey",
+  color: "Color",
+  either: "Either / not sure",
 };
 
 export const EMPTY_BOOKING_FILTERS: BookingFilters = {
@@ -134,4 +140,29 @@ export const INQUIRY_ACTIONS: InquiryAction[] = [
     icon: Undo2,
     isAvailable: (i: Inquiry) => i.status === "declined",
   },
+];
+
+export const BOOKING_PLACEMENTS = [
+  "Forearm",
+  "Upper arm",
+  "Shoulder",
+  "Back",
+  "Chest",
+  "Ribs",
+  "Stomach",
+  "Thigh",
+  "Calf",
+  "Ankle",
+  "Foot",
+  "Hand",
+  "Neck",
+  "Other",
+] as const;
+
+export const PLACEMENT_OTHER = "Other";
+
+export const BOOKING_COLOR_TYPES: { value: string; label: string }[] = [
+  { value: "black_and_grey", label: "Black & grey" },
+  { value: "color", label: "Color" },
+  { value: "either", label: "Either / not sure" },
 ];
