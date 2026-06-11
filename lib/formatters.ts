@@ -69,6 +69,16 @@ export function formatPhone(input: string): string {
 }
 
 /**
+ * Whether the value holds a complete 10-digit North-American phone number,
+ * e.g. "+1 (416) 123-4567" -> true, "+1 (416" -> false.
+ * @param input - The phone number to check.
+ * @returns Whether the number is complete.
+ */
+export function isPhoneComplete(input: string): boolean {
+  return input.replace(/\D/g, "").replace(/^1/, "").length === 10;
+}
+
+/**
  * Formats a cents amount as an editable currency input string,
  * e.g. 1500 -> "$15.00", null -> "" (empty, so the field reads as unset).
  * @param cents - The amount in cents, or null when there is no value.

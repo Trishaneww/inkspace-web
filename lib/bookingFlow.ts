@@ -1,11 +1,9 @@
 // Libs
+import { isPhoneComplete } from "@/lib/formatters";
 import { PLACEMENT_OTHER } from "@/constants/bookings";
 import { WEEKDAYS } from "@/constants/settings";
-import { BookingFlowPhaseKind } from "@/types/bookingFlow";
-import type {
-  BookingFlowFormState,
-  BookingFlowPhase,
-} from "@/types/bookingFlow";
+import { BookingFlowPhase } from "@/types/bookingFlow";
+import type { BookingFlowFormState } from "@/types/bookingFlow";
 import type {
   CreateBookingRequestPayload,
   OpenBookAvailabilityWindow,
@@ -35,7 +33,7 @@ export function resolveDefaultLocationId(profile: OpenBookProfile): string {
   );
 }
 
-export function initialBookingForm(
+export function buildInitialBookingForm(
   profile: OpenBookProfile,
 ): BookingFlowFormState {
   return {
@@ -85,8 +83,8 @@ export function availableWeekdays(availability: OpenBookAvailabilityWindow[]) {
 
 /**
  * Builds the ordered list of phases for this artist: the location step only
- * shows with more than one location, one step per custom question, and the
- * availability step only when the artist publishes any hours.
+ * shows with more than one location, the custom-questions step only when the
+ * artist has any, and the availability step only when they publish any hours.
  */
 export function buildBookingPhases(
   profile: OpenBookProfile,
@@ -94,24 +92,20 @@ export function buildBookingPhases(
   const phases: BookingFlowPhase[] = [];
 
   if (profile.locations.length > 1) {
-    phases.push({ kind: BookingFlowPhaseKind.Location });
+    phases.push(BookingFlowPhase.Location);
   }
-  phases.push({ kind: BookingFlowPhaseKind.Tattoo });
-  phases.push({ kind: BookingFlowPhaseKind.Placement });
-  phases.push({ kind: BookingFlowPhaseKind.Style });
-
-  profile.customQuestions.forEach((question, questionIndex) => {
-    phases.push({
-      kind: BookingFlowPhaseKind.CustomQuestion,
-      question,
-      questionIndex,
-    });
-  });
-
+  phases.push(
+    BookingFlowPhase.Tattoo,
+    BookingFlowPhase.Placement,
+    BookingFlowPhase.Style,
+  );
+  if (profile.customQuestions.length > 0) {
+    phases.push(BookingFlowPhase.CustomQuestions);
+  }
   if (availableWeekdays(profile.availability).length > 0) {
-    phases.push({ kind: BookingFlowPhaseKind.Availability });
+    phases.push(BookingFlowPhase.Availability);
   }
-  phases.push({ kind: BookingFlowPhaseKind.Contact });
+  phases.push(BookingFlowPhase.Contact);
 
   return phases;
 }
@@ -120,25 +114,32 @@ export function buildBookingPhases(
 export function validateBookingPhase(
   phase: BookingFlowPhase,
   form: BookingFlowFormState,
+  customQuestions: string[],
   flags: ValidationFlags,
 ): boolean {
-  switch (phase.kind) {
-    case BookingFlowPhaseKind.Location:
+  switch (phase) {
+    case BookingFlowPhase.Location:
       return form.locationId !== "";
-    case BookingFlowPhaseKind.Tattoo:
+    case BookingFlowPhase.Tattoo:
       return form.description.trim() !== "" && !flags.uploading;
-    case BookingFlowPhaseKind.Placement:
+    case BookingFlowPhase.Placement:
       return (
         form.placementChoice !== "" &&
         (form.placementChoice !== PLACEMENT_OTHER ||
-          form.placementOther.trim() !== "")
+          form.placementOther.trim() !== "") &&
+        parseApproxSizeInches(form.approxSize) !== undefined
       );
-    case BookingFlowPhaseKind.Style:
+    case BookingFlowPhase.Style:
       return form.colorType !== "";
-    case BookingFlowPhaseKind.Contact:
+    case BookingFlowPhase.CustomQuestions:
+      return customQuestions.every(
+        (question) => (form.answers[question] ?? "").trim() !== "",
+      );
+    case BookingFlowPhase.Contact:
       return (
         form.clientName.trim() !== "" &&
         form.clientEmail.trim() !== "" &&
+        isPhoneComplete(form.clientPhone) &&
         !flags.submitting
       );
     default:
@@ -152,21 +153,25 @@ export function resolvePlacement(form: BookingFlowFormState): string {
     : form.placementChoice;
 }
 
+/** The whole-inch size, or undefined when the field is empty or not a positive number. */
+export function parseApproxSizeInches(approxSize: string): number | undefined {
+  const size = Number(approxSize);
+  return approxSize.trim() !== "" && Number.isFinite(size) && size > 0
+    ? Math.round(size)
+    : undefined;
+}
+
 export function buildBookingRequestPayload(
   form: BookingFlowFormState,
   referenceImageKeys: string[],
   profile: OpenBookProfile,
 ): CreateBookingRequestPayload {
-  const size = Number(form.approxSize);
-  const hasSize =
-    form.approxSize.trim() !== "" && Number.isFinite(size) && size > 0;
-
   return {
     locationId: form.locationId,
     description: form.description.trim(),
     referenceImageKeys,
     placement: resolvePlacement(form),
-    approxSizeInches: hasSize ? Math.round(size) : undefined,
+    approxSizeInches: parseApproxSizeInches(form.approxSize),
     colorType: form.colorType,
     styles: form.selectedStyles,
     customAnswers: profile.customQuestions
