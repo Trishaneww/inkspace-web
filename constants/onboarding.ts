@@ -13,8 +13,8 @@ export const WEEKDAYS = [
 ];
 
 export const DEFAULT_WORK_DAYS = [1, 2, 3, 4, 5];
-export const DEFAULT_START_MINUTE = 600;
-export const DEFAULT_END_MINUTE = 1080;
+export const DEFAULT_START_MINUTE = 660; // 11:00 AM
+export const DEFAULT_END_MINUTE = 1200; // 8:00 PM
 
 export const SCHEDULING_OPTIONS: {
   value: SchedulingMode;
