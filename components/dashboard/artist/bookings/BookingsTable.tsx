@@ -31,7 +31,8 @@ import {
   WAIVER_META,
 } from "@/constants/bookings";
 import { formatRelativeDate, requestMeta } from "@/lib/bookings";
-import type { Inquiry } from "@/types/booking";
+import { formatLocation } from "@/lib/formatters";
+import type { Inquiry } from "@/types/bookings";
 
 interface BookingsTableProps {
   inquiries: Inquiry[];
@@ -77,6 +78,7 @@ export const BookingsTable = ({ inquiries, onSelect }: BookingsTableProps) => {
             <TableRow>
               <TableHead>Client</TableHead>
               <TableHead>Request</TableHead>
+              <TableHead>Location</TableHead>
               <TableHead>Submitted</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Deposit</TableHead>
@@ -116,6 +118,9 @@ export const BookingsTable = ({ inquiries, onSelect }: BookingsTableProps) => {
                     <div className={styles.requestMeta}>
                       {requestMeta(inquiry)}
                     </div>
+                  </TableCell>
+                  <TableCell className={styles.location}>
+                    {inquiry.location ? formatLocation(inquiry.location) : "—"}
                   </TableCell>
                   <TableCell className={styles.submitted}>
                     {formatRelativeDate(inquiry.createdAt)}
