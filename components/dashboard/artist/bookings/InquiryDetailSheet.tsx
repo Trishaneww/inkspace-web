@@ -22,13 +22,19 @@ import { TATTOO_STYLE_LABELS } from "@/constants/tattooStyles";
 import { useAuth } from "@/lib/auth";
 import { displayToast } from "@/lib/toast";
 import {
+  COLOR_TYPE_LABELS,
   DEPOSIT_META,
   STATUS_META,
   TYPE_LABELS,
   WAIVER_META,
 } from "@/constants/bookings";
 import { formatRelativeDate, getInquiryActions } from "@/lib/bookings";
-import type { Inquiry, InquiryAction, InquiryActionId } from "@/types/booking";
+import type {
+  Inquiry,
+  InquiryAction,
+  InquiryActionId,
+} from "@/types/booking";
+import { formatLocation } from "@/lib/formatters";
 
 interface InquiryDetailSheetProps {
   inquiryId: string | null;
@@ -177,6 +183,14 @@ const InquiryDetailContent = ({
               value={`${inquiry.approxSizeInches}"`}
             />
           )}
+          <DetailRow
+            label="Color"
+            value={COLOR_TYPE_LABELS[inquiry.colorType] ?? inquiry.colorType}
+          />
+          <DetailRow
+            label="Location"
+            value={inquiry.location ? formatLocation(inquiry.location) : "—"}
+          />
           {inquiry.styles.length > 0 && (
             <div className={styles.chipRow}>
               {inquiry.styles.map((style) => (
