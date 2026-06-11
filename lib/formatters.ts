@@ -1,5 +1,6 @@
 // Libs
 import { format, isValid, parseISO } from "date-fns";
+import { MONTHS } from "@/constants/dates";
 
 /**
  * Formats a currency amount in cents as a string,
@@ -98,6 +99,29 @@ export function formatDate(iso: string): string {
   const parsed = parseISO(iso);
   const date = isValid(parsed) ? parsed : new Date(iso);
   return isValid(date) ? format(date, "MMM d, yyyy") : iso;
+}
+
+/**
+ * Formats a YYYY-MM-DD date as a year-less month and day, e.g.
+ * "2026-06-18" -> "Jun 18". Splits the parts directly so the calendar date
+ * never shifts across timezones.
+ * @param iso - The YYYY-MM-DD date string to format.
+ * @returns The formatted "MMM d" string.
+ */
+export function formatMonthDay(iso: string): string {
+  const [, month, day] = iso.split("-").map(Number);
+  return `${MONTHS[month - 1]} ${day}`;
+}
+
+/**
+ * Formats a YYYY-MM-DD date range as year-less month/day values, e.g.
+ * "2026-06-18", "2026-06-20" -> "Jun 18 – Jun 20".
+ * @param start - The start date in YYYY-MM-DD format.
+ * @param end - The end date in YYYY-MM-DD format.
+ * @returns The formatted "MMM d – MMM d" range.
+ */
+export function formatMonthDayRange(start: string, end: string): string {
+  return `${formatMonthDay(start)} – ${formatMonthDay(end)}`;
 }
 
 /**

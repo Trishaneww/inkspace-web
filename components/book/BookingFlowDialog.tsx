@@ -47,12 +47,12 @@ export const BookingFlowDialog = ({
   const {
     phase,
     progress,
-    succeeded,
+    isCompleted,
     submitting,
     error,
     canProceed,
     isFirstPhase,
-    isLastPhase,
+    isLastInputPhase,
     phaseContentRef,
     form,
     update,
@@ -77,32 +77,26 @@ export const BookingFlowDialog = ({
 
         <div className={styles.content}>
           <div className={styles.phaseColumn} ref={phaseContentRef}>
-            {succeeded ? (
-              <BookingSuccess />
-            ) : (
-              <>
-                <BookingFlowHeading phase={phase} />
-                <div className={styles.fields}>
-                  <PhaseContent
-                    phase={phase}
-                    form={form}
-                    update={update}
-                    uploads={uploads}
-                    profile={profile}
-                  />
-                </div>
-                {error && <p className={styles.error}>{error}</p>}
-              </>
-            )}
+            {!isCompleted && <BookingFlowHeading phase={phase} />}
+            <div className={styles.fields}>
+              <PhaseContent
+                phase={phase}
+                form={form}
+                update={update}
+                uploads={uploads}
+                profile={profile}
+              />
+            </div>
+            {!isCompleted && error && <p className={styles.error}>{error}</p>}
           </div>
         </div>
 
         <BookingFlowFooter
-          succeeded={succeeded}
+          isCompleted={isCompleted}
           submitting={submitting}
           canProceed={canProceed}
           isFirstPhase={isFirstPhase}
-          isLastPhase={isLastPhase}
+          isLastInputPhase={isLastInputPhase}
           onNext={goNext}
           onBack={goBack}
           onClose={close}
@@ -190,6 +184,8 @@ const PhaseContent = ({
       );
     case BookingFlowPhase.Contact:
       return <ContactPhase form={form} update={update} />;
+    case BookingFlowPhase.Completed:
+      return <BookingSuccess />;
     default:
       return null;
   }
