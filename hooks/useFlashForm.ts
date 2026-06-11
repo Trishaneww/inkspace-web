@@ -75,6 +75,11 @@ export function useFlashForm({
   const [placements, setPlacements] = useState<string[]>(
     initialFlash?.placements ?? [],
   );
+  const [depositDollars, setDepositDollars] = useState(
+    initialFlash?.deposit_cents != null
+      ? formatCurrency((initialFlash.deposit_cents / 100).toString())
+      : "",
+  );
 
   const [isSaving, setIsSaving] = useState(false);
   const [isTogglingArchive, setIsTogglingArchive] = useState(false);
@@ -101,6 +106,11 @@ export function useFlashForm({
 
     if (!title.trim()) {
       setFormError("Title is required.");
+      return;
+    }
+    const depositCents = convertDollarsToCents(depositDollars);
+    if (!depositCents || depositCents <= 0) {
+      setFormError("A deposit greater than zero is required.");
       return;
     }
     if (publish && !images.hasPrimaryImage) {
@@ -145,6 +155,7 @@ export function useFlashForm({
             pricingMode === "flat"
               ? parseInt(flatDurationMinutes, 10) || null
               : null,
+          deposit_cents: depositCents,
           repeatable,
           pricing_tiers: pricingMode === "per_size" ? enabledTiers : [],
         };
@@ -174,6 +185,7 @@ export function useFlashForm({
             pricingMode === "flat"
               ? parseInt(flatDurationMinutes, 10) || null
               : null,
+          deposit_cents: depositCents,
           repeatable,
           pricing_tiers: pricingMode === "per_size" ? enabledTiers : [],
           publish,
@@ -279,6 +291,8 @@ export function useFlashForm({
     setStyleTags,
     placements,
     setPlacements,
+    depositDollars,
+    setDepositDollars,
     isSaving,
     isTogglingArchive,
     isArchived,

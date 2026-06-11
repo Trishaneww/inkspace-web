@@ -78,6 +78,8 @@ export const FlashForm = ({
     setStyleTags,
     placements,
     setPlacements,
+    depositDollars,
+    setDepositDollars,
     isSaving,
     isTogglingArchive,
     isArchived,
@@ -118,6 +120,10 @@ export const FlashForm = ({
           setFlatDurationMinutes={setFlatDurationMinutes}
           flatPriceDollars={flatPriceDollars}
           setFlatPriceDollars={setFlatPriceDollars}
+        />
+        <FlashDeposit
+          depositDollars={depositDollars}
+          setDepositDollars={setDepositDollars}
         />
         <FlashMoreDetails
           isOpen={isMoreDetailsOpen}
@@ -424,6 +430,34 @@ const FlashPricingToggle = ({
           Flat rate
         </Button>
       </div>
+    </div>
+  );
+};
+
+interface FlashDepositProps {
+  depositDollars: string;
+  setDepositDollars: (depositDollars: string) => void;
+}
+
+const FlashDeposit = ({
+  depositDollars,
+  setDepositDollars,
+}: FlashDepositProps) => {
+  return (
+    <div className={styles.section}>
+      <span className={styles.sectionHeading}>
+        Deposit to claim <span className={styles.required}>*</span>
+      </span>
+      <span className={styles.sectionHelper}>
+        Charged when a client claims this flash, then applied to the final
+        price.
+      </span>
+      <PriceInput
+        ariaLabel="Deposit to claim"
+        value={depositDollars}
+        onChange={setDepositDollars}
+        placeholder="$0.00"
+      />
     </div>
   );
 };
