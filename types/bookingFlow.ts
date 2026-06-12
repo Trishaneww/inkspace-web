@@ -3,18 +3,26 @@ import type { ChangeEvent, RefObject } from "react";
 import type { OpenBookAvailabilityWindow } from "@/types/bookings";
 
 export enum BookingFlowPhase {
+  BookingTrack,
   Location,
   Tattoo,
   Placement,
   Style,
   CustomQuestions,
   Availability,
+  FlashGrid,
+  FlashDetail,
   Contact,
   Completed,
 }
 
+export type BookingFlowEntry = "book" | "flash";
+export type BookingFlowTrack = "choose" | "custom" | "flash";
+
 export interface BookingFlowFormState {
   locationId: string;
+  flashId: string;
+  sizeCode: string;
   description: string;
   placementChoice: string;
   placementOther: string;

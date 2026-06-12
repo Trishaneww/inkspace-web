@@ -8,6 +8,10 @@ export const BOOKING_FLOW_PHASE_META: Record<
   BookingFlowPhase,
   { lead: string; rest: string }
 > = {
+  [BookingFlowPhase.BookingTrack]: {
+    lead: "What are you after?",
+    rest: "A custom piece, or one of the artist's flash designs.",
+  },
   [BookingFlowPhase.Location]: {
     lead: "Where?",
     rest: "Which location would you like to book?",
@@ -31,6 +35,14 @@ export const BOOKING_FLOW_PHASE_META: Record<
   [BookingFlowPhase.Availability]: {
     lead: "Your availability.",
     rest: "Pick the days and times that work for you.",
+  },
+  [BookingFlowPhase.FlashGrid]: {
+    lead: "The flashbook.",
+    rest: "Pick a design to claim.",
+  },
+  [BookingFlowPhase.FlashDetail]: {
+    lead: "Claim this flash.",
+    rest: "Choose your size, placement, and location.",
   },
   [BookingFlowPhase.Contact]: {
     lead: "Your contact.",

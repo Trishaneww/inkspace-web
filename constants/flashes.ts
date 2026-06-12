@@ -18,6 +18,10 @@ export const FLASH_SIZE_OPTIONS: FlashSizeOption[] = [
   { code: "x_large", label: "X-Large", description: "7+ inches" },
 ];
 
+export const FLASH_SIZE_LABELS: Record<string, string> = Object.fromEntries(
+  FLASH_SIZE_OPTIONS.map((size) => [size.code, size.label]),
+);
+
 export const DURATION_OPTIONS = [
   { value: 30, label: "30 min" },
   { value: 45, label: "45 min" },
