@@ -201,6 +201,35 @@
   }
 }
 
+.flashbookButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 2.5rem;
+
+  margin-top: -0.75rem;
+  border-radius: var(--ob-radius-sm);
+
+  border: 1px solid var(--ob-border);
+  background-color: var(--ob-surface);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ob-text);
+
+  cursor: pointer;
+  transition: background-color 150ms ease;
+
+  &:hover:not(:disabled) {
+    background-color: var(--ob-surface-hover);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
 /* ── Expandable sections ───────────────────────────────────────────────────*/
 .sections {
   display: flex;

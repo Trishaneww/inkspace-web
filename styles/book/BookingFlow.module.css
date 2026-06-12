@@ -114,3 +114,108 @@
   background-color: var(--color-success-background, hsl(150, 60%, 95%));
   color: var(--color-success-foreground, hsl(150, 55%, 35%));
 }
+
+/* ── Flashbook ─────────────────────────────────────────────────────────────*/
+.flashState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8rem;
+
+  font-size: 0.9rem;
+  color: var(--color-muted-foreground);
+  text-align: center;
+}
+
+.flashGrid {
+  display: grid;
+  /* Fill the width with as many tiles as fit — flashbooks can be large. */
+  grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+
+  gap: 0.6rem;
+}
+
+.flashTile {
+  position: relative;
+  aspect-ratio: 1 / 1;
+
+  border-radius: 0.75rem;
+
+  border: 2px solid transparent;
+  background-color: var(--color-neutral-background);
+
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 150ms ease;
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
+}
+
+.flashTileActive {
+  border-color: var(--color-primary);
+}
+
+.flashTileImage {
+  object-fit: cover;
+}
+
+.flashTilePlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  padding: 0.5rem;
+
+  font-size: 0.75rem;
+  color: var(--color-muted-foreground);
+  text-align: center;
+}
+
+.flashDetail {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1.25rem;
+}
+
+.flashHero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-height: 18rem;
+
+  border-radius: 0.875rem;
+
+  background-color: var(--color-neutral-background);
+  overflow: hidden;
+}
+
+.flashHeroImage {
+  object-fit: cover;
+}
+
+.flashSummary {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.25rem;
+}
+
+.flashName {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.flashDeposit {
+  font-size: 0.95rem;
+  color: var(--foreground);
+}
+
+.flashPrice {
+  font-size: 0.8rem;
+  color: var(--color-muted-foreground);
+}

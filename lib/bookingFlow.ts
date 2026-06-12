@@ -3,12 +3,16 @@ import { isPhoneComplete } from "@/lib/formatters";
 import { PLACEMENT_OTHER } from "@/constants/bookings";
 import { WEEKDAYS } from "@/constants/settings";
 import { BookingFlowPhase } from "@/types/bookingFlow";
-import type { BookingFlowFormState } from "@/types/bookingFlow";
+import type {
+  BookingFlowFormState,
+  BookingFlowTrack,
+} from "@/types/bookingFlow";
 import type {
   CreateBookingRequestPayload,
   OpenBookAvailabilityWindow,
   OpenBookProfile,
 } from "@/types/bookings";
+import type { Flash } from "@/types/flash";
 
 export interface DayBound {
   start: number;
@@ -38,6 +42,8 @@ export function buildInitialBookingForm(
 ): BookingFlowFormState {
   return {
     locationId: resolveDefaultLocationId(profile),
+    flashId: "",
+    sizeCode: "",
     description: "",
     placementChoice: "",
     placementOther: "",
@@ -81,33 +87,56 @@ export function availableWeekdays(availability: OpenBookAvailabilityWindow[]) {
   return WEEKDAYS.filter((day) => bounds.has(day.value));
 }
 
-/**
- * Builds the ordered list of phases for this artist: the location step only
- * shows with more than one location, the custom-questions step only when the
- * artist has any, and the availability step only when they publish any hours.
- */
 export function buildBookingPhases(
   profile: OpenBookProfile,
+  track: BookingFlowTrack,
+  includesFlashChoice: boolean,
 ): BookingFlowPhase[] {
   const phases: BookingFlowPhase[] = [];
 
-  if (profile.locations.length > 1) {
-    phases.push(BookingFlowPhase.Location);
+  if (includesFlashChoice) {
+    phases.push(BookingFlowPhase.BookingTrack);
   }
-  phases.push(
-    BookingFlowPhase.Tattoo,
-    BookingFlowPhase.Placement,
-    BookingFlowPhase.Style,
-  );
-  if (profile.customQuestions.length > 0) {
-    phases.push(BookingFlowPhase.CustomQuestions);
+
+  if (track === "flash") {
+    phases.push(
+      BookingFlowPhase.FlashGrid,
+      BookingFlowPhase.FlashDetail,
+      BookingFlowPhase.Contact,
+    );
+  } else if (track === "custom") {
+    if (profile.locations.length > 1) {
+      phases.push(BookingFlowPhase.Location);
+    }
+    phases.push(
+      BookingFlowPhase.Tattoo,
+      BookingFlowPhase.Placement,
+      BookingFlowPhase.Style,
+    );
+    if (profile.customQuestions.length > 0) {
+      phases.push(BookingFlowPhase.CustomQuestions);
+    }
+    if (availableWeekdays(profile.availability).length > 0) {
+      phases.push(BookingFlowPhase.Availability);
+    }
+    phases.push(BookingFlowPhase.Contact);
   }
-  if (availableWeekdays(profile.availability).length > 0) {
-    phases.push(BookingFlowPhase.Availability);
-  }
-  phases.push(BookingFlowPhase.Contact);
 
   return phases;
+}
+
+/** Whether the flash-detail selections are complete enough to continue. */
+export function validateFlashDetail(
+  flash: Flash | null,
+  form: BookingFlowFormState,
+): boolean {
+  if (!flash) return false;
+  const needsSize = flash.pricing_mode === "per_size";
+  return (
+    form.locationId !== "" &&
+    form.placementChoice !== "" &&
+    (!needsSize || form.sizeCode !== "")
+  );
 }
 
 /** Whether the client may advance past the given phase. */
@@ -181,6 +210,26 @@ export function buildBookingRequestPayload(
       }))
       .filter((entry) => entry.answer !== ""),
     clientAvailability: form.windows,
+    clientName: form.clientName.trim(),
+    clientEmail: form.clientEmail.trim(),
+    clientPhone: form.clientPhone.trim(),
+  };
+}
+
+export function buildFlashRequestPayload(
+  form: BookingFlowFormState,
+): CreateBookingRequestPayload {
+  return {
+    locationId: form.locationId,
+    flashId: form.flashId,
+    sizeCode: form.sizeCode,
+    description: "",
+    referenceImageKeys: [],
+    placement: form.placementChoice,
+    colorType: "",
+    styles: [],
+    customAnswers: [],
+    clientAvailability: [],
     clientName: form.clientName.trim(),
     clientEmail: form.clientEmail.trim(),
     clientPhone: form.clientPhone.trim(),

@@ -12,7 +12,7 @@ interface BookingFlowFooterProps {
   submitting: boolean;
   canProceed: boolean;
   isFirstPhase: boolean;
-  isLastInputPhase: boolean;
+  primaryLabel: string | null;
   onNext: () => void;
   onBack: () => void;
   onClose: () => void;
@@ -23,7 +23,7 @@ export const BookingFlowFooter = ({
   submitting,
   canProceed,
   isFirstPhase,
-  isLastInputPhase,
+  primaryLabel,
   onNext,
   onBack,
   onClose,
@@ -49,14 +49,16 @@ export const BookingFlowFooter = ({
             Done
           </Button>
         ) : (
-          <Button
-            className={styles.continueBtn}
-            disabled={!canProceed}
-            onClick={onNext}
-          >
-            {isLastInputPhase ? "Send request" : "Continue"}
-            {submitting && <Loader2 size={16} className="animate-spin" />}
-          </Button>
+          primaryLabel && (
+            <Button
+              className={styles.continueBtn}
+              disabled={!canProceed}
+              onClick={onNext}
+            >
+              {primaryLabel}
+              {submitting && <Loader2 size={16} className="animate-spin" />}
+            </Button>
+          )
         )}
       </div>
     </div>

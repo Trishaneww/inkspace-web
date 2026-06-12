@@ -28,18 +28,27 @@ import type {
   OpenBookAvailabilityWindow,
   OpenBookProfile,
 } from "@/types/bookings";
+import type { BookingFlowEntry } from "@/types/bookingFlow";
 
 export const OpenBookHub = ({ profile }: { profile: OpenBookProfile }) => {
-  const [bookingOpen, setBookingOpen] = useState(false);
+  const [entry, setEntry] = useState<BookingFlowEntry | null>(null);
 
   return (
     <>
-      <ProfileCard profile={profile} onBook={() => setBookingOpen(true)} />
-      <BookingFlowDialog
+      <ProfileCard
         profile={profile}
-        open={bookingOpen}
-        onOpenChange={setBookingOpen}
+        onBook={() => setEntry("book")}
+        onBrowseFlash={() => setEntry("flash")}
       />
+      {entry && (
+        <BookingFlowDialog
+          profile={profile}
+          entry={entry}
+          onOpenChange={(open) => {
+            if (!open) setEntry(null);
+          }}
+        />
+      )}
     </>
   );
 };
@@ -47,9 +56,11 @@ export const OpenBookHub = ({ profile }: { profile: OpenBookProfile }) => {
 const ProfileCard = ({
   profile,
   onBook,
+  onBrowseFlash,
 }: {
   profile: OpenBookProfile;
   onBook: () => void;
+  onBrowseFlash: () => void;
 }) => {
   const initial = profile.username.trim().charAt(0).toUpperCase() || "?";
 
@@ -101,6 +112,18 @@ const ProfileCard = ({
       >
         Book a tattoo
       </Button>
+
+      {profile.hasFlashes && (
+        <Button
+          type="button"
+          variant="outline"
+          className={styles.flashbookButton}
+          onClick={onBrowseFlash}
+          disabled={!profile.acceptingBookings}
+        >
+          Browse flashbook
+        </Button>
+      )}
 
       <div className={styles.sections}>
         {profile.availability.length > 0 && (

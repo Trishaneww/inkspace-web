@@ -31,6 +31,12 @@ export interface InquiryLocation {
   endDate?: string;
 }
 
+export interface InquiryFlash {
+  title: string;
+  imageUrls: string[];
+  sizeCode?: string;
+}
+
 export interface Inquiry {
   id: string;
   type: RequestType;
@@ -42,6 +48,7 @@ export interface Inquiry {
   approxSizeInches?: number;
   colorType: string;
   location: InquiryLocation | null;
+  flash?: InquiryFlash;
   styles: string[];
   clientAvailability: unknown;
   customAnswers: CustomAnswer[];
@@ -92,6 +99,8 @@ export interface OpenBookAvailabilityWindow {
 
 export interface OpenBookProfile {
   username: string;
+  artistId: string;
+  hasFlashes: boolean;
   displayName: string;
   avatarUrl: string;
   location: string;
@@ -124,6 +133,8 @@ export interface OpenBookCustomAnswer {
 
 export interface CreateBookingRequestPayload {
   locationId: string;
+  flashId?: string;
+  sizeCode?: string;
   description: string;
   referenceImageKeys: string[];
   placement: string;
