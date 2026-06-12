@@ -19,6 +19,7 @@ import { StatusBadge } from "./StatusBadge";
 // Libs
 import { bookingsApi } from "@/lib/api/bookings";
 import { TATTOO_STYLE_LABELS } from "@/constants/tattooStyles";
+import { FLASH_SIZE_LABELS } from "@/constants/flashes";
 import { useAuth } from "@/lib/auth";
 import { displayToast } from "@/lib/toast";
 import {
@@ -29,8 +30,8 @@ import {
   WAIVER_META,
 } from "@/constants/bookings";
 import { formatRelativeDate, getInquiryActions } from "@/lib/bookings";
-import type { Inquiry, InquiryAction, InquiryActionId } from "@/types/bookings";
 import { formatLocation } from "@/lib/formatters";
+import type { Inquiry, InquiryAction, InquiryActionId } from "@/types/bookings";
 
 interface InquiryDetailSheetProps {
   inquiryId: string | null;
@@ -170,8 +171,20 @@ const InquiryDetailContent = ({
         <div className={styles.detailCard}>
           <span className={styles.detailCardTitle}>The piece</span>
           <DetailRow label="Type" value={TYPE_LABELS[inquiry.type]} />
+          {inquiry.flash && (
+            <DetailRow label="Design" value={inquiry.flash.title} />
+          )}
           {inquiry.placement && (
             <DetailRow label="Placement" value={inquiry.placement} />
+          )}
+          {inquiry.flash?.sizeCode && (
+            <DetailRow
+              label="Size"
+              value={
+                FLASH_SIZE_LABELS[inquiry.flash.sizeCode] ??
+                inquiry.flash.sizeCode
+              }
+            />
           )}
           {inquiry.approxSizeInches != null && (
             <DetailRow
@@ -201,34 +214,63 @@ const InquiryDetailContent = ({
           )}
         </div>
 
-        <div className={styles.detailCard}>
-          <span className={styles.detailCardTitle}>Reference photos</span>
-          {inquiry.referenceImageUrls.length === 0 ? (
-            <span className={styles.detailEmpty}>
-              No reference photos were uploaded.
-            </span>
-          ) : (
-            <div className={styles.referenceGrid}>
-              {inquiry.referenceImageUrls.map((url, index) => (
-                <button
-                  key={url}
-                  type="button"
-                  className={styles.referenceThumb}
-                  onClick={() => setLightboxUrl(url)}
-                  aria-label={`View reference photo ${index + 1}`}
-                >
-                  <Image
-                    src={url}
-                    alt={`Reference photo ${index + 1}`}
-                    fill
-                    unoptimized
-                    className={styles.referenceImg}
-                  />
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        {inquiry.flash ? (
+          <div className={styles.detailCard}>
+            <span className={styles.detailCardTitle}>Flash design</span>
+            {inquiry.flash.imageUrls.length === 0 ? (
+              <span className={styles.detailEmpty}>No image available.</span>
+            ) : (
+              <div className={styles.referenceGrid}>
+                {inquiry.flash.imageUrls.map((url, index) => (
+                  <button
+                    key={url}
+                    type="button"
+                    className={styles.referenceThumb}
+                    onClick={() => setLightboxUrl(url)}
+                    aria-label={`View flash image ${index + 1}`}
+                  >
+                    <Image
+                      src={url}
+                      alt={`Flash image ${index + 1}`}
+                      fill
+                      unoptimized
+                      className={styles.referenceImg}
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className={styles.detailCard}>
+            <span className={styles.detailCardTitle}>Reference photos</span>
+            {inquiry.referenceImageUrls.length === 0 ? (
+              <span className={styles.detailEmpty}>
+                No reference photos were uploaded.
+              </span>
+            ) : (
+              <div className={styles.referenceGrid}>
+                {inquiry.referenceImageUrls.map((url, index) => (
+                  <button
+                    key={url}
+                    type="button"
+                    className={styles.referenceThumb}
+                    onClick={() => setLightboxUrl(url)}
+                    aria-label={`View reference photo ${index + 1}`}
+                  >
+                    <Image
+                      src={url}
+                      alt={`Reference photo ${index + 1}`}
+                      fill
+                      unoptimized
+                      className={styles.referenceImg}
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className={styles.detailCard}>
           <span className={styles.detailCardTitle}>Client</span>
