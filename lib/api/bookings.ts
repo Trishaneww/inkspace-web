@@ -1,6 +1,12 @@
 // Libs
 import { api } from "@/lib/api/client";
-import type { Inquiry, InquiryListResponse } from "@/types/bookings";
+import type {
+  AcceptInquiryPayload,
+  Inquiry,
+  InquiryListResponse,
+  RequestConsultationPayload,
+  RescheduleAppointmentPayload,
+} from "@/types/bookings";
 
 export const bookingsApi = {
   list(token: string) {
@@ -11,10 +17,30 @@ export const bookingsApi = {
     return api.get<Inquiry>(`/v1/current-user/bookings/${id}`, token);
   },
 
-  accept(token: string, id: string, sessionDurationMinutes?: number) {
+  accept(token: string, id: string, payload: AcceptInquiryPayload) {
     return api.post<Inquiry>(
       `/v1/current-user/bookings/${id}/accept`,
-      { sessionDurationMinutes },
+      payload,
+      token,
+    );
+  },
+
+  requestConsultation(
+    token: string,
+    id: string,
+    payload: RequestConsultationPayload,
+  ) {
+    return api.post<Inquiry>(
+      `/v1/current-user/bookings/${id}/request-consultation`,
+      payload,
+      token,
+    );
+  },
+
+  reschedule(token: string, id: string, payload: RescheduleAppointmentPayload) {
+    return api.post<Inquiry>(
+      `/v1/current-user/bookings/${id}/reschedule`,
+      payload,
       token,
     );
   },
