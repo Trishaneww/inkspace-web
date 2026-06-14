@@ -24,8 +24,12 @@ import { useSlideTransition } from "@/hooks/useSlideTransition";
 import { bookingsApi } from "@/lib/api/bookings";
 import { useAuth } from "@/lib/auth";
 import { displayToast } from "@/lib/toast";
-import { STATUS_META, TYPE_LABELS } from "@/constants/bookings";
-import { formatRelativeDate, getInquiryActions } from "@/lib/bookings";
+import { TYPE_LABELS } from "@/constants/bookings";
+import {
+  formatRelativeDate,
+  getInquiryActions,
+  getInquiryStatusMeta,
+} from "@/lib/bookings";
 import type { Inquiry, InquiryAction, InquiryActionId } from "@/types/bookings";
 
 interface InquiryDetailViewProps {
@@ -82,7 +86,7 @@ export const InquiryDetailView = ({
     }
   };
 
-  const status = STATUS_META[inquiry.status];
+  const status = getInquiryStatusMeta(inquiry);
 
   return (
     <div className={styles.editForm}>

@@ -223,15 +223,15 @@ export const PersonalInfoTab = ({
 
       <EditableCard
         title="Styles"
-        description="The styles you specialize in. Clients booking a custom piece can only choose from these."
+        description="The styles you specialize in — optional, it just helps clients get to know your work."
         onSubmit={() => saveSettings({ styles: stylesDraft.draft.styles })}
         successToast="Styles updated"
         errorToast="Couldn't save styles"
         onCancel={stylesDraft.reset}
-        disableSubmit={
-          stylesDraft.draft.styles.length === 0 ||
-          areStyleArraysEqual(settings.styles ?? [], stylesDraft.draft.styles)
-        }
+        disableSubmit={areStyleArraysEqual(
+          settings.styles ?? [],
+          stylesDraft.draft.styles,
+        )}
       >
         <StylesField
           selected={stylesDraft.draft.styles}
@@ -359,16 +359,7 @@ const StylesField = ({
   const isEditing = useIsEditing();
 
   if (isEditing) {
-    return (
-      <>
-        <TattooStylesPicker value={selected} onChange={onChange} />
-        {selected.length === 0 && (
-          <span className={styles.fieldError}>
-            Select at least one style so clients can book with you.
-          </span>
-        )}
-      </>
-    );
+    return <TattooStylesPicker value={selected} onChange={onChange} />;
   }
 
   return (

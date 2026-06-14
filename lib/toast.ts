@@ -10,7 +10,7 @@ export function displayToast(
 ) {
   toastPrimitive[type](message, {
     description,
-    duration: 6000,
+    duration: 4000,
     position: getToastPosition(),
   });
 }

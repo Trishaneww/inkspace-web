@@ -1,12 +1,27 @@
 // Libs
-import {COLOR_TYPE_LABELS, INQUIRY_ACTIONS } from "@/constants/bookings";
+import {
+  COLOR_TYPE_LABELS,
+  INQUIRY_ACTIONS,
+  STATUS_META,
+} from "@/constants/bookings";
 import { FLASH_SIZE_LABELS } from "@/constants/flashes";
 import type {
+  BadgeMeta,
   BookingFilters,
   InquiryAction,
   RecencyFilter,
   Inquiry,
 } from "@/types/bookings";
+
+export function getInquiryStatusMeta(inquiry: Inquiry): BadgeMeta {
+  if (
+    inquiry.status === "accepted" &&
+    inquiry.appointment?.status === "proposed"
+  ) {
+    return { label: "Proposed", variant: "pending" };
+  }
+  return STATUS_META[inquiry.status];
+}
 
 const RECENCY_WINDOW_DAYS: Record<Exclude<RecencyFilter, "all">, number> = {
   "24h": 1,

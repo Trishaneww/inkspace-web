@@ -50,13 +50,12 @@ export function useInquiryScheduling(
   };
 
   const openReschedule = () => {
-    const appointment = inquiry.appointment;
-    if (!appointment) return;
+    const type = inquiry.appointment?.type ?? "session";
     setForm(createRescheduleForm(inquiry));
     setError(null);
     setIsReschedule(true);
-    setPhase(getStartingPhase(appointment.type));
-    setAppointmentType(appointment.type);
+    setPhase(getStartingPhase(type));
+    setAppointmentType(type);
   };
 
   const close = () => {

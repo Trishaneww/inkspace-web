@@ -115,7 +115,7 @@ export const useOnboardingForm = () => {
           form.availability.every((w) => w.endMinute > w.startMinute)
         );
       case OnboardingPhase.Styles:
-        return form.styles.length > 0;
+        return true;
       case OnboardingPhase.Bookings:
         return form.schedulingMode !== "";
       default:

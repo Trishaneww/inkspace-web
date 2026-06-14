@@ -30,7 +30,7 @@ import type { Inquiry } from "@/types/bookings";
 export const STATUS_META: Record<InquiryStatus, BadgeMeta> = {
   pending: { label: "New", variant: "pending" },
   consultation_requested: { label: "Consultation", variant: "warning" },
-  accepted: { label: "Accepted", variant: "success" },
+  accepted: { label: "Scheduled", variant: "success" },
   declined: { label: "Declined", variant: "failure" },
   expired: { label: "Expired", variant: "inactive" },
   converted: { label: "Booked", variant: "success" },
@@ -124,7 +124,7 @@ export const STATUS_FILTER_OPTIONS: { value: StatusFilter; label: string }[] = [
   { value: "all", label: "All statuses" },
   { value: "pending", label: "New" },
   { value: "consultation_requested", label: "Consultation" },
-  { value: "accepted", label: "Accepted" },
+  { value: "accepted", label: "Scheduled" },
   { value: "declined", label: "Declined" },
   { value: "converted", label: "Booked" },
 ];
@@ -181,7 +181,8 @@ export const INQUIRY_ACTIONS: InquiryAction[] = [
     id: "reschedule",
     label: "Reschedule",
     icon: CalendarClock,
-    isAvailable: (i: Inquiry) => i.appointment?.status === "scheduled",
+    isAvailable: (i: Inquiry) =>
+      isActiveBooking(i.status) || i.appointment?.status === "scheduled",
   },
   {
     id: "cancel",

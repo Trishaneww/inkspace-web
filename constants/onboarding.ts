@@ -64,7 +64,7 @@ export const ONBOARDING_PHASE_META: Record<
   },
   [OnboardingPhase.Styles]: {
     lead: "Your styles.",
-    rest: "What you specialize in — clients pick from these for custom work.",
+    rest: "Optional — what you specialize in, so we can get to know your work.",
   },
   [OnboardingPhase.Bookings]: {
     lead: "Bookings.",
