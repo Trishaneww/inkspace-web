@@ -34,6 +34,7 @@ export const STATUS_META: Record<InquiryStatus, BadgeMeta> = {
   declined: { label: "Declined", variant: "failure" },
   expired: { label: "Expired", variant: "inactive" },
   converted: { label: "Booked", variant: "success" },
+  cancelled: { label: "Cancelled", variant: "failure" },
 };
 
 export const DEPOSIT_META: Record<DepositStatus, BadgeMeta> = {
@@ -148,6 +149,9 @@ const isUndecided = (status: InquiryStatus) =>
 const isActiveBooking = (status: InquiryStatus) =>
   status === "accepted" || status === "converted";
 
+const hasLiveAppointment = (i: Inquiry) =>
+  i.appointment?.status === "scheduled" || i.appointment?.status === "proposed";
+
 export const INQUIRY_ACTIONS: InquiryAction[] = [
   {
     id: "accept",
@@ -160,13 +164,13 @@ export const INQUIRY_ACTIONS: InquiryAction[] = [
     label: "Decline",
     icon: X,
     destructive: true,
-    isAvailable: (i: Inquiry) => isUndecided(i.status),
+    isAvailable: (i: Inquiry) => isUndecided(i.status) && !hasLiveAppointment(i),
   },
   {
     id: "book_consultation",
     label: "Request consultation",
     icon: CalendarPlus,
-    isAvailable: (i: Inquiry) => i.status === "pending",
+    isAvailable: (i: Inquiry) => i.status === "pending" && !hasLiveAppointment(i),
   },
   {
     id: "request_deposit",
@@ -186,16 +190,22 @@ export const INQUIRY_ACTIONS: InquiryAction[] = [
   },
   {
     id: "cancel",
-    label: "Cancel booking",
+    label: (i: Inquiry) =>
+      i.appointment?.type === "consultation"
+        ? "Cancel consultation"
+        : "Cancel booking",
     icon: Ban,
     destructive: true,
-    isAvailable: (i: Inquiry) => isActiveBooking(i.status),
+    isAvailable: (i: Inquiry) =>
+      hasLiveAppointment(i) || isActiveBooking(i.status),
   },
   {
     id: "reopen",
-    label: "Undo decline",
+    label: (i: Inquiry) =>
+      i.status === "cancelled" ? "Reopen" : "Undo decline",
     icon: Undo2,
-    isAvailable: (i: Inquiry) => i.status === "declined",
+    isAvailable: (i: Inquiry) =>
+      i.status === "declined" || i.status === "cancelled",
   },
 ];
 

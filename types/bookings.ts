@@ -9,7 +9,8 @@ export type InquiryStatus =
   | "accepted"
   | "declined"
   | "expired"
-  | "converted";
+  | "converted"
+  | "cancelled";
 
 export type DepositStatus = "not_required" | "pending" | "paid" | "refunded";
 export type WaiverStatus = "not_required" | "pending" | "signed";
@@ -99,6 +100,7 @@ export interface Inquiry {
   schedulingMode: SchedulingMode;
   artistAvailability: OpenBookAvailabilityWindow[];
   appointment?: Appointment;
+  liveAppointments: Appointment[];
 }
 
 export interface AcceptInquiryPayload {
@@ -250,8 +252,15 @@ export type InquiryActionId =
 
 export interface InquiryAction {
   id: InquiryActionId;
-  label: string;
+  label: string | ((inquiry: Inquiry) => string);
   icon: LucideIcon;
   destructive?: boolean;
   isAvailable: (inquiry: Inquiry) => boolean;
+}
+
+export interface ResolvedInquiryAction {
+  id: InquiryActionId;
+  label: string;
+  icon: LucideIcon;
+  destructive?: boolean;
 }

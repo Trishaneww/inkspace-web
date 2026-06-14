@@ -1,12 +1,20 @@
 "use client";
 
+// Next.js
+import { useState } from "react";
+
 // CSS
 import styles from "@/styles/dashboard/artist/Bookings.module.css";
 
 // HTML Components
 import { SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ArrowLeft, Ban, Loader2 } from "lucide-react";
 
 // Components
 import { StatusBadge } from "./StatusBadge";
@@ -27,10 +35,16 @@ import { displayToast } from "@/lib/toast";
 import { TYPE_LABELS } from "@/constants/bookings";
 import {
   formatRelativeDate,
+  getCancelLabel,
   getInquiryActions,
   getInquiryStatusMeta,
 } from "@/lib/bookings";
-import type { Inquiry, InquiryAction, InquiryActionId } from "@/types/bookings";
+import type {
+  Appointment,
+  Inquiry,
+  InquiryActionId,
+  ResolvedInquiryAction,
+} from "@/types/bookings";
 
 interface InquiryDetailViewProps {
   inquiry: Inquiry;
@@ -76,6 +90,23 @@ export const InquiryDetailView = ({
       } else {
         displayToast("Coming soon", "info");
       }
+    } catch (err) {
+      displayToast(
+        err instanceof Error ? err.message : "Action failed",
+        "error",
+      );
+    } finally {
+      setActingId(null);
+    }
+  };
+
+  const runCancel = async (appointmentId?: string) => {
+    if (!token) return;
+    setActingId("cancel");
+    try {
+      setInquiry(await bookingsApi.cancel(token, inquiry.id, appointmentId));
+      displayToast("Cancelled", "success");
+      onActed();
     } catch (err) {
       displayToast(
         err instanceof Error ? err.message : "Action failed",
@@ -141,8 +172,10 @@ export const InquiryDetailView = ({
       {!appointmentType ? (
         <InquirySheetFooter
           actions={getInquiryActions(inquiry)}
+          liveAppointments={inquiry.liveAppointments}
           actingId={actingId}
           onAction={runAction}
+          onCancel={runCancel}
         />
       ) : phase === "length" ? (
         <ScheduleFooter onBack={scheduling.back} />
@@ -173,22 +206,35 @@ const SCHEDULE_PHASE_INDEX: Record<SchedulePhase, number> = {
 };
 
 interface InquirySheetFooterProps {
-  actions: InquiryAction[];
+  actions: ResolvedInquiryAction[];
+  liveAppointments: Appointment[];
   actingId: InquiryActionId | null;
   onAction: (action: InquiryActionId) => void;
+  onCancel: (appointmentId?: string) => void;
 }
 
 const InquirySheetFooter = ({
   actions,
+  liveAppointments,
   actingId,
   onAction,
+  onCancel,
 }: InquirySheetFooterProps) => {
   if (actions.length === 0) return null;
 
   return (
     <div className={styles.editFooter}>
-      {actions.map((action) => {
-        return (
+      {actions.map((action) =>
+        action.id === "cancel" ? (
+          <CancelControl
+            key="cancel"
+            label={action.label}
+            liveAppointments={liveAppointments}
+            disabled={actingId !== null}
+            loading={actingId === "cancel"}
+            onCancel={onCancel}
+          />
+        ) : (
           <Button
             key={action.id}
             type="button"
@@ -202,9 +248,69 @@ const InquirySheetFooter = ({
               <Loader2 size={16} className="animate-spin" />
             )}
           </Button>
-        );
-      })}
+        ),
+      )}
     </div>
+  );
+};
+
+const CancelControl = ({
+  label,
+  liveAppointments,
+  disabled,
+  loading,
+  onCancel,
+}: {
+  label: string;
+  liveAppointments: Appointment[];
+  disabled: boolean;
+  loading: boolean;
+  onCancel: (appointmentId?: string) => void;
+}) => {
+  const [open, setOpen] = useState(false);
+
+  if (liveAppointments.length >= 2) {
+    return (
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger
+          render={
+            <Button type="button" variant="destructive" disabled={disabled}>
+              <Ban size={16} className={styles.actionBtnIcon} />
+              Cancel
+              {loading && <Loader2 size={16} className="animate-spin" />}
+            </Button>
+          }
+        />
+        <PopoverContent className={styles.cancelPopover} align="end">
+          {liveAppointments.map((appt) => (
+            <button
+              key={appt.id}
+              type="button"
+              className={styles.cancelOption}
+              onClick={() => {
+                setOpen(false);
+                onCancel(appt.id);
+              }}
+            >
+              {getCancelLabel(appt.type)}
+            </button>
+          ))}
+        </PopoverContent>
+      </Popover>
+    );
+  }
+
+  return (
+    <Button
+      type="button"
+      variant="destructive"
+      disabled={disabled}
+      onClick={() => onCancel(liveAppointments[0]?.id)}
+    >
+      <Ban size={16} className={styles.actionBtnIcon} />
+      {label}
+      {loading && <Loader2 size={16} className="animate-spin" />}
+    </Button>
   );
 };
 

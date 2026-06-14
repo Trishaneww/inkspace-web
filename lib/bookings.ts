@@ -8,9 +8,10 @@ import { FLASH_SIZE_LABELS } from "@/constants/flashes";
 import type {
   BadgeMeta,
   BookingFilters,
-  InquiryAction,
   RecencyFilter,
+  ResolvedInquiryAction,
   Inquiry,
+  AppointmentType,
 } from "@/types/bookings";
 
 export function getInquiryStatusMeta(inquiry: Inquiry): BadgeMeta {
@@ -71,10 +72,20 @@ export function hasActiveBookingFilters(filters: BookingFilters): boolean {
   );
 }
 
-export function getInquiryActions(inquiry: Inquiry): InquiryAction[] {
-  return INQUIRY_ACTIONS.filter((action) => action.isAvailable(inquiry)).sort(
-    (a, b) => Number(a.destructive ?? false) - Number(b.destructive ?? false),
-  );
+export function getInquiryActions(inquiry: Inquiry): ResolvedInquiryAction[] {
+  return INQUIRY_ACTIONS.filter((action) => action.isAvailable(inquiry))
+    .sort(
+      (a, b) => Number(a.destructive ?? false) - Number(b.destructive ?? false),
+    )
+    .map((action) => ({
+      id: action.id,
+      icon: action.icon,
+      destructive: action.destructive,
+      label:
+        typeof action.label === "function"
+          ? action.label(inquiry)
+          : action.label,
+    }));
 }
 
 export function formatRelativeDate(iso: string): string {
@@ -108,4 +119,8 @@ export function describePiece(inquiry: Inquiry): string {
     COLOR_TYPE_LABELS[inquiry.colorType] ?? inquiry.colorType,
   ].filter(Boolean);
   return parts.length > 0 ? parts.join(" · ") : "Custom piece";
+}
+
+export function getCancelLabel(type: AppointmentType) {
+  return type === "consultation" ? "Cancel consultation" : "Cancel booking";
 }

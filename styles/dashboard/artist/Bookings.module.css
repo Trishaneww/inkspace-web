@@ -353,6 +353,30 @@
   gap: 0.6rem;
 }
 
+.cancelPopover {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+
+  min-width: 12rem;
+  padding: 0.35rem;
+}
+
+.cancelOption {
+  padding: 0.5rem 0.6rem;
+
+  font-size: 0.9rem;
+  text-align: left;
+  color: var(--color-error);
+
+  border-radius: 0.5rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: hsl(0, 80%, 97%);
+  }
+}
+
 .actionBtnIcon {
   display: none;
 }
