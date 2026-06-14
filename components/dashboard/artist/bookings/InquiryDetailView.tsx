@@ -228,7 +228,6 @@ const InquirySheetFooter = ({
         action.id === "cancel" ? (
           <CancelControl
             key="cancel"
-            label={action.label}
             liveAppointments={liveAppointments}
             disabled={actingId !== null}
             loading={actingId === "cancel"}
@@ -255,13 +254,11 @@ const InquirySheetFooter = ({
 };
 
 const CancelControl = ({
-  label,
   liveAppointments,
   disabled,
   loading,
   onCancel,
 }: {
-  label: string;
   liveAppointments: Appointment[];
   disabled: boolean;
   loading: boolean;
@@ -308,7 +305,7 @@ const CancelControl = ({
       onClick={() => onCancel(liveAppointments[0]?.id)}
     >
       <Ban size={16} className={styles.actionBtnIcon} />
-      {label}
+      {getCancelLabel(liveAppointments[0]?.type ?? "session")}
       {loading && <Loader2 size={16} className="animate-spin" />}
     </Button>
   );

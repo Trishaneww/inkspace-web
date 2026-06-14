@@ -190,10 +190,7 @@ export const INQUIRY_ACTIONS: InquiryAction[] = [
   },
   {
     id: "cancel",
-    label: (i: Inquiry) =>
-      i.appointment?.type === "consultation"
-        ? "Cancel consultation"
-        : "Cancel booking",
+    label: "Cancel booking",
     icon: Ban,
     destructive: true,
     isAvailable: (i: Inquiry) =>
