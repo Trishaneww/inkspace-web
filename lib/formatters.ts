@@ -102,6 +102,18 @@ export function formatDate(iso: string): string {
 }
 
 /**
+ * Formats an ISO 8601 timestamp as a date and time, e.g.
+ * "2026-06-18T19:30:00Z" -> "Jun 18, 2026 · 3:30 PM" (in local time).
+ * @param iso - The ISO 8601 timestamp to format.
+ * @returns The formatted date-and-time string.
+ */
+export function formatDateTime(iso: string): string {
+  const parsed = parseISO(iso);
+  const date = isValid(parsed) ? parsed : new Date(iso);
+  return isValid(date) ? format(date, "MMM d, yyyy · h:mm a") : iso;
+}
+
+/**
  * Formats a YYYY-MM-DD date as a year-less month and day, e.g.
  * "2026-06-18" -> "Jun 18". Splits the parts directly so the calendar date
  * never shifts across timezones.
@@ -141,15 +153,15 @@ export function formatTimeOfDay(minutes: number): string {
 
 /**
  * Formats a duration in minutes as a compact human-readable string,
- * e.g. 45 -> "~45 min", 60 -> "~1 hour", 90 -> "~1.5 hours".
+ * e.g. 45 -> "45 min", 60 -> "1 hour", 90 -> "1.5 hours".
  * @param minutes - The duration in minutes to format.
  * @returns The formatted duration string.
  */
 export function formatDurationMinutes(minutes: number): string {
-  if (minutes < 60) return `~${minutes} min`;
+  if (minutes < 60) return `${minutes} min`;
   const hours = minutes / 60;
   const label = Number.isInteger(hours) ? `${hours}` : hours.toFixed(1);
-  return `~${label} hour${hours === 1 ? "" : "s"}`;
+  return `${label} hour${hours === 1 ? "" : "s"}`;
 }
 
 /**
@@ -265,4 +277,19 @@ export function formatLocationWithTimeRange(location: DatedLocation): string {
   return location.startDate
     ? `${place} · ${formatDateRange(location.startDate, location.endDate ?? null)}`
     : place;
+}
+
+/**
+ * Formats a name as two initials, e.g. "John Doe" -> "JD".
+ * @param name - The name to format.
+ * @returns The formatted initials string.
+ */
+export function formatInitials(name: string): string {
+  return name
+    .split(" ")
+    .map((part) => part[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
 }

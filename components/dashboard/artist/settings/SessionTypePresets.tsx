@@ -105,7 +105,11 @@ export const SessionTypePresets = ({
           />
         </div>
         <div className={styles.footerActions}>
-          <Button variant="outline" onClick={handleAdd} disabled={!canAddPreset}>
+          <Button
+            variant="outline"
+            onClick={handleAdd}
+            disabled={!canAddPreset}
+          >
             <Plus size={15} />
             Add preset
           </Button>

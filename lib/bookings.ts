@@ -1,5 +1,6 @@
 // Libs
-import { INQUIRY_ACTIONS } from "@/constants/bookings";
+import {COLOR_TYPE_LABELS, INQUIRY_ACTIONS } from "@/constants/bookings";
+import { FLASH_SIZE_LABELS } from "@/constants/flashes";
 import type {
   BookingFilters,
   InquiryAction,
@@ -56,7 +57,9 @@ export function hasActiveBookingFilters(filters: BookingFilters): boolean {
 }
 
 export function getInquiryActions(inquiry: Inquiry): InquiryAction[] {
-  return INQUIRY_ACTIONS.filter((action) => action.isAvailable(inquiry));
+  return INQUIRY_ACTIONS.filter((action) => action.isAvailable(inquiry)).sort(
+    (a, b) => Number(a.destructive ?? false) - Number(b.destructive ?? false),
+  );
 }
 
 export function formatRelativeDate(iso: string): string {
@@ -75,4 +78,19 @@ export function requestMeta(inquiry: Inquiry): string {
   if (inquiry.placement) parts.push(inquiry.placement);
   if (inquiry.approxSizeInches) parts.push(`${inquiry.approxSizeInches}"`);
   return parts.join(" · ") || "—";
+}
+
+export function describePiece(inquiry: Inquiry): string {
+  if (inquiry.flash) {
+    const size = inquiry.flash.sizeCode
+      ? (FLASH_SIZE_LABELS[inquiry.flash.sizeCode] ?? inquiry.flash.sizeCode)
+      : null;
+    return [inquiry.flash.title, size].filter(Boolean).join(" · ");
+  }
+  const parts = [
+    inquiry.placement,
+    inquiry.approxSizeInches != null ? `${inquiry.approxSizeInches}"` : null,
+    COLOR_TYPE_LABELS[inquiry.colorType] ?? inquiry.colorType,
+  ].filter(Boolean);
+  return parts.length > 0 ? parts.join(" · ") : "Custom piece";
 }

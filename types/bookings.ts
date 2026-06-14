@@ -16,6 +16,41 @@ export type WaiverStatus = "not_required" | "pending" | "signed";
 
 export type SchedulingMode = "artist_scheduled" | "client_scheduled";
 
+export type ConsultationFormat = "in_person" | "online" | "phone";
+
+export type AppointmentType = "consultation" | "session";
+
+export type AppointmentStatus =
+  | "proposed"
+  | "scheduled"
+  | "completed"
+  | "cancelled"
+  | "no_show";
+
+export type SchedulingOrigin = "artist_set" | "client_booked";
+
+export interface Appointment {
+  id: string;
+  type: AppointmentType;
+  status: AppointmentStatus;
+  scheduledStart?: string;
+  durationMinutes: number;
+  format?: ConsultationFormat;
+  schedulingOrigin: SchedulingOrigin;
+}
+
+export type TimeFilter = "any" | "morning" | "afternoon" | "evening";
+
+export interface InquirySchedulingForm {
+  date: Date | null;
+  startMinute: number | null;
+  endMinute: number | null;
+  durationMinutes: number;
+  timeFilter: TimeFilter;
+  consultationDurationMinutes: number;
+  consultationFormat: ConsultationFormat;
+}
+
 export interface CustomAnswer {
   prompt: string;
   answer: string;
@@ -61,6 +96,26 @@ export interface Inquiry {
   sessionDurationMinutes?: number;
   createdAt: string;
   decidedAt?: string;
+  schedulingMode: SchedulingMode;
+  artistAvailability: OpenBookAvailabilityWindow[];
+  appointment?: Appointment;
+}
+
+export interface AcceptInquiryPayload {
+  sessionDurationMinutes: number;
+  scheduledStart?: string;
+}
+
+export interface RequestConsultationPayload {
+  scheduledStart?: string;
+  durationMinutes?: number;
+  format?: ConsultationFormat;
+}
+
+export interface RescheduleAppointmentPayload {
+  scheduledStart: string;
+  durationMinutes?: number;
+  format?: ConsultationFormat;
 }
 
 export interface BookingStats {

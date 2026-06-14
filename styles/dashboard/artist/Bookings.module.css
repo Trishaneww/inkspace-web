@@ -281,7 +281,7 @@
 /* ── Open Book edit sheet ──────────────────────────────────────────────── */
 .editSheet {
   width: 100%;
-  max-width: 30rem;
+  max-width: 33rem;
   padding: 1.5rem;
 }
 
@@ -358,16 +358,6 @@
 @media (min-width: 640px) {
   .actionBtnIcon {
     display: block;
-  }
-}
-
-.acceptBtn {
-  color: white;
-
-  background-color: var(--color-success-foreground);
-
-  &:hover {
-    background-color: hsl(100, 35%, 36%);
   }
 }
 
@@ -536,6 +526,318 @@
 
   font-size: 0.95rem;
   color: hsl(220, 9%, 46%);
+}
+
+/* ── Scheduling phase ──────────────────────────────────────────────────── */
+.phaseSlide {
+  display: flex;
+  flex-direction: column;
+
+  flex: 1;
+  min-height: 0;
+}
+
+.scheduleSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.calendarWrap {
+  padding: 0.5rem;
+
+  border: 1px solid hsl(220, 13%, 90%);
+  border-radius: 0.75rem;
+}
+
+/* The shadcn calendar is fit-width by default; stretch it to fill the panel. */
+.calendarWrap :global([data-slot="calendar"]) {
+  width: 100%;
+}
+
+.calendarWrap :global([data-slot="calendar"] td) {
+  height: 2.5rem;
+  aspect-ratio: auto;
+}
+
+.calendarWrap :global([data-slot="calendar"] button[data-day]) {
+  width: 2.5rem;
+  height: 2.5rem;
+  min-width: 0;
+
+  margin-inline: auto;
+}
+
+.calendarWrap :global(button[data-selected-single="true"]),
+.calendarWrap :global(button[data-selected-single="true"]:hover) {
+  color: white;
+
+  background-color: var(--color-primary);
+}
+
+.timeFilterRow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.timeFilterBtn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+
+  padding: 0.5rem;
+
+  background-color: white;
+  border: 1px solid hsl(220, 13%, 90%);
+  border-radius: 0.6rem;
+
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
+}
+
+.timeFilterBtnActive {
+  border-color: var(--color-primary);
+
+  background-color: var(--color-primary-subtle);
+}
+
+.timeFilterLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.timeFilterHint {
+  font-size: 0.75rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.typeBoxRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.lengthCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+
+  padding: 1.1rem 1.25rem;
+
+  text-align: left;
+
+  background-color: white;
+  border: 1px solid hsl(220, 13%, 90%);
+  border-radius: 0.75rem;
+
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
+}
+
+.lengthCardActive {
+  border-color: var(--color-primary);
+
+  background-color: var(--color-primary-subtle);
+}
+
+.lengthCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.lengthCardTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  font-size: 1rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.lengthCardBadge {
+  padding: 0.1rem 0.5rem;
+
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-primary);
+
+  background-color: var(--color-primary-subtle);
+  border-radius: 1rem;
+}
+
+.lengthCardDesc {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.lengthCardMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  font-size: 0.8rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.lengthCardChevron {
+  flex-shrink: 0;
+
+  color: hsl(220, 9%, 60%);
+}
+
+.timeGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.timeGroupLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: hsl(220, 9%, 46%);
+}
+
+.timeChipGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.timeChip {
+  padding: 0.5rem 0.25rem;
+
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 30%);
+
+  background-color: white;
+  border: 1px solid hsl(220, 13%, 90%);
+  border-radius: 0.5rem;
+
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
+}
+
+.timeChipActive {
+  color: white;
+
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
+}
+
+.timeRangeRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.timeSelectTrigger {
+  width: 100%;
+}
+
+.selectPlaceholder {
+  color: hsl(220, 9%, 46%);
+}
+
+.scheduleNote {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.reviewCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  padding: 1.5rem;
+
+  border: 1px solid hsl(220, 13%, 90%);
+  border-radius: 0.75rem;
+}
+
+.reviewHead {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.reviewType {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.reviewSub {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.reviewRows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.reviewRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  font-size: 0.95rem;
+  color: hsl(220, 13%, 25%);
+}
+
+.reviewRowIcon {
+  flex-shrink: 0;
+
+  color: hsl(220, 9%, 46%);
+}
+
+.reviewSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  padding-top: 1.25rem;
+
+  border-top: 1px solid hsl(220, 13%, 92%);
+}
+
+.reviewSectionLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: hsl(220, 9%, 46%);
+}
+
+.scheduleFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
 }
 
 @media (min-width: 640px) {
