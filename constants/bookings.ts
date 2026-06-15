@@ -146,9 +146,6 @@ export const SORT_OPTIONS: { value: SortOrder; label: string }[] = [
 const isUndecided = (status: InquiryStatus) =>
   status === "pending" || status === "consultation_requested";
 
-const isActiveBooking = (status: InquiryStatus) =>
-  status === "accepted" || status === "converted";
-
 const hasLiveAppointment = (i: Inquiry) =>
   i.appointment?.status === "scheduled" || i.appointment?.status === "proposed";
 
@@ -185,16 +182,14 @@ export const INQUIRY_ACTIONS: InquiryAction[] = [
     id: "reschedule",
     label: "Reschedule",
     icon: CalendarClock,
-    isAvailable: (i: Inquiry) =>
-      isActiveBooking(i.status) || i.appointment?.status === "scheduled",
+    isAvailable: (i: Inquiry) => i.appointment?.status === "scheduled",
   },
   {
     id: "cancel",
     label: "Cancel booking",
     icon: Ban,
     destructive: true,
-    isAvailable: (i: Inquiry) =>
-      hasLiveAppointment(i) || isActiveBooking(i.status),
+    isAvailable: (i: Inquiry) => hasLiveAppointment(i),
   },
   {
     id: "reopen",
