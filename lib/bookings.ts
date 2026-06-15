@@ -1,11 +1,28 @@
 // Libs
-import { INQUIRY_ACTIONS } from "@/constants/bookings";
+import {
+  COLOR_TYPE_LABELS,
+  INQUIRY_ACTIONS,
+  STATUS_META,
+} from "@/constants/bookings";
+import { FLASH_SIZE_LABELS } from "@/constants/flashes";
 import type {
+  BadgeMeta,
   BookingFilters,
-  InquiryAction,
   RecencyFilter,
+  ResolvedInquiryAction,
   Inquiry,
-} from "@/types/booking";
+  AppointmentType,
+} from "@/types/bookings";
+
+export function getInquiryStatusMeta(inquiry: Inquiry): BadgeMeta {
+  if (
+    inquiry.status === "accepted" &&
+    inquiry.appointment?.status === "proposed"
+  ) {
+    return { label: "Proposed", variant: "pending" };
+  }
+  return STATUS_META[inquiry.status];
+}
 
 const RECENCY_WINDOW_DAYS: Record<Exclude<RecencyFilter, "all">, number> = {
   "24h": 1,
@@ -55,8 +72,20 @@ export function hasActiveBookingFilters(filters: BookingFilters): boolean {
   );
 }
 
-export function getInquiryActions(inquiry: Inquiry): InquiryAction[] {
-  return INQUIRY_ACTIONS.filter((action) => action.isAvailable(inquiry));
+export function getInquiryActions(inquiry: Inquiry): ResolvedInquiryAction[] {
+  return INQUIRY_ACTIONS.filter((action) => action.isAvailable(inquiry))
+    .sort(
+      (a, b) => Number(a.destructive ?? false) - Number(b.destructive ?? false),
+    )
+    .map((action) => ({
+      id: action.id,
+      icon: action.icon,
+      destructive: action.destructive,
+      label:
+        typeof action.label === "function"
+          ? action.label(inquiry)
+          : action.label,
+    }));
 }
 
 export function formatRelativeDate(iso: string): string {
@@ -75,4 +104,23 @@ export function requestMeta(inquiry: Inquiry): string {
   if (inquiry.placement) parts.push(inquiry.placement);
   if (inquiry.approxSizeInches) parts.push(`${inquiry.approxSizeInches}"`);
   return parts.join(" · ") || "—";
+}
+
+export function describePiece(inquiry: Inquiry): string {
+  if (inquiry.flash) {
+    const size = inquiry.flash.sizeCode
+      ? (FLASH_SIZE_LABELS[inquiry.flash.sizeCode] ?? inquiry.flash.sizeCode)
+      : null;
+    return [inquiry.flash.title, size].filter(Boolean).join(" · ");
+  }
+  const parts = [
+    inquiry.placement,
+    inquiry.approxSizeInches != null ? `${inquiry.approxSizeInches}"` : null,
+    COLOR_TYPE_LABELS[inquiry.colorType] ?? inquiry.colorType,
+  ].filter(Boolean);
+  return parts.length > 0 ? parts.join(" · ") : "Custom piece";
+}
+
+export function getCancelLabel(type: AppointmentType) {
+  return type === "consultation" ? "Cancel consultation" : "Cancel booking";
 }

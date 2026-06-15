@@ -10,7 +10,7 @@ import {
   type RepeatableFilter,
 } from "@/types/flash";
 import { FLASH_SIZE_OPTIONS } from "@/constants/flashes";
-import { formatCurrency } from "@/lib/formatters";
+import { formatCurrency, formatPriceCents } from "@/lib/formatters";
 
 export interface FlashStats {
   available: number;
@@ -58,7 +58,10 @@ function sortByPrice(flashes: Flash[], priceSort: PriceSort): Flash[] {
   });
 }
 
-export function filterFlashes(flashes: Flash[], filters: FlashFilters): Flash[] {
+export function filterFlashes(
+  flashes: Flash[],
+  filters: FlashFilters,
+): Flash[] {
   const search = filters.search.trim().toLowerCase();
 
   const matched = flashes.filter((flash) => {
@@ -172,4 +175,19 @@ export function convertDollarsToCents(input: string): number | null {
   const n = Number(trimmed);
   if (!Number.isFinite(n) || n < 0) return null;
   return Math.round(n * 100);
+}
+
+export function formatFlashPriceRange(flash: Flash): string {
+  if (flash.pricing_mode === "flat") {
+    return flash.flat_price_cents != null
+      ? formatPriceCents(flash.flat_price_cents, flash.currency)
+      : "";
+  }
+  const prices = flash.pricing_tiers.map((tier) => tier.price_cents);
+  if (prices.length === 0) return "";
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  return min === max
+    ? formatPriceCents(min, flash.currency)
+    : `${formatPriceCents(min, flash.currency)} – ${formatPriceCents(max, flash.currency)}`;
 }

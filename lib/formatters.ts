@@ -1,5 +1,6 @@
 // Libs
 import { format, isValid, parseISO } from "date-fns";
+import { MONTHS } from "@/constants/dates";
 
 /**
  * Formats a currency amount in cents as a string,
@@ -69,6 +70,16 @@ export function formatPhone(input: string): string {
 }
 
 /**
+ * Whether the value holds a complete 10-digit North-American phone number,
+ * e.g. "+1 (416) 123-4567" -> true, "+1 (416" -> false.
+ * @param input - The phone number to check.
+ * @returns Whether the number is complete.
+ */
+export function isPhoneComplete(input: string): boolean {
+  return input.replace(/\D/g, "").replace(/^1/, "").length === 10;
+}
+
+/**
  * Formats a cents amount as an editable currency input string,
  * e.g. 1500 -> "$15.00", null -> "" (empty, so the field reads as unset).
  * @param cents - The amount in cents, or null when there is no value.
@@ -91,6 +102,41 @@ export function formatDate(iso: string): string {
 }
 
 /**
+ * Formats an ISO 8601 timestamp as a date and time, e.g.
+ * "2026-06-18T19:30:00Z" -> "Jun 18, 2026 · 3:30 PM" (in local time).
+ * @param iso - The ISO 8601 timestamp to format.
+ * @returns The formatted date-and-time string.
+ */
+export function formatDateTime(iso: string): string {
+  const parsed = parseISO(iso);
+  const date = isValid(parsed) ? parsed : new Date(iso);
+  return isValid(date) ? format(date, "MMM d, yyyy · h:mm a") : iso;
+}
+
+/**
+ * Formats a YYYY-MM-DD date as a year-less month and day, e.g.
+ * "2026-06-18" -> "Jun 18". Splits the parts directly so the calendar date
+ * never shifts across timezones.
+ * @param iso - The YYYY-MM-DD date string to format.
+ * @returns The formatted "MMM d" string.
+ */
+export function formatMonthDay(iso: string): string {
+  const [, month, day] = iso.split("-").map(Number);
+  return `${MONTHS[month - 1]} ${day}`;
+}
+
+/**
+ * Formats a YYYY-MM-DD date range as year-less month/day values, e.g.
+ * "2026-06-18", "2026-06-20" -> "Jun 18 – Jun 20".
+ * @param start - The start date in YYYY-MM-DD format.
+ * @param end - The end date in YYYY-MM-DD format.
+ * @returns The formatted "MMM d – MMM d" range.
+ */
+export function formatMonthDayRange(start: string, end: string): string {
+  return `${formatMonthDay(start)} – ${formatMonthDay(end)}`;
+}
+
+/**
  * Formats minutes-from-midnight (0..1440) as a 12-hour clock time,
  * e.g. 630 -> "10:30 AM", 1020 -> "5:00 PM", 1440 -> "12:00 AM".
  * @param minutes - The minutes from midnight to format.
@@ -105,18 +151,17 @@ export function formatTimeOfDay(minutes: number): string {
   return `${hour12}:${mins.toString().padStart(2, "0")} ${period}`;
 }
 
-
 /**
  * Formats a duration in minutes as a compact human-readable string,
- * e.g. 45 -> "~45 min", 60 -> "~1 hour", 90 -> "~1.5 hours".
+ * e.g. 45 -> "45 min", 60 -> "1 hour", 90 -> "1.5 hours".
  * @param minutes - The duration in minutes to format.
  * @returns The formatted duration string.
  */
 export function formatDurationMinutes(minutes: number): string {
-  if (minutes < 60) return `~${minutes} min`;
+  if (minutes < 60) return `${minutes} min`;
   const hours = minutes / 60;
   const label = Number.isInteger(hours) ? `${hours}` : hours.toFixed(1);
-  return `~${label} hour${hours === 1 ? "" : "s"}`;
+  return `${label} hour${hours === 1 ? "" : "s"}`;
 }
 
 /**
@@ -130,19 +175,6 @@ export function formatDurationMinutes(minutes: number): string {
 export function parseISODate(value: string): Date {
   const [year, month, day] = value.split("-").map(Number);
   return new Date(year, month - 1, day);
-}
-
-/**
- * Parses a comma-separated string into an array of strings,
- * e.g. "apple,banana,cherry" -> ["apple", "banana", "cherry"].
- * @param input - The comma-separated string to parse.
- * @returns The parsed array of strings.
- */
-export function parseCsv(input: string): string[] {
-  return input
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
 }
 
 export interface SelectOption {
@@ -174,4 +206,90 @@ export function formatSelectValue<T>(
  */
 export function formatOnOffLabel(bool: boolean): string {
   return bool ? "On" : "Off";
+}
+
+/**
+ * Formats a date range as a human-readable string,
+ * e.g. "2026-06-03" -> "Jun 3, 2026 – Jun 5, 2026".
+ * @param start - The start date in ISO 8601 format.
+ * @param end - The end date in ISO 8601 format.
+ * @returns The formatted date range string.
+ */
+export function formatDateRange(
+  start: string | null,
+  end: string | null,
+): string {
+  if (!start || !end) return "";
+  return `${formatDate(start)} – ${formatDate(end)}`;
+}
+
+export interface FormattableLocation {
+  address?: string | null;
+  city: string;
+  country: string;
+  label?: string;
+}
+
+/**
+ * Formats a location as a plain place string — the street address first when
+ * present, then the city and country, e.g.
+ * { address: "123 Main St", city: "Chicago", country: "USA" } -> "123 Main St, Chicago, USA".
+ * Falls back to the label when address, city, and country are all absent.
+ * @param location - The location to format.
+ * @returns The formatted location string.
+ */
+export function formatLocation(location: FormattableLocation): string {
+  const parts = [location.address, location.city, location.country]
+    .map((part) => part?.trim())
+    .filter(Boolean);
+
+  return parts.length > 0 ? parts.join(", ") : (location.label ?? "");
+}
+
+export interface DatedLocation {
+  city: string;
+  country: string;
+  label: string;
+  isPrimary: boolean;
+  startDate?: string | null;
+  endDate?: string | null;
+}
+
+/**
+ * Formats a location with the dates it's active, for places where the time
+ * range matters (e.g. the studio travel & guest spots picker). The home studio
+ * is tagged "(home)"; guest spots carry their date range, e.g.
+ * { city: "Bali", country: "Indonesia", startDate: "2026-06-18", endDate: "2026-06-20" }
+ *   -> "Bali, Indonesia · Jun 18, 2026 – Jun 20, 2026".
+ * Falls back to label when city and country are both absent.
+ * @param location - The location to format.
+ * @returns The formatted location string.
+ */
+export function formatLocationWithTimeRange(location: DatedLocation): string {
+  const place =
+    [location.city, location.country].filter(Boolean).join(", ") ||
+    location.label;
+
+  if (location.isPrimary) {
+    return place ? `${place} (home)` : "Home studio";
+  }
+
+  return location.startDate
+    ? `${place} · ${formatDateRange(location.startDate, location.endDate ?? null)}`
+    : place;
+}
+
+/**
+ * Formats a name as two initials, e.g. "John Doe" -> "JD".
+ * @param name - The name to format.
+ * @returns The formatted initials string.
+ */
+export function formatInitials(name: string): string {
+  return name
+    .split(" ")
+    .map((part) => part[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
 }

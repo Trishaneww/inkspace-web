@@ -24,14 +24,14 @@ import { PanelRightOpen } from "lucide-react";
 import { StatusBadge } from "./StatusBadge";
 
 // Libs
+import { DEPOSIT_META, TYPE_LABELS, WAIVER_META } from "@/constants/bookings";
 import {
-  DEPOSIT_META,
-  STATUS_META,
-  TYPE_LABELS,
-  WAIVER_META,
-} from "@/constants/bookings";
-import { formatRelativeDate, requestMeta } from "@/lib/bookings";
-import type { Inquiry } from "@/types/booking";
+  formatRelativeDate,
+  getInquiryStatusMeta,
+  requestMeta,
+} from "@/lib/bookings";
+import { formatLocation } from "@/lib/formatters";
+import type { Inquiry } from "@/types/bookings";
 
 interface BookingsTableProps {
   inquiries: Inquiry[];
@@ -77,6 +77,7 @@ export const BookingsTable = ({ inquiries, onSelect }: BookingsTableProps) => {
             <TableRow>
               <TableHead>Client</TableHead>
               <TableHead>Request</TableHead>
+              <TableHead>Studio</TableHead>
               <TableHead>Submitted</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Deposit</TableHead>
@@ -86,7 +87,7 @@ export const BookingsTable = ({ inquiries, onSelect }: BookingsTableProps) => {
           </TableHeader>
           <TableBody>
             {rows.map((inquiry) => {
-              const status = STATUS_META[inquiry.status];
+              const status = getInquiryStatusMeta(inquiry);
               const deposit = DEPOSIT_META[inquiry.depositStatus];
               const waiver = WAIVER_META[inquiry.waiverStatus];
               return (
@@ -116,6 +117,9 @@ export const BookingsTable = ({ inquiries, onSelect }: BookingsTableProps) => {
                     <div className={styles.requestMeta}>
                       {requestMeta(inquiry)}
                     </div>
+                  </TableCell>
+                  <TableCell className={styles.location}>
+                    {inquiry.location ? formatLocation(inquiry.location) : "—"}
                   </TableCell>
                   <TableCell className={styles.submitted}>
                     {formatRelativeDate(inquiry.createdAt)}

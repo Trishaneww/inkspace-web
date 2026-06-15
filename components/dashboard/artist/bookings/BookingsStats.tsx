@@ -5,7 +5,7 @@ import styles from "@/styles/dashboard/artist/Bookings.module.css";
 import { CalendarCheck, Inbox, Wallet } from "lucide-react";
 
 // Libs
-import type { BookingStats } from "@/types/booking";
+import type { BookingStats } from "@/types/bookings";
 
 interface BookingsStatsProps {
   stats: BookingStats;
@@ -13,7 +13,12 @@ interface BookingsStatsProps {
 
 export const BookingsStats = ({ stats }: BookingsStatsProps) => {
   const cards = [
-    { key: "new", label: "New inquiries", value: stats.newInquiries, icon: Inbox },
+    {
+      key: "new",
+      label: "New inquiries",
+      value: stats.newInquiries,
+      icon: Inbox,
+    },
     {
       key: "deposit",
       label: "Awaiting deposit",

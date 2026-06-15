@@ -4,6 +4,7 @@
 import { useState } from "react";
 
 // CSS
+import clsx from "clsx";
 import styles from "@/styles/dashboard/artist/Bookings.module.css";
 
 // HTML Components
@@ -12,16 +13,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
 import { Loader2, Plus, X } from "lucide-react";
 
 // Components
-import { TattooStylesPicker } from "@/components/common/TattooStylesPicker";
 import { AvailabilityScheduler } from "@/components/dashboard/artist/settings/AvailabilityScheduler";
 import { DaysOffPicker } from "@/components/dashboard/artist/settings/DaysOffPicker";
 
@@ -29,16 +23,13 @@ import { DaysOffPicker } from "@/components/dashboard/artist/settings/DaysOffPic
 import { getApiErrorMessage } from "@/hooks/useAuthForm";
 import { useAuth } from "@/lib/auth";
 import { openBookApi } from "@/lib/api/openBook";
+import { displayToast } from "@/lib/toast";
+import { SCHEDULING_OPTIONS } from "@/constants/onboarding";
 import type { ArtistSettingsController } from "@/hooks/useArtistSettings";
 import type { AvailabilityWindowInput } from "@/types/settings";
-import type { OpenBook, SchedulingMode } from "@/types/booking";
+import type { OpenBook, SchedulingMode } from "@/types/bookings";
 
 const MAX_QUESTIONS = 3;
-
-const SCHEDULING_LABELS: Record<SchedulingMode, string> = {
-  artist_scheduled: "Manual Scheduling",
-  client_scheduled: "Self-Scheduling",
-};
 
 interface OpenBookEditSheetProps {
   open: boolean;
@@ -89,7 +80,6 @@ const OpenBookEditForm = ({
   const [schedulingMode, setSchedulingMode] = useState<SchedulingMode>(
     openBook.schedulingMode,
   );
-  const [stylesValue, setStylesValue] = useState<string[]>(settings.styles);
   const [windows, setWindows] = useState<AvailabilityWindowInput[]>(
     controller.data!.availability.map((w) => ({
       weekday: w.weekday,
@@ -114,7 +104,7 @@ const OpenBookEditForm = ({
     setSaving(true);
     setError(null);
     try {
-      await controller.saveSettings({ acceptingBookings, styles: stylesValue });
+      await controller.saveSettings({ acceptingBookings });
       await controller.saveAvailability(windows);
 
       const updated = await openBookApi.update(token, {
@@ -122,6 +112,7 @@ const OpenBookEditForm = ({
         customQuestions: questions.map((q) => q.trim()).filter(Boolean),
       });
       onOpenBookSaved(updated);
+      displayToast("Your Open Book has been updated", "success");
       onClose();
     } catch (err) {
       setError(getApiErrorMessage(err, "Could not save. Please try again."));
@@ -148,49 +139,24 @@ const OpenBookEditForm = ({
         </div>
 
         <div className={styles.editField}>
-          <Label htmlFor="open-book-scheduling">Scheduling</Label>
-          <Select
-            value={schedulingMode}
-            onValueChange={(next) =>
-              next && setSchedulingMode(next as SchedulingMode)
-            }
-          >
-            <SelectTrigger id="open-book-scheduling">
-              <span>{SCHEDULING_LABELS[schedulingMode]}</span>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="artist_scheduled">
-                {SCHEDULING_LABELS.artist_scheduled}
-              </SelectItem>
-              <SelectItem value="client_scheduled">
-                {SCHEDULING_LABELS.client_scheduled}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className={styles.editField}>
-          <Label>Styles you offer</Label>
-          <span className={styles.editHint}>
-            Clients booking a custom piece can only choose from these.
-          </span>
-          <TattooStylesPicker value={stylesValue} onChange={setStylesValue} />
-        </div>
-
-        <div className={styles.editField}>
-          <Label>Weekly hours</Label>
-          <AvailabilityScheduler windows={windows} onChange={setWindows} />
-        </div>
-
-        <div className={styles.editField}>
-          <Label>Days off</Label>
-          <span className={styles.editHint}>
-            Block specific dates. Changes here save immediately.
-          </span>
-          <DaysOffPicker
-            daysOff={controller.data!.daysOff}
-            controller={controller}
-          />
+          <Label>Scheduling</Label>
+          <div className={styles.timeFilterRow}>
+            {SCHEDULING_OPTIONS.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                className={clsx(styles.timeFilterBtn, {
+                  [styles.timeFilterBtnActive]: schedulingMode === option.value,
+                })}
+                onClick={() => setSchedulingMode(option.value)}
+              >
+                <span className={styles.timeFilterLabel}>{option.label}</span>
+                <span className={styles.timeFilterHint}>
+                  {option.description}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className={styles.editField}>
@@ -230,6 +196,22 @@ const OpenBookEditForm = ({
               Add question
             </Button>
           )}
+        </div>
+
+        <div className={styles.editField}>
+          <Label>Weekly hours</Label>
+          <AvailabilityScheduler windows={windows} onChange={setWindows} />
+        </div>
+
+        <div className={styles.editField}>
+          <Label>Days off</Label>
+          <span className={styles.editHint}>
+            Block specific dates. Changes here save immediately.
+          </span>
+          <DaysOffPicker
+            daysOff={controller.data!.daysOff}
+            controller={controller}
+          />
         </div>
 
         {error && <p className={styles.editError}>{error}</p>}

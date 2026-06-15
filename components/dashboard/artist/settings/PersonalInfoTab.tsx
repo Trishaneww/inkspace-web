@@ -21,6 +21,7 @@ import {
   CardField,
   useIsEditing,
 } from "./SettingsPrimitives";
+import { StudioTravelManager } from "./StudioTravelManager";
 import { TattooStylesPicker } from "@/components/common/TattooStylesPicker";
 
 // Hooks
@@ -37,7 +38,7 @@ import {
 import { TATTOO_STYLE_LABELS } from "@/constants/tattooStyles";
 import { displayToast } from "@/lib/toast";
 import type { ArtistSettingsController } from "@/hooks/useArtistSettings";
-import type { ArtistSettings, SettingsAccount } from "@/types/settings";
+import type { Location, SettingsAccount } from "@/types/settings";
 
 type ProfileDraft = Pick<
   SettingsAccount,
@@ -53,22 +54,17 @@ const PROFILE_KEYS: (keyof ProfileDraft)[] = [
 ];
 
 type StudioDraft = Pick<
-  ArtistSettings,
-  | "studioName"
-  | "studioAddress"
-  | "studioCity"
-  | "studioProvince"
-  | "studioPostalCode"
-  | "studioCountry"
+  Location,
+  "label" | "address" | "city" | "province" | "postalCode" | "country"
 >;
 
 const STUDIO_KEYS: (keyof StudioDraft)[] = [
-  "studioName",
-  "studioAddress",
-  "studioCity",
-  "studioProvince",
-  "studioPostalCode",
-  "studioCountry",
+  "label",
+  "address",
+  "city",
+  "province",
+  "postalCode",
+  "country",
 ];
 
 export const PersonalInfoTab = ({
@@ -76,9 +72,10 @@ export const PersonalInfoTab = ({
 }: {
   controller: ArtistSettingsController;
 }) => {
-  const { data, saveProfile, saveSettings } = controller;
+  const { data, saveProfile, saveSettings, saveLocation } = controller;
   const account = data?.account;
   const settings = data?.settings;
+  const primary = data?.locations.find((location) => location.isPrimary);
 
   const profile = useDraftState<ProfileDraft>({
     firstName: account?.firstName ?? "",
@@ -88,18 +85,18 @@ export const PersonalInfoTab = ({
     instagramUrl: account?.instagramUrl ?? "",
   });
   const studio = useDraftState<StudioDraft>({
-    studioName: settings?.studioName ?? "",
-    studioAddress: settings?.studioAddress ?? "",
-    studioCity: settings?.studioCity ?? "",
-    studioProvince: settings?.studioProvince ?? "",
-    studioPostalCode: settings?.studioPostalCode ?? "",
-    studioCountry: settings?.studioCountry ?? "",
+    label: primary?.label ?? "",
+    address: primary?.address ?? "",
+    city: primary?.city ?? "",
+    province: primary?.province ?? "",
+    postalCode: primary?.postalCode ?? "",
+    country: primary?.country ?? "",
   });
   const stylesDraft = useDraftState<{ styles: string[] }>({
     styles: settings?.styles ?? [],
   });
 
-  if (!account || !settings) return null;
+  if (!account || !settings || !primary) return null;
 
   return (
     <>
@@ -163,80 +160,78 @@ export const PersonalInfoTab = ({
       </EditableCard>
 
       <EditableCard
-        title="Studio"
-        description="Where you currently work out of. Shown to clients on your booking page so they can find you."
+        title="Home studio"
+        description="Your permanent base. Shown to clients on your booking page so they can find you."
         onSubmit={() =>
-          saveSettings(getChangedFields(settings, studio.draft, STUDIO_KEYS))
+          saveLocation(
+            primary.id,
+            getChangedFields(primary, studio.draft, STUDIO_KEYS),
+          )
         }
         successToast="Studio updated"
         errorToast="Couldn't save studio details"
         onCancel={studio.reset}
-        disableSubmit={!hasUnsavedChanges(settings, studio.draft, STUDIO_KEYS)}
+        disableSubmit={!hasUnsavedChanges(primary, studio.draft, STUDIO_KEYS)}
       >
         <CardGrid>
-          <CardField label="Studio name" value={settings.studioName} full>
+          <CardField label="Studio name" value={primary.label} full>
             <Input
-              value={studio.draft.studioName}
+              value={studio.draft.label}
               placeholder="e.g. Ink & Co."
-              onChange={(e) => studio.update({ studioName: e.target.value })}
+              onChange={(e) => studio.update({ label: e.target.value })}
             />
           </CardField>
-          <CardField label="Street address" value={settings.studioAddress} full>
+          <CardField label="Street address" value={primary.address} full>
             <Input
-              value={studio.draft.studioAddress}
+              value={studio.draft.address}
               placeholder="123 Main St, Unit 4"
-              onChange={(e) => studio.update({ studioAddress: e.target.value })}
+              onChange={(e) => studio.update({ address: e.target.value })}
             />
           </CardField>
-          <CardField label="City" value={settings.studioCity}>
+          <CardField label="City" value={primary.city}>
             <Input
-              value={studio.draft.studioCity}
+              value={studio.draft.city}
               placeholder="City"
-              onChange={(e) => studio.update({ studioCity: e.target.value })}
+              onChange={(e) => studio.update({ city: e.target.value })}
             />
           </CardField>
-          <CardField label="Province / State" value={settings.studioProvince}>
+          <CardField label="Province / State" value={primary.province}>
             <Input
-              value={studio.draft.studioProvince}
+              value={studio.draft.province}
               placeholder="Province or state"
-              onChange={(e) =>
-                studio.update({ studioProvince: e.target.value })
-              }
+              onChange={(e) => studio.update({ province: e.target.value })}
             />
           </CardField>
-          <CardField
-            label="Postal / ZIP code"
-            value={settings.studioPostalCode}
-          >
+          <CardField label="Postal / ZIP code" value={primary.postalCode}>
             <Input
-              value={studio.draft.studioPostalCode}
+              value={studio.draft.postalCode}
               placeholder="A1A 1A1"
-              onChange={(e) =>
-                studio.update({ studioPostalCode: e.target.value })
-              }
+              onChange={(e) => studio.update({ postalCode: e.target.value })}
             />
           </CardField>
-          <CardField label="Country" value={settings.studioCountry}>
+          <CardField label="Country" value={primary.country}>
             <Input
-              value={studio.draft.studioCountry}
+              value={studio.draft.country}
               placeholder="Country"
-              onChange={(e) => studio.update({ studioCountry: e.target.value })}
+              onChange={(e) => studio.update({ country: e.target.value })}
             />
           </CardField>
         </CardGrid>
       </EditableCard>
 
+      <StudioTravelManager controller={controller} />
+
       <EditableCard
         title="Styles"
-        description="The styles you specialize in. Clients booking a custom piece can only choose from these."
+        description="The styles you specialize in — optional, it just helps clients get to know your work."
         onSubmit={() => saveSettings({ styles: stylesDraft.draft.styles })}
         successToast="Styles updated"
         errorToast="Couldn't save styles"
         onCancel={stylesDraft.reset}
-        disableSubmit={
-          stylesDraft.draft.styles.length === 0 ||
-          areStyleArraysEqual(settings.styles ?? [], stylesDraft.draft.styles)
-        }
+        disableSubmit={areStyleArraysEqual(
+          settings.styles ?? [],
+          stylesDraft.draft.styles,
+        )}
       >
         <StylesField
           selected={stylesDraft.draft.styles}
@@ -364,16 +359,7 @@ const StylesField = ({
   const isEditing = useIsEditing();
 
   if (isEditing) {
-    return (
-      <>
-        <TattooStylesPicker value={selected} onChange={onChange} />
-        {selected.length === 0 && (
-          <span className={styles.fieldError}>
-            Select at least one style so clients can book with you.
-          </span>
-        )}
-      </>
-    );
+    return <TattooStylesPicker value={selected} onChange={onChange} />;
   }
 
   return (

@@ -9,12 +9,15 @@ import type {
   ChangePasswordPayload,
   ConnectGoogleCalendarPayload,
   CreateBlocklistPayload,
+  CreateLocationPayload,
   CreatePresetPayload,
+  Location,
   PresignUploadResponse,
   SessionPreset,
   SettingsAccount,
   SettingsResponse,
   StripeConnectResponse,
+  UpdateLocationPayload,
   UpdatePresetPayload,
   UpdateProfilePayload,
   UpdateSettingsPayload,
@@ -48,6 +51,27 @@ export const settingsApi = {
     return api.put<{ windows: AvailabilityWindow[] }>(
       `${BASE}/settings/availability`,
       { windows },
+      token,
+    );
+  },
+
+  createLocation(token: string, payload: CreateLocationPayload) {
+    return api.post<Location>(`${BASE}/settings/locations`, payload, token);
+  },
+  updateLocation(token: string, id: string, payload: UpdateLocationPayload) {
+    return api.patch<Location>(
+      `${BASE}/settings/locations/${id}`,
+      payload,
+      token,
+    );
+  },
+  deleteLocation(token: string, id: string) {
+    return api.delete<void>(`${BASE}/settings/locations/${id}`, token);
+  },
+  setCurrentLocation(token: string, locationId: string) {
+    return api.post<void>(
+      `${BASE}/settings/locations/current`,
+      { locationId },
       token,
     );
   },

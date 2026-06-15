@@ -17,9 +17,11 @@ import type {
   ChangeEmailPayload,
   ChangePasswordPayload,
   CreateBlocklistPayload,
+  CreateLocationPayload,
   CreatePresetPayload,
   SettingsResponse,
   StripeConnectResponse,
+  UpdateLocationPayload,
   UpdatePresetPayload,
   UpdateProfilePayload,
   UpdateSettingsPayload,
@@ -37,6 +39,11 @@ export interface ArtistSettingsController {
   saveSettings: (patch: UpdateSettingsPayload) => Promise<void>;
   uploadWaiver: (file: File) => Promise<void>;
   saveAvailability: (windows: AvailabilityWindowInput[]) => Promise<void>;
+
+  saveLocation: (id: string, payload: UpdateLocationPayload) => Promise<void>;
+  addLocation: (payload: CreateLocationPayload) => Promise<void>;
+  removeLocation: (id: string) => Promise<void>;
+  setCurrentLocation: (id: string) => Promise<void>;
   connectStripe: () => Promise<StripeConnectResponse>;
   refreshStripeStatus: () => Promise<void>;
   disconnectStripe: () => Promise<void>;
@@ -145,6 +152,21 @@ export function useArtistSettings(): ArtistSettingsController {
     [token],
   );
 
+  const saveLocation = useCallback<ArtistSettingsController["saveLocation"]>(
+    async (id, payload) => {
+      const location = await settingsApi.updateLocation(token!, id, payload);
+      setData((d) =>
+        d
+          ? {
+              ...d,
+              locations: d.locations.map((l) => (l.id === id ? location : l)),
+            }
+          : d,
+      );
+    },
+    [token],
+  );
+
   const connectStripe = useCallback<
     ArtistSettingsController["connectStripe"]
   >(() => settingsApi.connectStripe(token!), [token]);
@@ -180,6 +202,43 @@ export function useArtistSettings(): ArtistSettingsController {
       }
     },
     [],
+  );
+
+  const addLocation = useCallback<ArtistSettingsController["addLocation"]>(
+    (payload) =>
+      executeWithFeedback(async () => {
+        const location = await settingsApi.createLocation(token!, payload);
+        setData((d) =>
+          d ? { ...d, locations: [...d.locations, location] } : d,
+        );
+      }, "Guest spot added"),
+    [executeWithFeedback, token],
+  );
+
+  const removeLocation = useCallback<
+    ArtistSettingsController["removeLocation"]
+  >(
+    (id) =>
+      executeWithFeedback(async () => {
+        await settingsApi.deleteLocation(token!, id);
+        setData((d) =>
+          d ? { ...d, locations: d.locations.filter((l) => l.id !== id) } : d,
+        );
+      }, "Guest spot removed"),
+    [executeWithFeedback, token],
+  );
+
+  const setCurrentLocation = useCallback<
+    ArtistSettingsController["setCurrentLocation"]
+  >(
+    (id) =>
+      executeWithFeedback(async () => {
+        await settingsApi.setCurrentLocation(token!, id);
+        setData((d) =>
+          d ? { ...d, settings: { ...d.settings, currentLocationId: id } } : d,
+        );
+      }, "Working location updated"),
+    [executeWithFeedback, token],
   );
 
   const addPreset = useCallback<ArtistSettingsController["addPreset"]>(
@@ -286,6 +345,10 @@ export function useArtistSettings(): ArtistSettingsController {
     saveSettings,
     uploadWaiver,
     saveAvailability,
+    saveLocation,
+    addLocation,
+    removeLocation,
+    setCurrentLocation,
     connectStripe,
     refreshStripeStatus,
     disconnectStripe,

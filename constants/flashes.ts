@@ -18,20 +18,24 @@ export const FLASH_SIZE_OPTIONS: FlashSizeOption[] = [
   { code: "x_large", label: "X-Large", description: "7+ inches" },
 ];
 
+export const FLASH_SIZE_LABELS: Record<string, string> = Object.fromEntries(
+  FLASH_SIZE_OPTIONS.map((size) => [size.code, size.label]),
+);
+
 export const DURATION_OPTIONS = [
-  { minutes: 30, label: "30 min" },
-  { minutes: 45, label: "45 min" },
-  { minutes: 60, label: "1 H" },
-  { minutes: 90, label: "1.5 H" },
-  { minutes: 120, label: "2 H" },
-  { minutes: 150, label: "2.5 H" },
-  { minutes: 180, label: "3 H" },
-  { minutes: 210, label: "3.5 H" },
-  { minutes: 240, label: "4 H" },
-  { minutes: 300, label: "5 H" },
-  { minutes: 360, label: "6 H" },
-  { minutes: 420, label: "7 H" },
-  { minutes: 480, label: "8 H" },
+  { value: 30, label: "30 min" },
+  { value: 45, label: "45 min" },
+  { value: 60, label: "1h" },
+  { value: 90, label: "1.5h" },
+  { value: 120, label: "2h" },
+  { value: 150, label: "2.5h" },
+  { value: 180, label: "3h" },
+  { value: 210, label: "3.5h" },
+  { value: 240, label: "4h" },
+  { value: 300, label: "5h" },
+  { value: 360, label: "6h" },
+  { value: 420, label: "7h" },
+  { value: 480, label: "8h" },
 ];
 
 export const STATUS_FILTER_OPTIONS: FilterOption<FlashStatusFilter>[] = [

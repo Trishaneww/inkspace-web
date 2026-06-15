@@ -12,7 +12,7 @@ import {
   buildTierRowsFromFlash,
   convertDollarsToCents,
 } from "@/lib/flashes";
-import { formatCurrency, parseCsv } from "@/lib/formatters";
+import { formatCurrency } from "@/lib/formatters";
 import { displayToast } from "@/lib/toast";
 
 // Types
@@ -69,11 +69,16 @@ export function useFlashForm({
   const [colorType, setColorType] = useState<ColorType>(
     initialFlash?.color_type ?? "both",
   );
-  const [stylesText, setStylesText] = useState(
-    initialFlash?.styles.join(", ") ?? "",
+  const [styleTags, setStyleTags] = useState<string[]>(
+    initialFlash?.styles ?? [],
   );
-  const [placementsText, setPlacementsText] = useState(
-    initialFlash?.placements.join(", ") ?? "",
+  const [placements, setPlacements] = useState<string[]>(
+    initialFlash?.placements ?? [],
+  );
+  const [depositDollars, setDepositDollars] = useState(
+    initialFlash?.deposit_cents != null
+      ? formatCurrency((initialFlash.deposit_cents / 100).toString())
+      : "",
   );
 
   const [isSaving, setIsSaving] = useState(false);
@@ -101,6 +106,11 @@ export function useFlashForm({
 
     if (!title.trim()) {
       setFormError("Title is required.");
+      return;
+    }
+    const depositCents = convertDollarsToCents(depositDollars);
+    if (!depositCents || depositCents <= 0) {
+      setFormError("A deposit greater than zero is required.");
       return;
     }
     if (publish && !images.hasPrimaryImage) {
@@ -134,8 +144,8 @@ export function useFlashForm({
           title: title.trim(),
           description: description.trim() ? description.trim() : null,
           color_type: colorType,
-          styles: parseCsv(stylesText),
-          placements: parseCsv(placementsText),
+          styles: styleTags,
+          placements,
           pricing_mode: pricingMode,
           flat_price_cents:
             pricingMode === "flat"
@@ -145,6 +155,7 @@ export function useFlashForm({
             pricingMode === "flat"
               ? parseInt(flatDurationMinutes, 10) || null
               : null,
+          deposit_cents: depositCents,
           repeatable,
           pricing_tiers: pricingMode === "per_size" ? enabledTiers : [],
         };
@@ -163,8 +174,8 @@ export function useFlashForm({
           s3_key: primaryKey ?? null,
           reference_s3_key: referenceKey ?? null,
           color_type: colorType,
-          styles: parseCsv(stylesText),
-          placements: parseCsv(placementsText),
+          styles: styleTags,
+          placements,
           pricing_mode: pricingMode,
           flat_price_cents:
             pricingMode === "flat"
@@ -174,6 +185,7 @@ export function useFlashForm({
             pricingMode === "flat"
               ? parseInt(flatDurationMinutes, 10) || null
               : null,
+          deposit_cents: depositCents,
           repeatable,
           pricing_tiers: pricingMode === "per_size" ? enabledTiers : [],
           publish,
@@ -275,10 +287,12 @@ export function useFlashForm({
     updateTierRow,
     colorType,
     setColorType,
-    stylesText,
-    setStylesText,
-    placementsText,
-    setPlacementsText,
+    styleTags,
+    setStyleTags,
+    placements,
+    setPlacements,
+    depositDollars,
+    setDepositDollars,
     isSaving,
     isTogglingArchive,
     isArchived,

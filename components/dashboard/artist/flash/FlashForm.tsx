@@ -74,10 +74,12 @@ export const FlashForm = ({
     updateTierRow,
     colorType,
     setColorType,
-    stylesText,
-    setStylesText,
-    placementsText,
-    setPlacementsText,
+    styleTags,
+    setStyleTags,
+    placements,
+    setPlacements,
+    depositDollars,
+    setDepositDollars,
     isSaving,
     isTogglingArchive,
     isArchived,
@@ -119,15 +121,19 @@ export const FlashForm = ({
           flatPriceDollars={flatPriceDollars}
           setFlatPriceDollars={setFlatPriceDollars}
         />
+        <FlashDeposit
+          depositDollars={depositDollars}
+          setDepositDollars={setDepositDollars}
+        />
         <FlashMoreDetails
           isOpen={isMoreDetailsOpen}
           onOpenChange={setIsMoreDetailsOpen}
           colorType={colorType}
           setColorType={setColorType}
-          placementsText={placementsText}
-          setPlacementsText={setPlacementsText}
-          stylesText={stylesText}
-          setStylesText={setStylesText}
+          placements={placements}
+          setPlacements={setPlacements}
+          styleTags={styleTags}
+          setStyleTags={setStyleTags}
         />
         <FlashDisclaimer />
         {formError && <div className={styles.formError}>{formError}</div>}
@@ -424,6 +430,34 @@ const FlashPricingToggle = ({
           Flat rate
         </Button>
       </div>
+    </div>
+  );
+};
+
+interface FlashDepositProps {
+  depositDollars: string;
+  setDepositDollars: (depositDollars: string) => void;
+}
+
+const FlashDeposit = ({
+  depositDollars,
+  setDepositDollars,
+}: FlashDepositProps) => {
+  return (
+    <div className={styles.section}>
+      <span className={styles.sectionHeading}>
+        Deposit to claim <span className={styles.required}>*</span>
+      </span>
+      <span className={styles.sectionHelper}>
+        Charged when a client claims this flash, then applied to the final
+        price.
+      </span>
+      <PriceInput
+        ariaLabel="Deposit to claim"
+        value={depositDollars}
+        onChange={setDepositDollars}
+        placeholder="$0.00"
+      />
     </div>
   );
 };
