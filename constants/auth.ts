@@ -11,6 +11,7 @@ export const OAUTH_STATE_KEY = "inkspace_oauth_state";
 
 export const GOOGLE_CALENDAR_SCOPE =
   "openid email https://www.googleapis.com/auth/calendar.events";
+export const GOOGLE_CALENDAR_MESSAGE_TYPE = "inkspace:google-calendar-result";
 
 export const RESEND_COOLDOWN_SECONDS = 30;
 

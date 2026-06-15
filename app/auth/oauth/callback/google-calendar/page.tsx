@@ -7,12 +7,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 // Libs
 import { ApiError } from "@/lib/api/client";
 import { settingsApi } from "@/lib/api/settings";
-import {
-  consumeOAuthState,
-  getGoogleCalendarRedirectUri,
-  useAuth,
-} from "@/lib/auth";
+import { getGoogleCalendarRedirectUri, useAuth } from "@/lib/auth";
 import { displayToast } from "@/lib/toast";
+import { consumeExpectedState, reportToOpener } from "@/lib/auth/oauth";
 
 const RETURN_TO = "/dashboard/artist/settings?tab=booking";
 
@@ -28,36 +25,44 @@ export default function GoogleCalendarCallbackPage() {
     if (ranRef.current) return;
     ranRef.current = true;
 
+    function fail(message: string) {
+      if (reportToOpener({ ok: false, error: message })) return;
+      setError(message);
+    }
+
     async function handleCallback() {
       const providerError = searchParams.get("error");
       if (providerError) {
-        setError(`Connection cancelled or denied (${providerError}).`);
+        fail(`Connection cancelled or denied (${providerError}).`);
         return;
       }
 
       const code = searchParams.get("code");
       if (!code) {
-        setError("Missing authorization code.");
+        fail("Missing authorization code.");
         return;
       }
 
       const state = searchParams.get("state");
-      const expectedState = consumeOAuthState();
+      const expectedState = consumeExpectedState();
       if (!expectedState || expectedState !== state) {
-        setError("Invalid OAuth state. Please try again.");
+        fail("Invalid OAuth state. Please try again.");
         return;
       }
 
       if (!token) {
-        setError("Your session expired. Please sign in and try again.");
+        fail("Your session expired. Please sign in and try again.");
         return;
       }
 
       try {
-        await settingsApi.connectGoogleCalendar(token, {
+        const settings = await settingsApi.connectGoogleCalendar(token, {
           code,
           redirectUri: getGoogleCalendarRedirectUri(),
         });
+        if (reportToOpener({ ok: true, email: settings.googleCalendarEmail })) {
+          return;
+        }
         displayToast(
           "Google Calendar connected",
           "success",
@@ -65,7 +70,7 @@ export default function GoogleCalendarCallbackPage() {
         );
         router.replace(RETURN_TO);
       } catch (err) {
-        setError(
+        fail(
           err instanceof ApiError
             ? err.message
             : "Could not connect Google Calendar.",

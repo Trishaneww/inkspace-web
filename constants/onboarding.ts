@@ -44,6 +44,7 @@ export const ONBOARDING_INPUT_PHASES = [
   OnboardingPhase.Availability,
   OnboardingPhase.Styles,
   OnboardingPhase.Bookings,
+  OnboardingPhase.Calendar,
 ];
 
 export const ONBOARDING_PHASE_META: Record<
@@ -69,6 +70,10 @@ export const ONBOARDING_PHASE_META: Record<
   [OnboardingPhase.Bookings]: {
     lead: "Bookings.",
     rest: "Choose how clients book with you.",
+  },
+  [OnboardingPhase.Calendar]: {
+    lead: "Sync your calendar.",
+    rest: "Optional — connect Google Calendar so sessions never double-book.",
   },
   [OnboardingPhase.Complete]: {
     lead: "You're all set.",

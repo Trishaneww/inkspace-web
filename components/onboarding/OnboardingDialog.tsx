@@ -21,6 +21,7 @@ import { StudioPhase } from "./StudioPhase";
 import { AvailabilityPhase } from "./AvailabilityPhase";
 import { StylesPhase } from "./StylesPhase";
 import { BookingsPhase } from "./BookingsPhase";
+import { CalendarPhase } from "./CalendarPhase";
 import { CompletedPhase } from "./CompletedPhase";
 import { OnboardingDialogFooter } from "./OnboardingDialogFooter";
 
@@ -42,6 +43,7 @@ export const OnboardingDialog = () => {
     canProceed,
     submitting,
     formError,
+    googleCalendar,
     onNext,
     onBack,
     onDismiss,
@@ -65,6 +67,8 @@ export const OnboardingDialog = () => {
         return <StylesPhase form={form} update={update} />;
       case OnboardingPhase.Bookings:
         return <BookingsPhase form={form} update={update} />;
+      case OnboardingPhase.Calendar:
+        return <CalendarPhase googleCalendar={googleCalendar} />;
       case OnboardingPhase.Complete:
         return <CompletedPhase />;
       default:

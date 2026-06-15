@@ -6,6 +6,7 @@ export {
   getRedirectUri,
   isProviderConfigured,
   startGoogleCalendarFlow,
+  openGoogleCalendarPopup,
   getGoogleCalendarRedirectUri,
   isGoogleCalendarConfigured,
 } from "@/lib/auth/oauth";

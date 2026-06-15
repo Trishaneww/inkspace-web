@@ -252,6 +252,61 @@
   color: var(--color-muted-foreground);
 }
 
+.calendarCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+
+  padding: 1rem;
+
+  background-color: var(--card);
+  border: 1px solid var(--color-neutral-border);
+  border-radius: 0.75rem;
+}
+
+.calendarCardMain {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.calendarLogo {
+  flex-shrink: 0;
+
+  width: 2rem;
+  height: 2rem;
+}
+
+.calendarCardText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.calendarCardTitle {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.calendarCardSubtitle {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--color-muted-foreground);
+}
+
+.calendarConnected {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-success-foreground);
+}
+
 .reassure {
   font-size: 0.8rem;
   color: var(--color-muted-foreground);
