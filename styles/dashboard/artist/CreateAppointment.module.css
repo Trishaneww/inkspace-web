@@ -1,0 +1,312 @@
+.sheet {
+  width: 30rem;
+  max-width: 100vw;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.3rem;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.sub {
+  font-size: 0.875rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.slide {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+
+  gap: 1rem;
+  margin: 0 -0.5rem;
+  padding: 0.25rem 0.5rem;
+
+  overflow-y: auto;
+}
+
+.phase {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.4rem;
+}
+
+.optional {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: hsl(220, 9%, 55%);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 0.75rem;
+}
+
+/* ── Segmented choices ────────────────────────────────────────────────── */
+.choiceGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+
+  gap: 0.6rem;
+}
+
+.choiceCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  gap: 0.2rem;
+  padding: 0.85rem;
+
+  font-family: inherit;
+  text-align: left;
+
+  background-color: var(--card);
+  border: 1px solid var(--color-neutral-border);
+  border-radius: 0.6rem;
+  cursor: pointer;
+
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
+}
+
+.choiceCardActive {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.choiceLabel {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 20%);
+}
+
+.choiceHint {
+  font-size: 0.78rem;
+  color: hsl(220, 9%, 50%);
+}
+
+/* ── Optional piece section ────────────────────────────────────────────── */
+.pieceSection {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.75rem;
+  padding-top: 0.25rem;
+
+  border-top: 1px solid var(--color-neutral-border);
+}
+
+.pieceToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0.5rem 0;
+
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 30%);
+
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.pieceChevron {
+  color: hsl(220, 9%, 50%);
+
+  transition: transform var(--transition-fast);
+}
+
+.pieceChevronOpen {
+  transform: rotate(180deg);
+}
+
+.pieceFields {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1rem;
+}
+
+/* ── Footer ────────────────────────────────────────────────────────────── */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 0.75rem;
+  padding-top: 0.25rem;
+}
+
+.primary {
+  gap: 0.4rem;
+  margin-left: auto;
+
+  background-color: var(--color-primary);
+}
+
+.primary:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.error {
+  font-size: 0.85rem;
+  color: var(--color-error);
+}
+
+/* ── Date / time pickers ───────────────────────────────────────────────── */
+.calendarWrap {
+  padding: 0.5rem;
+
+  border: 1px solid var(--color-neutral-border);
+  border-radius: 0.75rem;
+}
+
+.calendarWrap :global([data-slot="calendar"]) {
+  width: 100%;
+}
+
+.calendarWrap :global([data-slot="calendar"] td) {
+  height: 2.5rem;
+
+  aspect-ratio: auto;
+}
+
+.calendarWrap :global([data-slot="calendar"] button[data-day]) {
+  width: 2.5rem;
+  height: 2.5rem;
+  min-width: 0;
+
+  margin-inline: auto;
+}
+
+.calendarWrap :global(button[data-selected-single="true"]),
+.calendarWrap :global(button[data-selected-single="true"]:hover) {
+  color: hsl(0, 0%, 100%);
+
+  background-color: var(--color-primary);
+}
+
+/* ── Review card ───────────────────────────────────────────────────────── */
+.reviewCard {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1.5rem;
+  padding: 1.5rem;
+
+  background-color: var(--card);
+  border: 1px solid var(--color-neutral-border);
+  border-radius: 0.75rem;
+}
+
+.reviewHead {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.25rem;
+}
+
+.reviewType {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.reviewSub {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.reviewRows {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.9rem;
+}
+
+.reviewRow {
+  display: flex;
+  align-items: center;
+
+  gap: 0.6rem;
+
+  font-size: 0.95rem;
+  color: hsl(220, 13%, 25%);
+}
+
+.reviewRowIcon {
+  flex-shrink: 0;
+
+  color: hsl(220, 9%, 46%);
+}
+
+.reviewSection {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.8rem;
+  padding-top: 1.25rem;
+
+  border-top: 1px solid var(--color-neutral-border);
+}
+
+.reviewSectionLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: hsl(220, 9%, 46%);
+}
+
+.reviewNote {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: hsl(220, 13%, 30%);
+}
+
+.loadingState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 46%);
+}

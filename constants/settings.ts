@@ -1,5 +1,5 @@
 // Libs
-import { formatTimeOfDay } from "@/lib/formatters";
+import { formatTime } from "@/lib/formatters";
 import type {
   DepositRefundPolicy,
   PayoutFrequency,
@@ -122,7 +122,7 @@ export const AVAILABILITY_DEFAULT_END_MINUTE = 1020; // 5:00 PM
 const AVAILABILITY_ALL_TIME_OPTIONS = Array.from(
   { length: 49 },
   (_, i) => i * 30,
-).map((m) => ({ value: String(m), label: formatTimeOfDay(m) }));
+).map((m) => ({ value: String(m), label: formatTime(m) }));
 
 export const AVAILABILITY_START_TIME_OPTIONS =
   AVAILABILITY_ALL_TIME_OPTIONS.filter((o) => Number(o.value) < 1440);

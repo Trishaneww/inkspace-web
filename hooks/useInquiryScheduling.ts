@@ -94,7 +94,7 @@ export function useInquiryScheduling(
     ? "Save new time"
     : appointmentType === "consultation"
       ? "Request consultation"
-      : "Book appointment";
+      : "Create booking";
 
   const submit = async () => {
     if (!token || !appointmentType || !canSubmit) return;
@@ -120,7 +120,7 @@ export function useInquiryScheduling(
             );
       displayToast(
         isReschedule
-          ? "Appointment rescheduled"
+          ? "Booking rescheduled"
           : appointmentType === "consultation"
             ? "Consultation requested"
             : "Booking accepted",

@@ -135,7 +135,7 @@ export const BookingPreferencesTab = ({
 
       <EditableCard
         title="Weekly hours"
-        description="Set the days and hours you take appointments."
+        description="Set the days and hours you take bookings."
         onSubmit={form.saveWeeklySchedule}
         successToast="Weekly hours updated"
         errorToast="Couldn't save weekly hours"
@@ -175,7 +175,7 @@ export const BookingPreferencesTab = ({
           />
         </CardRow>
         <CardRow
-          label="Buffer between appointments"
+          label="Buffer between bookings"
           description="Padding added after each session."
           value={formatSelectValue(settings.bufferMinutes, BUFFER_OPTIONS)}
         >

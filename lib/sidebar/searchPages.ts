@@ -54,7 +54,7 @@ export const ARTIST_SEARCH_PAGES: SearchPage[] = [
     href: "/dashboard/artist/calendar",
     breadcrumb: [],
     icon: Calendar,
-    keywords: ["schedule", "appointments"],
+    keywords: ["schedule", "bookings"],
   },
   {
     label: "Clients",

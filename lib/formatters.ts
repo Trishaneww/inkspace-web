@@ -137,18 +137,29 @@ export function formatMonthDayRange(start: string, end: string): string {
 }
 
 /**
- * Formats minutes-from-midnight (0..1440) as a 12-hour clock time,
- * e.g. 630 -> "10:30 AM", 1020 -> "5:00 PM", 1440 -> "12:00 AM".
- * @param minutes - The minutes from midnight to format.
- * @returns The formatted time in 12-hour format.
+ * Formats minutes-from-midnight (0..1440) as a 12-hour clock string.
+ *
+ * Default (isCompact = false): "10:30 AM", "5:00 PM", "12:00 AM"
+ * Compact  (isCompact = true):  "10:30am", "5pm", "12am"
+ *
+ * @param minutes - Minutes from midnight to format.
+ * @param isCompact - When true, omits `:00` on the hour and uses lowercase period with no space.
+ * @returns The formatted time string.
  */
-export function formatTimeOfDay(minutes: number): string {
-  if (minutes >= 1440) return "12:00 AM";
+export function formatTime(minutes: number, isCompact = false): string {
+  if (minutes >= 1440) return isCompact ? "12am" : "12:00 AM";
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
   const period = hours < 12 ? "AM" : "PM";
   const hour12 = hours % 12 === 0 ? 12 : hours % 12;
-  return `${hour12}:${mins.toString().padStart(2, "0")} ${period}`;
+
+  if (isCompact) {
+    return mins === 0
+      ? `${hour12}${period.toLowerCase()}`
+      : `${hour12}:${String(mins).padStart(2, "0")}${period.toLowerCase()}`;
+  }
+
+  return `${hour12}:${String(mins).padStart(2, "0")} ${period}`;
 }
 
 /**
