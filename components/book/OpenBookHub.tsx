@@ -22,7 +22,7 @@ import InstagramLogo from "@/public/logos/instagram-logo.svg";
 import { BookingFlowDialog } from "@/components/book/BookingFlowDialog";
 
 // Libs
-import { formatMonthDayRange, formatTimeOfDay } from "@/lib/formatters";
+import { formatMonthDayRange, formatTime } from "@/lib/formatters";
 import { WEEKDAYS } from "@/constants/settings";
 import type {
   OpenBookAvailabilityWindow,
@@ -251,7 +251,7 @@ const AvailabilityList = ({
       .sort((a, b) => a.startMinute - b.startMinute)
       .map(
         (window) =>
-          `${formatTimeOfDay(window.startMinute)} – ${formatTimeOfDay(window.endMinute)}`,
+          `${formatTime(window.startMinute)} – ${formatTime(window.endMinute)}`,
       ),
   })).filter((day) => day.ranges.length > 0);
 

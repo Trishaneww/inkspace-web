@@ -1,6 +1,6 @@
 // Libs
 import { format } from "date-fns";
-import { formatDurationMinutes, formatTimeOfDay } from "@/lib/formatters";
+import { formatDurationMinutes, formatTime } from "@/lib/formatters";
 import type {
   AcceptInquiryPayload,
   AppointmentType,
@@ -79,7 +79,7 @@ export function groupTimeOptions(
   const otherTimes: TimeOption[] = [];
   for (let minute = 0; minute < 1440; minute += TIME_STEP_MINUTES) {
     if (minute < rangeStart || minute >= rangeEnd || minute <= after) continue;
-    const option = { value: String(minute), label: formatTimeOfDay(minute) };
+    const option = { value: String(minute), label: formatTime(minute) };
     if (isStandard(minute)) yourHours.push(option);
     else otherTimes.push(option);
   }
@@ -245,7 +245,7 @@ export function buildScheduleReview(
     durationLabel: formatDurationMinutes(duration),
     clientName: inquiry.clientName,
     dateLabel: form.date ? format(form.date, "EEEE, MMMM d, yyyy") : "",
-    timeLabel: `${formatTimeOfDay(start)} – ${formatTimeOfDay(start + duration)}`,
+    timeLabel: `${formatTime(start)} – ${formatTime(start + duration)}`,
     format: consultationFormat,
   };
 }

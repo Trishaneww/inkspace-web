@@ -1,7 +1,7 @@
 "use client";
 
 // Next.js
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 // Libs
@@ -14,6 +14,14 @@ import { consumeExpectedState, reportToOpener } from "@/lib/auth/oauth";
 const RETURN_TO = "/dashboard/artist/settings?tab=booking";
 
 export default function GoogleCalendarCallbackPage() {
+  return (
+    <Suspense>
+      <GoogleCalendarCallback />
+    </Suspense>
+  );
+}
+
+const GoogleCalendarCallback = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { token, isLoading } = useAuth();
@@ -96,4 +104,4 @@ export default function GoogleCalendarCallbackPage() {
       <p>Connecting your Google Calendar…</p>
     </div>
   );
-}
+};

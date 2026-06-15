@@ -183,7 +183,7 @@ export const DepositsTab = ({
         {usesWindow && (
           <CardRow
             label="Cancellation notice"
-            description="How many hours before the appointment a client must cancel to get a refund."
+            description="How many hours before the booking a client must cancel to get a refund."
             value={
               settings.cancellationNoticeHours != null
                 ? `${settings.cancellationNoticeHours} hours before the appointment`

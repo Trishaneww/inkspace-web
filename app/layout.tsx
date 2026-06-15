@@ -23,7 +23,7 @@ const interTight = Inter_Tight({
 export const metadata: Metadata = {
   title: "Inkspace — Booking & Management Suite",
   description:
-    "Manage your tattoo studio with Inkspace. Track artists, clients, and appointments.",
+    "Manage your tattoo studio with Inkspace. Track artists, clients, and bookings.",
   icons: {
     icon: {
       url: "/logos/inkspace-logo.svg",
