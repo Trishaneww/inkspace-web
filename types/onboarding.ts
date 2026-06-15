@@ -6,6 +6,7 @@ export enum OnboardingPhase {
   Availability,
   Styles,
   Bookings,
+  Calendar,
   Complete,
 }
 

@@ -1,6 +1,7 @@
 // Libs
 import {
   GOOGLE_AUTH_URL,
+  GOOGLE_CALENDAR_MESSAGE_TYPE,
   GOOGLE_CALENDAR_PROVIDER,
   GOOGLE_CALENDAR_SCOPE,
   MICROSOFT_AUTH_URL,
@@ -82,12 +83,68 @@ export function getGoogleCalendarRedirectUri(): string {
 }
 
 export function startGoogleCalendarFlow(): boolean {
+  const url = buildGoogleCalendarAuthUrl();
+  if (!url) return false;
+
+  window.location.assign(url);
+  return true;
+}
+
+export function openGoogleCalendarPopup(): Window | null {
+  const url = buildGoogleCalendarAuthUrl();
+  if (!url) return null;
+
+  const width = 500;
+  const height = 640;
+  const left = window.screenX + Math.max(0, (window.outerWidth - width) / 2);
+  const top = window.screenY + Math.max(0, (window.outerHeight - height) / 2);
+
+  return window.open(
+    url,
+    "inkspace-google-calendar",
+    `popup,width=${width},height=${height},left=${left},top=${top}`,
+  );
+}
+
+export function isGoogleCalendarConfigured(): boolean {
+  return !!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+}
+
+export function reportToOpener(
+  result: { ok: true; email: string } | { ok: false; error: string },
+): boolean {
+  if (typeof window === "undefined") return false;
+  const opener = window.opener;
+  if (!opener || opener === window) return false;
+
+  opener.postMessage(
+    { type: GOOGLE_CALENDAR_MESSAGE_TYPE, ...result },
+    window.location.origin,
+  );
+  window.close();
+  return true;
+}
+
+export function consumeExpectedState(): string | null {
+  const opener = typeof window !== "undefined" ? window.opener : null;
+  if (opener && opener !== window) {
+    try {
+      const state = opener.sessionStorage.getItem(OAUTH_STATE_KEY);
+      opener.sessionStorage.removeItem(OAUTH_STATE_KEY);
+      if (state) return state;
+    } catch {
+    }
+  }
+  return consumeOAuthState();
+}
+
+function buildGoogleCalendarAuthUrl(): string | null {
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   if (!clientId) {
     console.warn(
       "[oauth] google calendar not configured — set NEXT_PUBLIC_GOOGLE_CLIENT_ID.",
     );
-    return false;
+    return null;
   }
 
   const state = generateState();
@@ -104,12 +161,7 @@ export function startGoogleCalendarFlow(): boolean {
     include_granted_scopes: "true",
   });
 
-  window.location.assign(`${GOOGLE_AUTH_URL}?${params.toString()}`);
-  return true;
-}
-
-export function isGoogleCalendarConfigured(): boolean {
-  return !!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  return `${GOOGLE_AUTH_URL}?${params.toString()}`;
 }
 
 function generateState(): string {

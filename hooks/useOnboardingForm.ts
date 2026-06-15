@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 // Hooks
 import { getApiErrorMessage } from "@/hooks/useAuthForm";
+import { useGoogleCalendarConnect } from "@/hooks/useGoogleCalendarConnect";
 
 // Libs
 import { useAuth } from "@/lib/auth";
@@ -58,6 +59,8 @@ export const useOnboardingForm = () => {
   } | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+
+  const googleCalendar = useGoogleCalendarConnect();
 
   const update = (patch: Partial<OnboardingFormState>) =>
     setForm((f) => ({ ...f, ...patch }));
@@ -118,13 +121,15 @@ export const useOnboardingForm = () => {
         return true;
       case OnboardingPhase.Bookings:
         return form.schedulingMode !== "";
+      case OnboardingPhase.Calendar:
+        return true;
       default:
         return false;
     }
   }, [phase, usernameStatus, form]);
 
   const phaseIndex = ONBOARDING_INPUT_PHASES.indexOf(phase);
-  const isBookingsPhase = phase === OnboardingPhase.Bookings;
+  const isLastInputPhase = phaseIndex === ONBOARDING_INPUT_PHASES.length - 1;
   const isComplete = phase === OnboardingPhase.Complete;
   const progress = isComplete
     ? 100
@@ -148,7 +153,7 @@ export const useOnboardingForm = () => {
 
   const onNext = async () => {
     if (!canProceed) return;
-    if (isBookingsPhase) {
+    if (isLastInputPhase) {
       await submit();
       return;
     }
@@ -173,6 +178,7 @@ export const useOnboardingForm = () => {
     canProceed,
     submitting,
     formError,
+    googleCalendar,
     onNext,
     onBack,
     onDismiss,

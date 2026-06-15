@@ -29,7 +29,7 @@ export const OnboardingDialogFooter = ({
   onDismiss,
 }: OnboardingDialogFooterProps) => {
   const isComplete = phase === OnboardingPhase.Complete;
-  const isLastInputPhase = phase === OnboardingPhase.Bookings;
+  const isLastInputPhase = phase === OnboardingPhase.Calendar;
 
   return (
     <DialogFooter className={styles.footer}>
