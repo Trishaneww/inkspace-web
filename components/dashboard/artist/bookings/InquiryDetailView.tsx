@@ -130,7 +130,7 @@ export const InquiryDetailView = ({
         </div>
         <span className={styles.detailSub}>
           {scheduling.isReschedule
-            ? "Reschedule appointment"
+            ? "Reschedule booking"
             : appointmentType === "consultation"
               ? "Request a consultation"
               : appointmentType === "session"

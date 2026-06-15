@@ -152,7 +152,7 @@ const hasLiveAppointment = (i: Inquiry) =>
 export const INQUIRY_ACTIONS: InquiryAction[] = [
   {
     id: "accept",
-    label: "Book appointment",
+    label: "Create booking",
     icon: CalendarCheck,
     isAvailable: (i: Inquiry) => isUndecided(i.status),
   },

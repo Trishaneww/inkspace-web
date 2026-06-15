@@ -147,7 +147,7 @@ export const PoliciesTab = ({
 
       <EditableCard
         title="Consent / waiver"
-        description="Upload a waiver clients must sign before their appointment."
+        description="Upload a waiver clients must sign before their booking."
         onSubmit={() =>
           saveSettings({ waiverRequired: waiver.draft.waiverRequired })
         }
