@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     "Manage your tattoo studio with Inkspace. Track artists, clients, and bookings.",
   icons: {
     icon: {
-      url: "/logos/inkspace-logo.svg",
+      url: "/logos/inkspace-logo.png",
       type: "image/svg+xml",
     },
   },
