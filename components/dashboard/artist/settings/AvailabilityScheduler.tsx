@@ -17,7 +17,7 @@ import {
   AVAILABILITY_START_TIME_OPTIONS,
   AVAILABILITY_END_TIME_OPTIONS,
 } from "@/constants/settings";
-import { formatTimeOfDay } from "@/lib/formatters";
+import { formatTime } from "@/lib/formatters";
 import type { AvailabilityWindowInput } from "@/types/settings";
 
 interface AvailabilitySchedulerProps {
@@ -142,8 +142,8 @@ export const WeeklyHoursSummary = ({
             <span className={styles.dayLabel}>{day.label}</span>
             {range ? (
               <span className={styles.fieldValue}>
-                {formatTimeOfDay(range.startMinute)} –{" "}
-                {formatTimeOfDay(range.endMinute)}
+                {formatTime(range.startMinute)} –{" "}
+                {formatTime(range.endMinute)}
               </span>
             ) : (
               <span className={styles.dayClosed}>Closed</span>

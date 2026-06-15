@@ -33,7 +33,14 @@ export const OptionsSelect = ({
     <Select value={value} onValueChange={(next) => next && onValueChange(next)}>
       <SelectTrigger className={className} aria-label={ariaLabel}>
         <SelectValue placeholder={placeholder}>
-          {(selected) => formatSelectValue(selected, options)}
+          {(selected) => {
+            const label = selected ? formatSelectValue(selected, options) : "";
+            return label ? (
+              label
+            ) : (
+              <span style={{ color: "hsl(220, 9%, 46%)" }}>{placeholder}</span>
+            );
+          }}
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
