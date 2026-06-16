@@ -29,7 +29,9 @@ export const SegmentedChoice = ({
   <div
     className={styles.choiceGrid}
     style={
-      columns ? { gridTemplateColumns: `repeat(${columns}, 1fr)` } : undefined
+      columns
+        ? { gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }
+        : undefined
     }
   >
     {options.map((option) => (
