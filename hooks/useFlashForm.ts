@@ -12,7 +12,7 @@ import {
   buildTierRowsFromFlash,
   convertDollarsToCents,
 } from "@/lib/flashes";
-import { formatCurrency } from "@/lib/formatters";
+import { formatCentsAsInput } from "@/lib/formatters";
 import { displayToast } from "@/lib/toast";
 
 // Types
@@ -55,7 +55,7 @@ export function useFlashForm({
   const [flatPriceDollars, setFlatPriceDollars] = useState(
     initialFlash?.flat_price_cents !== null &&
       initialFlash?.flat_price_cents !== undefined
-      ? formatCurrency((initialFlash.flat_price_cents / 100).toString())
+      ? formatCentsAsInput(initialFlash.flat_price_cents)
       : "",
   );
   const [flatDurationMinutes, setFlatDurationMinutes] = useState(
@@ -77,7 +77,7 @@ export function useFlashForm({
   );
   const [depositDollars, setDepositDollars] = useState(
     initialFlash?.deposit_cents != null
-      ? formatCurrency((initialFlash.deposit_cents / 100).toString())
+      ? formatCentsAsInput(initialFlash.deposit_cents)
       : "",
   );
 

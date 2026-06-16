@@ -10,7 +10,7 @@ import {
   type RepeatableFilter,
 } from "@/types/flash";
 import { FLASH_SIZE_OPTIONS } from "@/constants/flashes";
-import { formatCurrency, formatPriceCents } from "@/lib/formatters";
+import { formatPrice } from "@/lib/formatters";
 
 export interface FlashStats {
   available: number;
@@ -133,7 +133,7 @@ export function buildTierRowsFromFlash(
     rows[tier.size_code] = {
       enabled: true,
       durationMinutes: tier.duration_minutes.toString(),
-      priceDollars: formatCurrency((tier.price_cents / 100).toString()),
+      priceDollars: formatPrice(tier.price_cents),
     };
   }
   return rows;
@@ -180,7 +180,7 @@ export function convertDollarsToCents(input: string): number | null {
 export function formatFlashPriceRange(flash: Flash): string {
   if (flash.pricing_mode === "flat") {
     return flash.flat_price_cents != null
-      ? formatPriceCents(flash.flat_price_cents, flash.currency)
+      ? formatPrice(flash.flat_price_cents, flash.currency)
       : "";
   }
   const prices = flash.pricing_tiers.map((tier) => tier.price_cents);
@@ -188,6 +188,6 @@ export function formatFlashPriceRange(flash: Flash): string {
   const min = Math.min(...prices);
   const max = Math.max(...prices);
   return min === max
-    ? formatPriceCents(min, flash.currency)
-    : `${formatPriceCents(min, flash.currency)} – ${formatPriceCents(max, flash.currency)}`;
+    ? formatPrice(min, flash.currency)
+    : `${formatPrice(min, flash.currency)} – ${formatPrice(max, flash.currency)}`;
 }

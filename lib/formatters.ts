@@ -1,20 +1,19 @@
 // Libs
 import { format, isValid, parseISO } from "date-fns";
-import { MONTHS } from "@/constants/dates";
 
 /**
- * Formats a currency amount in cents as a string,
- * e.g. 123456 -> "$1,234.56".
+ * Formats a currency amount in cents, showing cents only when non-zero,
+ * e.g. 9000 -> "$90", 9050 -> "$90.50".
  * @param cents - The currency amount in cents.
  * @param currency - The currency to format.
  * @returns The formatted currency amount.
  */
-export function formatPriceCents(cents: number, currency = "CAD"): string {
+export function formatPrice(cents: number, currency = "CAD"): string {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+    minimumFractionDigits: cents % 100 === 0 ? 0 : 2,
+    maximumFractionDigits: 2,
   }).format(cents / 100);
 }
 
@@ -86,7 +85,7 @@ export function isPhoneComplete(input: string): boolean {
  * @returns The formatted currency string for an input field.
  */
 export function formatCentsAsInput(cents: number | null): string {
-  return cents != null ? formatCurrency((cents / 100).toString()) : "";
+  return cents != null ? formatCurrency(String(cents / 100)) : "";
 }
 
 /**
@@ -96,9 +95,7 @@ export function formatCentsAsInput(cents: number | null): string {
  * @returns The formatted date string.
  */
 export function formatDate(iso: string): string {
-  const parsed = parseISO(iso);
-  const date = isValid(parsed) ? parsed : new Date(iso);
-  return isValid(date) ? format(date, "MMM d, yyyy") : iso;
+  return formatISO(iso, "MMM d, yyyy");
 }
 
 /**
@@ -108,21 +105,31 @@ export function formatDate(iso: string): string {
  * @returns The formatted date-and-time string.
  */
 export function formatDateTime(iso: string): string {
+  return formatISO(iso, "MMM d, yyyy · h:mm a");
+}
+
+/**
+ * Formats an ISO 8601 date or timestamp with the given date-fns pattern,
+ * falling back to the raw input when it cannot be parsed.
+ * @param iso - The ISO 8601 date or timestamp to format.
+ * @param pattern - The date-fns format pattern to apply.
+ * @returns The formatted string, or the raw input when unparseable.
+ */
+function formatISO(iso: string, pattern: string): string {
   const parsed = parseISO(iso);
   const date = isValid(parsed) ? parsed : new Date(iso);
-  return isValid(date) ? format(date, "MMM d, yyyy · h:mm a") : iso;
+  return isValid(date) ? format(date, pattern) : iso;
 }
 
 /**
  * Formats a YYYY-MM-DD date as a year-less month and day, e.g.
- * "2026-06-18" -> "Jun 18". Splits the parts directly so the calendar date
+ * "2026-06-18" -> "Jun 18". Parses via parseISODate so the calendar date
  * never shifts across timezones.
  * @param iso - The YYYY-MM-DD date string to format.
  * @returns The formatted "MMM d" string.
  */
 export function formatMonthDay(iso: string): string {
-  const [, month, day] = iso.split("-").map(Number);
-  return `${MONTHS[month - 1]} ${day}`;
+  return format(parseISODate(iso), "MMM d");
 }
 
 /**

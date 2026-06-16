@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 // Libs
 import { FLASH_SIZE_OPTIONS } from "@/constants/flashes";
 import { PLACEMENT_OPTIONS } from "@/constants/tattooStyles";
-import { formatPriceCents } from "@/lib/formatters";
+import { formatPrice } from "@/lib/formatters";
 import type {
   BookingFlowFormState,
   UpdateBookingForm,
@@ -63,7 +63,7 @@ export const FlashDetailPhase = ({
         {flash.deposit_cents != null && (
           <p className={bk.flashDeposit}>
             <strong>
-              {formatPriceCents(flash.deposit_cents, flash.currency)}
+              {formatPrice(flash.deposit_cents, flash.currency)}
             </strong>{" "}
             deposit to claim
           </p>
