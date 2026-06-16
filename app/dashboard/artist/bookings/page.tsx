@@ -103,15 +103,24 @@ export default function ArtistBookingsPage() {
 
   const handleCreateBooking = () => {};
 
-  const openInquiry = (inquiry: Inquiry) => {
+  const initialView =
+    searchParams.get("view") === "actions" ? "actions" : "details";
+
+  const openInquiry = (
+    inquiry: Inquiry,
+    intent: "details" | "actions" = "details",
+  ) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("inquiry", inquiry.id);
+    if (intent === "actions") params.set("view", "actions");
+    else params.delete("view");
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   const closeInquiry = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("inquiry");
+    params.delete("view");
     const query = params.toString();
     router.replace(query ? `${pathname}?${query}` : pathname, {
       scroll: false,
@@ -149,13 +158,18 @@ export default function ArtistBookingsPage() {
       {loadError && <div className={styles.errorBanner}>{loadError}</div>}
 
       {!isLoading && (
-        <BookingsTable inquiries={visibleInquiries} onSelect={openInquiry} />
+        <BookingsTable
+          inquiries={visibleInquiries}
+          onSelect={openInquiry}
+          onOpenActions={(inquiry) => openInquiry(inquiry, "actions")}
+        />
       )}
 
       <InquiryDetailSheet
         inquiryId={selectedInquiryId}
         onClose={closeInquiry}
         onActed={fetchData}
+        initialView={initialView}
       />
 
       <OpenBookEditSheet

@@ -122,6 +122,23 @@ function formatISO(iso: string, pattern: string): string {
 }
 
 /**
+ * Formats an ISO 8601 date or timestamp as a relative date string, e.g.
+ * "2026-06-18" -> "Today", "2026-06-17" -> "Yesterday", "2026-06-16" -> "3d ago", "2026-05-18" -> "1mo ago".
+ * @param iso - The ISO 8601 date or timestamp to format.
+ * @returns The formatted relative date string.
+ */
+export function formatRelativeDate(iso: string): string {
+  const then = new Date(iso).getTime();
+  if (Number.isNaN(then)) return "";
+  const days = Math.floor((Date.now() - then) / 86_400_000);
+  if (days <= 0) return "Today";
+  if (days === 1) return "Yesterday";
+  if (days < 30) return `${days}d ago`;
+  const months = Math.floor(days / 30);
+  return months === 1 ? "1mo ago" : `${months}mo ago`;
+}
+
+/**
  * Formats a YYYY-MM-DD date as a year-less month and day, e.g.
  * "2026-06-18" -> "Jun 18". Parses via parseISODate so the calendar date
  * never shifts across timezones.

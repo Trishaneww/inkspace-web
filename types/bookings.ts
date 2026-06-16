@@ -14,6 +14,28 @@ export type InquiryStatus =
 
 export type DepositStatus = "not_required" | "pending" | "paid" | "refunded";
 export type WaiverStatus = "not_required" | "pending" | "signed";
+export type PaymentType = "deposit" | "final";
+
+export type PaymentRequestStatus =
+  | "requested"
+  | "processing"
+  | "paid"
+  | "failed"
+  | "canceled"
+  | "expired"
+  | "refunded";
+
+export interface InquiryPayment {
+  id: string;
+  type: PaymentType;
+  status: PaymentRequestStatus;
+  currency: string;
+  amountCents: number;
+  clientChargeCents: number;
+  publicToken: string;
+  createdAt: string;
+  paidAt?: string;
+}
 
 export type SchedulingMode = "artist_scheduled" | "client_scheduled";
 
@@ -101,6 +123,7 @@ export interface Inquiry {
   artistAvailability: OpenBookAvailabilityWindow[];
   appointment?: Appointment;
   liveAppointments: Appointment[];
+  payments: InquiryPayment[];
 }
 
 export interface AcceptInquiryPayload {
@@ -118,6 +141,7 @@ export interface RescheduleAppointmentPayload {
   scheduledStart: string;
   durationMinutes?: number;
   format?: ConsultationFormat;
+  appointmentId?: string;
 }
 
 export interface BookingStats {
@@ -243,24 +267,39 @@ export interface BookingFilters {
 
 export type InquiryActionId =
   | "accept"
-  | "request_deposit"
+  | "request_payment"
+  | "send_waiver"
   | "book_consultation"
   | "reschedule"
+  | "refund"
   | "decline"
   | "cancel"
   | "reopen";
 
+export type InquiryActionBehavior = "nav" | "immediate" | "confirm";
+
 export interface InquiryAction {
   id: InquiryActionId;
   label: string | ((inquiry: Inquiry) => string);
+  description: string;
   icon: LucideIcon;
+  behavior: InquiryActionBehavior;
   destructive?: boolean;
+  perAppointment?: boolean;
+  perPayment?: boolean;
+  confirmMessage?: string;
   isAvailable: (inquiry: Inquiry) => boolean;
 }
 
-export interface ResolvedInquiryAction {
+export interface InquiryActionItem {
+  key: string;
   id: InquiryActionId;
   label: string;
+  description: string;
   icon: LucideIcon;
-  destructive?: boolean;
+  behavior: InquiryActionBehavior;
+  destructive: boolean;
+  appointmentId?: string;
+  paymentRequestId?: string;
+  confirmMessage?: string;
 }

@@ -1,17 +1,24 @@
 // Libs
+import { format } from "date-fns";
 import {
   COLOR_TYPE_LABELS,
   INQUIRY_ACTIONS,
+  PAYMENT_TYPE_LABELS,
   STATUS_META,
 } from "@/constants/bookings";
 import { FLASH_SIZE_LABELS } from "@/constants/flashes";
+import { formatPrice } from "@/lib/formatters";
+
+// Types
 import type {
+  Appointment,
   BadgeMeta,
   BookingFilters,
-  RecencyFilter,
-  ResolvedInquiryAction,
   Inquiry,
-  AppointmentType,
+  InquiryActionId,
+  InquiryActionItem,
+  InquiryPayment,
+  RecencyFilter,
 } from "@/types/bookings";
 
 export function getInquiryStatusMeta(inquiry: Inquiry): BadgeMeta {
@@ -72,31 +79,94 @@ export function hasActiveBookingFilters(filters: BookingFilters): boolean {
   );
 }
 
-export function getInquiryActions(inquiry: Inquiry): ResolvedInquiryAction[] {
-  return INQUIRY_ACTIONS.filter((action) => action.isAvailable(inquiry))
-    .sort(
-      (a, b) => Number(a.destructive ?? false) - Number(b.destructive ?? false),
-    )
-    .map((action) => ({
+export function getInquiryActionItems(inquiry: Inquiry): InquiryActionItem[] {
+  const items: InquiryActionItem[] = [];
+
+  for (const action of INQUIRY_ACTIONS) {
+    if (!action.isAvailable(inquiry)) continue;
+
+    if (action.perAppointment) {
+      const actionLabel = action.id === "reschedule" ? "Reschedule" : "Cancel";
+      const appointments = getAppointmentsForAction(action.id, inquiry);
+      for (const appt of appointments) {
+        items.push({
+          key: `${action.id}:${appt.id}`,
+          id: action.id,
+          label: `${actionLabel} ${formatAppointmentType(appt)}`,
+          description: formatAppointmentTime(appt),
+          icon: action.icon,
+          behavior: action.behavior,
+          destructive: action.destructive ?? false,
+          appointmentId: appt.id,
+          confirmMessage: action.confirmMessage,
+        });
+      }
+      continue;
+    }
+
+    if (action.perPayment) {
+      const refundablePayments = getRefundablePayments(inquiry);
+      for (const payment of refundablePayments) {
+        const amount = formatPrice(payment.clientChargeCents, payment.currency);
+        items.push({
+          key: `${action.id}:${payment.id}`,
+          id: action.id,
+          label: `Refund ${formatPaymentType(payment)}`,
+          description: `${amount} paid`,
+          icon: action.icon,
+          behavior: action.behavior,
+          destructive: action.destructive ?? false,
+          paymentRequestId: payment.id,
+          confirmMessage: `Refund ${amount} to the client? This can't be undone.`,
+        });
+      }
+      continue;
+    }
+
+    items.push({
+      key: action.id,
       id: action.id,
-      icon: action.icon,
-      destructive: action.destructive,
       label:
         typeof action.label === "function"
           ? action.label(inquiry)
           : action.label,
-    }));
+      description: action.description,
+      icon: action.icon,
+      behavior: action.behavior,
+      destructive: action.destructive ?? false,
+      confirmMessage: action.confirmMessage,
+    });
+  }
+
+  return items.sort((a, b) => Number(a.destructive) - Number(b.destructive));
 }
 
-export function formatRelativeDate(iso: string): string {
-  const then = new Date(iso).getTime();
-  if (Number.isNaN(then)) return "";
-  const days = Math.floor((Date.now() - then) / 86_400_000);
-  if (days <= 0) return "Today";
-  if (days === 1) return "Yesterday";
-  if (days < 30) return `${days}d ago`;
-  const months = Math.floor(days / 30);
-  return months === 1 ? "1mo ago" : `${months}mo ago`;
+function getAppointmentsForAction(
+  actionId: InquiryActionId,
+  inquiry: Inquiry,
+): Appointment[] {
+  const live = inquiry.liveAppointments ?? [];
+  if (actionId === "reschedule") {
+    return live.filter((a) => a.scheduledStart && a.status === "scheduled");
+  }
+  return live;
+}
+
+function formatAppointmentType(appt: Appointment): string {
+  return appt.type === "consultation" ? "consultation" : "session";
+}
+
+function getRefundablePayments(inquiry: Inquiry): InquiryPayment[] {
+  return (inquiry.payments ?? []).filter((p) => p.status === "paid");
+}
+
+function formatPaymentType(payment: InquiryPayment): string {
+  return (PAYMENT_TYPE_LABELS[payment.type] ?? "payment").toLowerCase();
+}
+
+function formatAppointmentTime(appt: Appointment): string {
+  if (!appt.scheduledStart) return "Awaiting a time";
+  return format(new Date(appt.scheduledStart), "MMM d, h:mm a");
 }
 
 export function requestMeta(inquiry: Inquiry): string {
@@ -119,8 +189,4 @@ export function describePiece(inquiry: Inquiry): string {
     COLOR_TYPE_LABELS[inquiry.colorType] ?? inquiry.colorType,
   ].filter(Boolean);
   return parts.length > 0 ? parts.join(" · ") : "Custom piece";
-}
-
-export function getCancelLabel(type: AppointmentType) {
-  return type === "consultation" ? "Cancel consultation" : "Cancel booking";
 }
