@@ -37,6 +37,7 @@ export interface PublicPaymentRequest {
   clientChargeCents: number;
   artistName: string;
   clientEmail: string;
+  clientName: string;
   description: string;
   expired: boolean;
   hasAccount: boolean;
@@ -47,6 +48,8 @@ export interface CheckoutResponse {
 }
 
 export interface CreateClientAccountPayload {
+  firstName: string;
+  lastName: string;
   password: string;
   marketingOptIn: boolean;
 }
