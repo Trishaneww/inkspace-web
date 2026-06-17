@@ -17,12 +17,11 @@ import {
 
 // Libs
 import { formatPrice } from "@/lib/formatters";
+import { getPaymentBreakdown, getPaymentAmountCents } from "@/lib/payments";
 import {
-  computePaymentBreakdown,
-  paymentAmountCents,
+  FEE_PAYER_NOTE,
   PLATFORM_FEE_PERCENT_LABEL,
-} from "@/lib/requestPayment";
-import { FEE_PAYER_NOTE } from "@/constants/payments";
+} from "@/constants/payments";
 import { getPaymentTypeLabel, getPaymentTypeHint } from "@/lib/payments";
 
 // Types
@@ -48,7 +47,7 @@ export const RequestPaymentReviewPhase = ({
   currency,
   feePayer,
 }: RequestPaymentReviewPhaseProps) => {
-  const breakdown = computePaymentBreakdown(paymentAmountCents(form), feePayer);
+  const breakdown = getPaymentBreakdown(getPaymentAmountCents(form), feePayer);
   const feeAddedToClient = feePayer !== "artist";
 
   return (

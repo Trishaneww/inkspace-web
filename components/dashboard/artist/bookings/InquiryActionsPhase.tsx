@@ -12,18 +12,18 @@ import type { InquiryActionItem } from "@/types/bookings";
 
 interface InquiryActionsPhaseProps {
   items: InquiryActionItem[];
-  busyKey: string | null;
+  pendingActionKey: string | null;
   onSelect: (item: InquiryActionItem) => void;
 }
 
 export const InquiryActionsPhase = ({
   items,
-  busyKey,
+  pendingActionKey,
   onSelect,
 }: InquiryActionsPhaseProps) => {
   const primary = items.filter((item) => !item.destructive);
   const destructive = items.filter((item) => item.destructive);
-  const disabled = busyKey !== null;
+  const disabled = pendingActionKey !== null;
 
   const renderCard = (item: InquiryActionItem) => (
     <button
@@ -42,7 +42,7 @@ export const InquiryActionsPhase = ({
         <span className={styles.actionCardTitle}>{item.label}</span>
         <span className={styles.actionCardDesc}>{item.description}</span>
       </span>
-      {busyKey === item.key ? (
+      {pendingActionKey === item.key ? (
         <Loader2
           size={18}
           className={clsx(styles.actionCardChevron, "animate-spin")}

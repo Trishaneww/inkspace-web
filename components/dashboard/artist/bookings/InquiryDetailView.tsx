@@ -1,20 +1,12 @@
 "use client";
 
-// Next.js
-import { useState } from "react";
-
 // CSS
 import styles from "@/styles/dashboard/artist/Bookings.module.css";
 
 // HTML Components
 import { SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { ArrowLeft, Ban, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, Zap } from "lucide-react";
 
 // Components
 import { StatusBadge } from "./StatusBadge";
@@ -22,102 +14,59 @@ import { InquiryDetailsPhase } from "./InquiryDetailsPhase";
 import { InquiryConsultLengthPhase } from "./InquiryConsultLengthPhase";
 import { InquirySchedulePhase } from "./InquirySchedulePhase";
 import { InquiryReviewPhase } from "./InquiryReviewPhase";
+import { RequestPaymentTypePhase } from "./RequestPaymentTypePhase";
+import { RequestPaymentReviewPhase } from "./RequestPaymentReviewPhase";
+import { InquiryActionsPhase } from "./InquiryActionsPhase";
+import { InquiryConfirmPhase } from "./InquiryConfirmPhase";
 
 // Hooks
-import { useInquiryScheduling } from "@/hooks/useInquiryScheduling";
-import type { SchedulePhase } from "@/hooks/useInquiryScheduling";
-import { useSlideTransition } from "@/hooks/useSlideTransition";
+import { useInquiryDetailView } from "@/hooks/useInquiryDetailView";
 
-// Libs
-import { bookingsApi } from "@/lib/api/bookings";
-import { useAuth } from "@/lib/auth";
-import { displayToast } from "@/lib/toast";
-import { TYPE_LABELS } from "@/constants/bookings";
-import {
-  formatRelativeDate,
-  getCancelLabel,
-  getInquiryActions,
-  getInquiryStatusMeta,
-} from "@/lib/bookings";
-import type {
-  Appointment,
-  Inquiry,
-  InquiryActionId,
-  ResolvedInquiryAction,
-} from "@/types/bookings";
+// Types
+import type { InquiryView } from "@/hooks/useInquiryDetailView";
+import type { Inquiry } from "@/types/bookings";
 
 interface InquiryDetailViewProps {
   inquiry: Inquiry;
   setInquiry: (inquiry: Inquiry) => void;
   onActed: () => void;
-  actingId: InquiryActionId | null;
-  setActingId: (id: InquiryActionId | null) => void;
+  onClose: () => void;
+  initialView?: InquiryView;
 }
 
 export const InquiryDetailView = ({
   inquiry,
   setInquiry,
   onActed,
-  actingId,
-  setActingId,
+  onClose,
+  initialView = "details",
 }: InquiryDetailViewProps) => {
-  const { token } = useAuth();
-
-  const scheduling = useInquiryScheduling(inquiry, (updated) => {
-    setInquiry(updated);
-    onActed();
+  const {
+    scheduling,
+    payment,
+    view,
+    pendingConfirm,
+    pendingActionKey,
+    isDefaultView,
+    slideRef,
+    status,
+    detailSub,
+    currency,
+    feePayer,
+    actionItems,
+    selectAction,
+    execute,
+    showActions,
+    showDetails,
+    cancelConfirm,
+  } = useInquiryDetailView({
+    inquiry,
+    setInquiry,
+    onActed,
+    initialView,
   });
-  const { appointmentType, phase, openSchedule, openReschedule } = scheduling;
-  const slideIndex = appointmentType ? SCHEDULE_PHASE_INDEX[phase] : 0;
-  const slideRef = useSlideTransition<HTMLDivElement>(slideIndex);
 
-  const runAction = async (action: InquiryActionId) => {
-    if (!token) return;
-    if (action === "accept") return openSchedule("session");
-    if (action === "book_consultation") return openSchedule("consultation");
-    if (action === "reschedule") return openReschedule();
-
-    setActingId(action);
-    try {
-      if (action === "decline") {
-        setInquiry(await bookingsApi.decline(token, inquiry.id));
-        displayToast("Booking declined", "success");
-        onActed();
-      } else if (action === "reopen") {
-        setInquiry(await bookingsApi.reopen(token, inquiry.id));
-        displayToast("Booking reopened", "success");
-        onActed();
-      } else {
-        displayToast("Coming soon", "info");
-      }
-    } catch (err) {
-      displayToast(
-        err instanceof Error ? err.message : "Action failed",
-        "error",
-      );
-    } finally {
-      setActingId(null);
-    }
-  };
-
-  const runCancel = async (appointmentId?: string) => {
-    if (!token) return;
-    setActingId("cancel");
-    try {
-      setInquiry(await bookingsApi.cancel(token, inquiry.id, appointmentId));
-      displayToast("Cancelled", "success");
-      onActed();
-    } catch (err) {
-      displayToast(
-        err instanceof Error ? err.message : "Action failed",
-        "error",
-      );
-    } finally {
-      setActingId(null);
-    }
-  };
-
-  const status = getInquiryStatusMeta(inquiry);
+  const { appointmentType, phase } = scheduling;
 
   return (
     <div className={styles.editForm}>
@@ -128,193 +77,166 @@ export const InquiryDetailView = ({
           </SheetTitle>
           <StatusBadge label={status.label} variant={status.variant} />
         </div>
-        <span className={styles.detailSub}>
-          {scheduling.isReschedule
-            ? "Reschedule booking"
-            : appointmentType === "consultation"
-              ? "Request a consultation"
-              : appointmentType === "session"
-                ? "Accept & schedule"
-                : `${TYPE_LABELS[inquiry.type]} request · Submitted ${formatRelativeDate(inquiry.createdAt)}`}
-        </span>
+        <span className={styles.detailSub}>{detailSub}</span>
       </div>
 
       <div ref={slideRef} className={styles.phaseSlide}>
-        {!appointmentType ? (
-          <InquiryDetailsPhase inquiry={inquiry} />
-        ) : phase === "length" ? (
-          <InquiryConsultLengthPhase
-            selected={scheduling.form.consultationDurationMinutes}
-            onSelect={scheduling.selectLength}
-          />
-        ) : phase === "review" ? (
-          <>
-            <InquiryReviewPhase
+        {appointmentType &&
+          (phase === "length" ? (
+            <InquiryConsultLengthPhase
+              selected={scheduling.form.consultationDurationMinutes}
+              onSelect={scheduling.selectLength}
+            />
+          ) : phase === "review" ? (
+            <>
+              <InquiryReviewPhase
+                inquiry={inquiry}
+                type={appointmentType}
+                form={scheduling.form}
+                isReschedule={scheduling.isReschedule}
+              />
+              {scheduling.error && (
+                <p className={styles.editError}>{scheduling.error}</p>
+              )}
+            </>
+          ) : (
+            <InquirySchedulePhase
               inquiry={inquiry}
               type={appointmentType}
               form={scheduling.form}
+              update={scheduling.update}
+              isReschedule={scheduling.isReschedule}
             />
-            {scheduling.error && (
-              <p className={styles.editError}>{scheduling.error}</p>
-            )}
-          </>
-        ) : (
-          <InquirySchedulePhase
-            inquiry={inquiry}
-            type={appointmentType}
-            form={scheduling.form}
-            update={scheduling.update}
-            isReschedule={scheduling.isReschedule}
+          ))}
+
+        {payment.isActive &&
+          (payment.phase === "review" ? (
+            <>
+              <RequestPaymentReviewPhase
+                inquiry={inquiry}
+                form={payment.form}
+                currency={currency}
+                feePayer={feePayer}
+              />
+              {payment.error && (
+                <p className={styles.editError}>{payment.error}</p>
+              )}
+            </>
+          ) : (
+            <RequestPaymentTypePhase
+              form={payment.form}
+              currency={currency}
+              selectType={payment.selectType}
+              update={payment.update}
+            />
+          ))}
+
+        {isDefaultView && view === "details" && (
+          <InquiryDetailsPhase inquiry={inquiry} />
+        )}
+        {isDefaultView && view === "actions" && (
+          <InquiryActionsPhase
+            items={actionItems}
+            pendingActionKey={pendingActionKey}
+            onSelect={selectAction}
           />
+        )}
+        {isDefaultView && view === "confirm" && pendingConfirm && (
+          <InquiryConfirmPhase item={pendingConfirm} />
         )}
       </div>
 
-      {!appointmentType ? (
-        <InquirySheetFooter
-          actions={getInquiryActions(inquiry)}
-          liveAppointments={inquiry.liveAppointments}
-          actingId={actingId}
-          onAction={runAction}
-          onCancel={runCancel}
-        />
-      ) : phase === "length" ? (
-        <ScheduleFooter onBack={scheduling.back} />
-      ) : phase === "review" ? (
-        <ScheduleFooter
-          primaryLabel={scheduling.primaryLabel}
-          canSubmit={scheduling.canSubmit}
-          submitting={scheduling.submitting}
-          onBack={scheduling.back}
-          onSubmit={scheduling.submit}
-        />
-      ) : (
-        <ScheduleFooter
-          primaryLabel="Review"
-          canSubmit={scheduling.canSubmit}
-          onBack={scheduling.back}
-          onSubmit={scheduling.goToReview}
-        />
-      )}
-    </div>
-  );
-};
-
-const SCHEDULE_PHASE_INDEX: Record<SchedulePhase, number> = {
-  length: 1,
-  schedule: 2,
-  review: 3,
-};
-
-interface InquirySheetFooterProps {
-  actions: ResolvedInquiryAction[];
-  liveAppointments: Appointment[];
-  actingId: InquiryActionId | null;
-  onAction: (action: InquiryActionId) => void;
-  onCancel: (appointmentId?: string) => void;
-}
-
-const InquirySheetFooter = ({
-  actions,
-  liveAppointments,
-  actingId,
-  onAction,
-  onCancel,
-}: InquirySheetFooterProps) => {
-  if (actions.length === 0) return null;
-
-  return (
-    <div className={styles.editFooter}>
-      {actions.map((action) =>
-        action.id === "cancel" ? (
-          <CancelControl
-            key="cancel"
-            liveAppointments={liveAppointments}
-            disabled={actingId !== null}
-            loading={actingId === "cancel"}
-            onCancel={onCancel}
+      {appointmentType &&
+        (phase === "length" ? (
+          <ScheduleFooter onBack={scheduling.back} />
+        ) : phase === "review" ? (
+          <ScheduleFooter
+            primaryLabel={scheduling.primaryLabel}
+            canSubmit={scheduling.canSubmit}
+            submitting={scheduling.submitting}
+            onBack={scheduling.back}
+            onSubmit={scheduling.submit}
           />
         ) : (
-          <Button
-            key={action.id}
-            type="button"
-            variant={action.destructive ? "destructive" : "outline"}
-            disabled={actingId !== null}
-            onClick={() => onAction(action.id)}
-          >
-            <action.icon size={16} className={styles.actionBtnIcon} />
-            {action.label}
-            {actingId === action.id && (
-              <Loader2 size={16} className="animate-spin" />
-            )}
-          </Button>
-        ),
+          <ScheduleFooter
+            primaryLabel="Review"
+            canSubmit={scheduling.canSubmit}
+            onBack={scheduling.back}
+            onSubmit={scheduling.goToReview}
+          />
+        ))}
+
+      {payment.isActive &&
+        (payment.phase === "review" ? (
+          <ScheduleFooter
+            primaryLabel="Request payment"
+            canSubmit={payment.canSubmit}
+            submitting={payment.submitting}
+            onBack={payment.back}
+            onSubmit={payment.submit}
+          />
+        ) : (
+          <ScheduleFooter
+            primaryLabel="Review"
+            canSubmit={payment.canSubmit}
+            onBack={payment.back}
+            onSubmit={payment.goToReview}
+          />
+        ))}
+
+      {isDefaultView && view === "details" && (
+        <DetailsFooter
+          hasActions={actionItems.length > 0}
+          onClose={onClose}
+          onActions={showActions}
+        />
+      )}
+      {isDefaultView && view === "actions" && (
+        <ScheduleFooter onBack={showDetails} />
+      )}
+      {isDefaultView && view === "confirm" && pendingConfirm && (
+        <ScheduleFooter
+          destructive={pendingConfirm.destructive}
+          primaryLabel="Confirm"
+          submitting={pendingActionKey === pendingConfirm.key}
+          onBack={cancelConfirm}
+          onSubmit={() => execute(pendingConfirm)}
+        />
       )}
     </div>
   );
 };
 
-const CancelControl = ({
-  liveAppointments,
-  disabled,
-  loading,
-  onCancel,
+const DetailsFooter = ({
+  hasActions,
+  onClose,
+  onActions,
 }: {
-  liveAppointments: Appointment[];
-  disabled: boolean;
-  loading: boolean;
-  onCancel: (appointmentId?: string) => void;
-}) => {
-  const [open, setOpen] = useState(false);
-
-  if (liveAppointments.length >= 2) {
-    return (
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger
-          render={
-            <Button type="button" variant="destructive" disabled={disabled}>
-              <Ban size={16} className={styles.actionBtnIcon} />
-              Cancel
-              {loading && <Loader2 size={16} className="animate-spin" />}
-            </Button>
-          }
-        />
-        <PopoverContent className={styles.cancelPopover} align="end">
-          {liveAppointments.map((appt) => (
-            <button
-              key={appt.id}
-              type="button"
-              className={styles.cancelOption}
-              onClick={() => {
-                setOpen(false);
-                onCancel(appt.id);
-              }}
-            >
-              {getCancelLabel(appt.type)}
-            </button>
-          ))}
-        </PopoverContent>
-      </Popover>
-    );
-  }
-
-  return (
+  hasActions: boolean;
+  onClose: () => void;
+  onActions: () => void;
+}) => (
+  <div className={styles.scheduleFooter}>
+    <Button type="button" variant="outline" onClick={onClose}>
+      Close
+    </Button>
     <Button
       type="button"
-      variant="destructive"
-      disabled={disabled}
-      onClick={() => onCancel(liveAppointments[0]?.id)}
+      className={styles.saveBtn}
+      disabled={!hasActions}
+      onClick={onActions}
     >
-      <Ban size={16} className={styles.actionBtnIcon} />
-      {getCancelLabel(liveAppointments[0]?.type ?? "session")}
-      {loading && <Loader2 size={16} className="animate-spin" />}
+      <Zap size={16} />
+      Actions
     </Button>
-  );
-};
+  </div>
+);
 
 interface ScheduleFooterProps {
   primaryLabel?: string;
   canSubmit?: boolean;
   submitting?: boolean;
+  destructive?: boolean;
   onBack: () => void;
   onSubmit?: () => void;
 }
@@ -323,6 +245,7 @@ const ScheduleFooter = ({
   primaryLabel,
   canSubmit = true,
   submitting = false,
+  destructive = false,
   onBack,
   onSubmit,
 }: ScheduleFooterProps) => (
@@ -339,7 +262,8 @@ const ScheduleFooter = ({
     {primaryLabel && onSubmit && (
       <Button
         type="button"
-        className={styles.saveBtn}
+        variant={destructive ? "destructive" : "default"}
+        className={destructive ? undefined : styles.saveBtn}
         disabled={!canSubmit || submitting}
         onClick={onSubmit}
       >

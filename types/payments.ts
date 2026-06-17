@@ -1,0 +1,52 @@
+// Libs
+import type { PaymentType, PaymentRequestStatus } from "@/types/bookings";
+
+export interface PaymentRequest {
+  id: string;
+  bookingRequestId: string;
+  type: PaymentType;
+  status: PaymentRequestStatus;
+  currency: string;
+  amountCents: number;
+  platformFeeCents: number;
+  clientChargeCents: number;
+  artistNetCents: number;
+  feePayer: "artist" | "client" | "split";
+  clientEmail: string;
+  description: string;
+  payUrl: string;
+  expiresAt: string;
+  paidAt?: string;
+  createdAt: string;
+}
+
+export interface CreatePaymentRequestPayload {
+  type: PaymentType;
+  amountCents?: number;
+}
+
+export interface RequestPaymentForm {
+  type: PaymentType;
+  amount: string;
+}
+
+export interface PublicPaymentRequest {
+  status: PaymentRequestStatus;
+  type: PaymentType;
+  currency: string;
+  clientChargeCents: number;
+  artistName: string;
+  clientEmail: string;
+  description: string;
+  expired: boolean;
+  hasAccount: boolean;
+}
+
+export interface CheckoutResponse {
+  url: string;
+}
+
+export interface CreateClientAccountPayload {
+  password: string;
+  marketingOptIn: boolean;
+}

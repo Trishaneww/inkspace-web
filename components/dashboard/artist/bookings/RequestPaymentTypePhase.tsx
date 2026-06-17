@@ -11,8 +11,10 @@ import { Label } from "@/components/ui/label";
 import { SegmentedChoice } from "@/components/dashboard/artist/calendar/create/SegmentedChoice";
 
 // Libs
-import { REQUEST_PAYMENT_TYPE_OPTIONS } from "@/constants/payments";
-import { MIN_CHARGE_DOLLARS } from "@/lib/requestPayment";
+import {
+  REQUEST_PAYMENT_TYPE_OPTIONS,
+  MIN_CHARGE_DOLLARS,
+} from "@/constants/payments";
 
 // Types
 import type { PaymentType } from "@/types/bookings";
