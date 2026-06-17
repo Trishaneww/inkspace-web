@@ -1,0 +1,225 @@
+.page {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 100dvh;
+
+  background-color: var(--background);
+}
+
+.imageSide {
+  display: none;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.contentSide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+
+  padding: 1.5rem;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 30rem;
+
+  gap: 1.25rem;
+  text-align: center;
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.description {
+  font-size: 0.8rem;
+  color: var(--color-muted-foreground);
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+
+  padding: 0.6rem 1.1rem;
+
+  background-color: hsl(240, 100%, 98%);
+  border: 1px solid var(--color-neutral-border);
+  border-radius: 0.8rem;
+}
+
+.summaryLabel {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: hsl(220, 9%, 46%);
+}
+
+.summaryAmount {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.cta {
+  width: 100%;
+  height: 38px;
+
+  background-color: var(--color-primary);
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-primary-hover);
+  }
+}
+
+.secureNote {
+  font-size: 0.8rem;
+  color: hsl(220, 9%, 55%);
+}
+
+.error {
+  font-size: 0.9rem;
+  color: var(--color-error);
+}
+
+.accountHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 0.3rem;
+}
+
+.accountForm {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  gap: 0.8rem;
+
+  text-align: left;
+}
+
+.nameRow {
+  display: grid;
+  grid-template-columns: 1fr;
+
+  gap: 0.8rem;
+}
+
+.accountField {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.4rem;
+
+  input {
+    height: 38px;
+  }
+}
+
+.consentRow {
+  display: flex;
+  align-items: center;
+
+  gap: 0.5rem;
+
+  font-size: 0.85rem;
+  color: hsl(220, 13%, 30%);
+  cursor: pointer;
+}
+
+.status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 0.5rem;
+}
+
+.statusTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.statusDescription {
+  font-size: 0.1rem;
+  line-height: 1.6;
+  color: hsl(220, 9%, 46%);
+}
+
+.iconMuted {
+  color: hsl(220, 9%, 55%);
+}
+
+.iconSuccess {
+  color: var(--color-success-foreground);
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+
+  color: hsl(220, 9%, 46%);
+}
+
+@media (min-width: 480px) {
+  .nameRow {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 768px) {
+  .page {
+    flex-direction: row-reverse;
+    align-items: stretch;
+  }
+
+  .imageSide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    max-width: 50%;
+
+    padding: 1.5rem;
+    overflow: hidden;
+  }
+
+  .image {
+    max-height: calc(100vh - 3rem);
+  }
+
+  .contentSide {
+    flex: 1;
+    max-width: 50%;
+  }
+
+  .title {
+    font-size: 1.7rem;
+  }
+
+  .description {
+    font-size: 0.9rem;
+  }
+}
