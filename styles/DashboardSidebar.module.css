@@ -30,6 +30,19 @@
   background-color: transparent;
 }
 
+.inset {
+  height: 100svh;
+
+  overflow: hidden;
+}
+
+.scrollArea {
+  flex: 1;
+  min-height: 0;
+
+  overflow-y: auto;
+}
+
 .brandRow {
   display: flex;
   align-items: center;
@@ -198,7 +211,8 @@
   flex-shrink: 0;
   transition: background-color 150ms ease;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background-color: var(--sidebar-accent);
     color: var(--sidebar-foreground);
   }
@@ -253,7 +267,8 @@
   cursor: pointer;
   transition: background-color 150ms ease;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background-color: var(--accent);
   }
 }
@@ -282,7 +297,8 @@
   cursor: pointer;
   transition: background-color 150ms ease;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background-color: var(--accent);
   }
 }

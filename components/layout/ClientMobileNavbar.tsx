@@ -9,10 +9,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { Bell, Menu } from "lucide-react";
 import InkspaceLogo from "@/public/logos/inkspace-logo.svg";
 
-// Components
-import { MobileSearch } from "@/components/layout/MobileSearch";
-
-export const ArtistMobileNavbar = () => {
+export const ClientMobileNavbar = () => {
   const { toggleSidebar } = useSidebar();
 
   return (
@@ -36,7 +33,6 @@ export const ArtistMobileNavbar = () => {
         <Button variant="ghost" size="icon-lg" aria-label="Notifications">
           <Bell className={styles.navIcon} />
         </Button>
-        <MobileSearch />
       </div>
     </header>
   );
