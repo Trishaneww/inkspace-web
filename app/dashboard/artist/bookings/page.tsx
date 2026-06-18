@@ -14,6 +14,7 @@ import { BookingsTable } from "@/components/dashboard/artist/bookings/BookingsTa
 import { OpenBookPanel } from "@/components/dashboard/artist/bookings/OpenBookPanel";
 import { OpenBookEditSheet } from "@/components/dashboard/artist/bookings/OpenBookEditSheet";
 import { InquiryDetailSheet } from "@/components/dashboard/artist/bookings/InquiryDetailSheet";
+import { CreateAppointmentSheet } from "@/components/dashboard/artist/calendar/create/CreateAppointmentSheet";
 
 // Libs
 import { bookingsApi } from "@/lib/api/bookings";
@@ -49,6 +50,7 @@ export default function ArtistBookingsPage() {
 
   const [filters, setFilters] = useState<BookingFilters>(EMPTY_BOOKING_FILTERS);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isCreateBookingOpen, setIsCreateBookingOpen] = useState(false);
   const [isSeeding, setIsSeeding] = useState(false);
 
   const lastFetchKey = useRef<string | null>(null);
@@ -101,7 +103,7 @@ export default function ArtistBookingsPage() {
     }
   };
 
-  const handleCreateBooking = () => {};
+  const handleCreateBooking = () => setIsCreateBookingOpen(true);
 
   const initialView =
     searchParams.get("view") === "actions" ? "actions" : "details";
@@ -178,6 +180,15 @@ export default function ArtistBookingsPage() {
         controller={settings}
         onOpenChange={setIsEditOpen}
         onOpenBookSaved={(updated) => setOpenBook(updated)}
+      />
+
+      <CreateAppointmentSheet
+        open={isCreateBookingOpen}
+        onOpenChange={setIsCreateBookingOpen}
+        onCreated={() => {
+          setIsCreateBookingOpen(false);
+          fetchData();
+        }}
       />
     </div>
   );
