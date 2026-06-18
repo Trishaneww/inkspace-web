@@ -20,16 +20,22 @@ import { PortfolioDetailPhase } from "./PortfolioDetailPhase";
 import { usePortfolioBrowse } from "@/hooks/usePortfolioBrowse";
 
 // Libs
+import { OpenBookThemeContext } from "@/lib/openBookTheme";
 import { PORTFOLIO_BROWSE_PHASE_META } from "@/constants/portfolioBrowse";
 import { PortfolioBrowsePhase } from "@/types/portfolioBrowse";
 
+// Types
+import type { OpenBookTheme } from "@/types/bookings";
+
 interface PortfolioBrowseDialogProps {
   artistId: string;
+  theme: OpenBookTheme;
   onOpenChange: (open: boolean) => void;
 }
 
 export const PortfolioBrowseDialog = ({
   artistId,
+  theme,
   onOpenChange,
 }: PortfolioBrowseDialogProps) => {
   const {
@@ -48,6 +54,7 @@ export const PortfolioBrowseDialog = ({
   const isGrid = phase === PortfolioBrowsePhase.Grid;
 
   return (
+    <OpenBookThemeContext.Provider value={theme}>
     <Dialog
       open
       onOpenChange={(next) => {
@@ -57,6 +64,7 @@ export const PortfolioBrowseDialog = ({
       <DialogContent
         showCloseButton={false}
         className={styles.onboardingDialog}
+        data-ob-theme={theme}
       >
         <div className={styles.topbar}>
           <Image
@@ -102,6 +110,7 @@ export const PortfolioBrowseDialog = ({
         </div>
       </DialogContent>
     </Dialog>
+    </OpenBookThemeContext.Provider>
   );
 };
 

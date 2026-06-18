@@ -8,6 +8,8 @@
   max-width: none;
   padding: 0;
 
+  color: var(--foreground);
+
   border-radius: 1.25rem;
   overflow: hidden;
 }

@@ -28,6 +28,7 @@ import { BookingFlowFooter } from "./BookingFlowFooter";
 import { useBookingFlow } from "@/hooks/useBookingFlow";
 
 // Libs
+import { OpenBookThemeContext } from "@/lib/openBookTheme";
 import { BOOKING_FLOW_PHASE_META } from "@/constants/bookingFlow";
 import { BookingFlowPhase } from "@/types/bookingFlow";
 import type {
@@ -78,6 +79,7 @@ export const BookingFlowDialog = ({
   } = useBookingFlow(profile, entry, onOpenChange);
 
   return (
+    <OpenBookThemeContext.Provider value={profile.theme}>
     <Dialog
       open
       onOpenChange={(next) => {
@@ -87,6 +89,7 @@ export const BookingFlowDialog = ({
       <DialogContent
         showCloseButton={false}
         className={styles.onboardingDialog}
+        data-ob-theme={profile.theme}
       >
         <BookingFlowHeader progress={progress} showProgress={showProgress} />
 
@@ -134,6 +137,7 @@ export const BookingFlowDialog = ({
         />
       </DialogContent>
     </Dialog>
+    </OpenBookThemeContext.Provider>
   );
 };
 

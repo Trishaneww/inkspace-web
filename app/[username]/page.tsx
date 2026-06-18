@@ -35,7 +35,7 @@ export default async function ArtistProfilePage({
   }
 
   return (
-    <OpenBookFrame>
+    <OpenBookFrame theme={profile.theme}>
       <OpenBookHub profile={profile} />
     </OpenBookFrame>
   );
