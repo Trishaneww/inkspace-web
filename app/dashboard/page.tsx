@@ -1,6 +1,19 @@
-import { redirect } from "next/navigation";
+"use client";
+
+// Next.js
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+// Libs
+import { postAuthRedirect, useAuth } from "@/lib/auth";
 
 export default function DashboardRootPage() {
-  // TODO: replace with server-side role check once auth is wired
-  redirect("/dashboard/artist");
+  const router = useRouter();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) router.replace(postAuthRedirect(user));
+  }, [user, router]);
+
+  return null;
 }

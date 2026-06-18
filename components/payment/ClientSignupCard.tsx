@@ -3,6 +3,7 @@
 // Next.js
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 // CSS
 import styles from "@/styles/pay/PayPage.module.css";
@@ -12,33 +13,35 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CheckCircle2, Loader2 } from "lucide-react";
-
-// Components
-import { PayStatus } from "./PayStatus";
+import { Loader2 } from "lucide-react";
 
 // Libs
 import { paymentsApi } from "@/lib/api/payments";
 import { ApiError } from "@/lib/api/client";
+import { postAuthRedirect, useAuth } from "@/lib/auth";
 import { splitFullName } from "@/lib/payments";
 
-export const ClientAccountCard = ({
-  token,
-  email,
-  name,
-  artist,
-}: {
+interface ClientSignupCardProps {
   token: string;
   email: string;
   name: string;
   artist: string;
-}) => {
+}
+
+export const ClientSignupCard = ({
+  token,
+  email,
+  name,
+  artist,
+}: ClientSignupCardProps) => {
+  const router = useRouter();
+  const { applySession } = useAuth();
+
   const [firstName, setFirstName] = useState(() => splitFullName(name).first);
   const [lastName, setLastName] = useState(() => splitFullName(name).last);
   const [password, setPassword] = useState("");
   const [optIn, setOptIn] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [created, setCreated] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const submit = async () => {
@@ -53,13 +56,16 @@ export const ClientAccountCard = ({
     setSubmitting(true);
     setError(null);
     try {
-      await paymentsApi.createClientAccount(token, {
+      const session = await paymentsApi.createClientAccount(token, {
         firstName: firstName.trim(),
         lastName: lastName.trim(),
         password,
         marketingOptIn: optIn,
       });
-      setCreated(true);
+      // Log the new client in and drop them into their dashboard. Keep the
+      // button spinning through the redirect rather than flashing a done state.
+      applySession(session);
+      router.replace(postAuthRedirect(session.user));
     } catch (err) {
       setError(
         err instanceof ApiError && err.status === 409
@@ -69,16 +75,6 @@ export const ClientAccountCard = ({
       setSubmitting(false);
     }
   };
-
-  if (created) {
-    return (
-      <PayStatus
-        icon={<CheckCircle2 size={36} className={styles.iconSuccess} />}
-        title="You're all set"
-        description={`Your account is ready. Log in anytime with ${email} to manage your bookings.`}
-      />
-    );
-  }
 
   return (
     <div className={styles.content}>

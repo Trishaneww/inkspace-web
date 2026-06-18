@@ -1,5 +1,6 @@
 // Libs
 import { api } from "@/lib/api/client";
+import type { ClientSession } from "@/lib/auth/context";
 import type {
   CheckoutResponse,
   CreateClientAccountPayload,
@@ -54,6 +55,6 @@ export const paymentsApi = {
   },
 
   createClientAccount(token: string, payload: CreateClientAccountPayload) {
-    return api.post<{ created: boolean }>(`/v1/pay/${token}/account`, payload);
+    return api.post<ClientSession>(`/v1/pay/${token}/account`, payload);
   },
 };

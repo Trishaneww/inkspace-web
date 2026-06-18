@@ -12,7 +12,7 @@ import styles from "@/styles/pay/PayPage.module.css";
 import { CheckCircle2, CircleAlert, Loader2 } from "lucide-react";
 
 // Components
-import { ClientAccountCard } from "@/components/payment/ClientAccountCard";
+import { ClientSignupCard } from "@/components/payment/ClientSignupCard";
 import { PaymentRequestCard } from "@/components/payment/PaymentRequestCard";
 import { PayStatus } from "@/components/payment/PayStatus";
 
@@ -92,7 +92,7 @@ export default function PayPage() {
     if (request.status === "paid" || returnedFromStripe) {
       if (!request.hasAccount) {
         return (
-          <ClientAccountCard
+          <ClientSignupCard
             token={token}
             email={request.clientEmail}
             name={request.clientName}
