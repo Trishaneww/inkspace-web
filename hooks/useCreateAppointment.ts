@@ -9,6 +9,7 @@ import { getApiErrorMessage } from "@/hooks/useAuthForm";
 // Libs
 import { useAuth } from "@/lib/auth";
 import { calendarApi } from "@/lib/api/calendar";
+import { displayToast } from "@/lib/toast";
 import {
   buildCreateAppointmentPayload,
   canProceedAppointmentPhase,
@@ -52,6 +53,7 @@ export const useCreateAppointment = (
     setError(null);
     try {
       await calendarApi.create(token, buildCreateAppointmentPayload(form));
+      displayToast("Booking created", "success");
       onCreated();
     } catch (err) {
       setError(getApiErrorMessage(err, "Couldn't create the booking."));

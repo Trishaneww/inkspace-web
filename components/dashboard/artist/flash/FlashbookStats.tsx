@@ -1,10 +1,13 @@
 "use client";
 
-// CSS
-import styles from "@/styles/dashboard/artist/Flashbook.module.css";
-
 // HTML Components
 import { Archive, BookmarkCheck, Eye, Sparkles } from "lucide-react";
+
+// Components
+import {
+  StatsRow,
+  type StatCard,
+} from "@/components/dashboard/artist/StatsRow";
 
 // Libs
 import type { FlashStats } from "@/lib/flashes";
@@ -14,7 +17,7 @@ interface FlashbookStatsProps {
 }
 
 export const FlashbookStats = ({ stats }: FlashbookStatsProps) => {
-  const cards = [
+  const cards: StatCard[] = [
     {
       key: "available",
       label: "Available",
@@ -36,24 +39,5 @@ export const FlashbookStats = ({ stats }: FlashbookStatsProps) => {
     { key: "views", label: "Total views", value: stats.totalViews, icon: Eye },
   ];
 
-  return (
-    <div className={styles.stats}>
-      {cards.map((card) => {
-        const Icon = card.icon;
-        return (
-          <div key={card.key} className={styles.statCard}>
-            <div className={styles.statHeader}>
-              <span className={styles.statIcon}>
-                <Icon size={16} />
-              </span>
-              <span className={styles.statLabel}>{card.label}</span>
-            </div>
-            <span className={styles.statValue}>
-              {card.value.toLocaleString()}
-            </span>
-          </div>
-        );
-      })}
-    </div>
-  );
+  return <StatsRow cards={cards} />;
 };
