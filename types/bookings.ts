@@ -155,6 +155,15 @@ export interface InquiryListResponse {
   stats: BookingStats;
 }
 
+export interface ClientInquiry extends Inquiry {
+  artistName: string;
+  artistSlug: string;
+}
+
+export interface ClientInquiryListResponse {
+  inquiries: ClientInquiry[];
+}
+
 export interface OpenBook {
   slug: string;
   schedulingMode: SchedulingMode;
