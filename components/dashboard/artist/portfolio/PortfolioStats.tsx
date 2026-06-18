@@ -1,10 +1,13 @@
 "use client";
 
-// CSS
-import styles from "@/styles/dashboard/artist/Portfolio.module.css";
-
 // HTML Components
 import { CheckCircle2, LayoutGrid, Palette } from "lucide-react";
+
+// Components
+import {
+  StatsRow,
+  type StatCard,
+} from "@/components/dashboard/artist/StatsRow";
 
 // Libs
 import type { PortfolioStats as PortfolioStatsData } from "@/lib/portfolio";
@@ -14,7 +17,7 @@ interface PortfolioStatsProps {
 }
 
 export const PortfolioStats = ({ stats }: PortfolioStatsProps) => {
-  const cards = [
+  const cards: StatCard[] = [
     {
       key: "total",
       label: "Total pieces",
@@ -35,24 +38,5 @@ export const PortfolioStats = ({ stats }: PortfolioStatsProps) => {
     },
   ];
 
-  return (
-    <div className={styles.stats}>
-      {cards.map((card) => {
-        const Icon = card.icon;
-        return (
-          <div key={card.key} className={styles.statCard}>
-            <div className={styles.statHeader}>
-              <span className={styles.statIcon}>
-                <Icon size={16} />
-              </span>
-              <span className={styles.statLabel}>{card.label}</span>
-            </div>
-            <span className={styles.statValue}>
-              {card.value.toLocaleString()}
-            </span>
-          </div>
-        );
-      })}
-    </div>
-  );
+  return <StatsRow cards={cards} />;
 };

@@ -1,8 +1,11 @@
-// CSS
-import styles from "@/styles/dashboard/artist/Bookings.module.css";
-
 // HTML Components
 import { CalendarCheck, Inbox, Wallet } from "lucide-react";
+
+// Components
+import {
+  StatsRow,
+  type StatCard,
+} from "@/components/dashboard/artist/StatsRow";
 
 // Libs
 import type { BookingStats } from "@/types/bookings";
@@ -12,7 +15,7 @@ interface BookingsStatsProps {
 }
 
 export const BookingsStats = ({ stats }: BookingsStatsProps) => {
-  const cards = [
+  const cards: StatCard[] = [
     {
       key: "new",
       label: "New inquiries",
@@ -33,24 +36,5 @@ export const BookingsStats = ({ stats }: BookingsStatsProps) => {
     },
   ];
 
-  return (
-    <div className={styles.stats}>
-      {cards.map((card) => {
-        const Icon = card.icon;
-        return (
-          <div key={card.key} className={styles.statCard}>
-            <div className={styles.statHeader}>
-              <span className={styles.statIcon}>
-                <Icon size={16} />
-              </span>
-              <span className={styles.statLabel}>{card.label}</span>
-            </div>
-            <span className={styles.statValue}>
-              {card.value.toLocaleString()}
-            </span>
-          </div>
-        );
-      })}
-    </div>
-  );
+  return <StatsRow cards={cards} />;
 };

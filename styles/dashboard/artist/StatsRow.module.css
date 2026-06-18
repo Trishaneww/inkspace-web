@@ -1,0 +1,79 @@
+.stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+
+  gap: 1rem;
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.8rem;
+  padding: 1rem;
+
+  background-color: white;
+  border: 1px solid hsl(220, 13%, 90%);
+  border-radius: 0.8rem;
+}
+
+.statHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+
+  color: var(--color-primary);
+
+  background-color: var(--color-neutral-background);
+  border-radius: 0.5rem;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: hsl(220, 13%, 18%);
+}
+
+@media (min-width: 640px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .stats[data-count="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stats[data-count="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .stats[data-count="4"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .stats[data-count="5"] {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .stats[data-count="6"] {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
