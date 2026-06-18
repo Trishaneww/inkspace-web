@@ -1,5 +1,6 @@
 /* ── Theme tokens ────────────────────────────────────────────────────────── */
 .page {
+  --ob-page-bg: hsl(0, 0%, 100%);
   --ob-surface: hsl(0, 0%, 100%);
   --ob-surface-hover: hsl(35, 24%, 96%);
   --ob-avatar-bg: hsl(258, 55%, 95%);
@@ -25,8 +26,83 @@
   gap: 2rem;
   padding: 2rem 1.25rem 3rem;
 
-  background-color: hsl(0, 0%, 100%);
+  background-color: var(--ob-page-bg);
   color: var(--ob-text);
+}
+
+.page[data-ob-theme="noir"] {
+  --ob-page-bg: hsl(0, 0%, 96%);
+  --ob-surface: hsl(0, 0%, 100%);
+  --ob-surface-hover: hsl(0, 0%, 95%);
+  --ob-avatar-bg: hsl(0, 0%, 92%);
+  --ob-border: hsl(0, 0%, 88%);
+  --ob-text: hsl(0, 0%, 9%);
+  --ob-text-muted: hsl(0, 0%, 42%);
+  --ob-accent: hsl(0, 0%, 12%);
+  --ob-accent-hover: hsl(0, 0%, 26%);
+  --ob-on-accent: hsl(0, 0%, 100%);
+  --ob-success: hsl(150, 45%, 36%);
+  --ob-shadow: hsl(0, 0%, 0%, 0.1);
+}
+
+.page[data-ob-theme="sand"] {
+  --ob-page-bg: hsl(35, 38%, 94%);
+  --ob-surface: hsl(38, 55%, 98%);
+  --ob-surface-hover: hsl(35, 40%, 93%);
+  --ob-avatar-bg: hsl(20, 45%, 90%);
+  --ob-border: hsl(33, 28%, 83%);
+  --ob-text: hsl(25, 28%, 17%);
+  --ob-text-muted: hsl(28, 14%, 42%);
+  --ob-accent: hsl(14, 72%, 52%);
+  --ob-accent-hover: hsl(14, 70%, 46%);
+  --ob-on-accent: hsl(0, 0%, 100%);
+  --ob-success: hsl(150, 50%, 36%);
+  --ob-shadow: hsl(25, 40%, 25%, 0.14);
+}
+
+.page[data-ob-theme="sage"] {
+  --ob-page-bg: hsl(120, 15%, 93%);
+  --ob-surface: hsl(90, 25%, 98%);
+  --ob-surface-hover: hsl(110, 18%, 93%);
+  --ob-avatar-bg: hsl(140, 30%, 89%);
+  --ob-border: hsl(120, 14%, 82%);
+  --ob-text: hsl(150, 20%, 15%);
+  --ob-text-muted: hsl(140, 10%, 40%);
+  --ob-accent: hsl(152, 46%, 37%);
+  --ob-accent-hover: hsl(152, 48%, 31%);
+  --ob-on-accent: hsl(0, 0%, 100%);
+  --ob-success: hsl(150, 55%, 36%);
+  --ob-shadow: hsl(150, 25%, 20%, 0.13);
+}
+
+.page[data-ob-theme="midnight"] {
+  --ob-page-bg: hsl(240, 10%, 8%);
+  --ob-surface: hsl(240, 8%, 13%);
+  --ob-surface-hover: hsl(240, 7%, 18%);
+  --ob-avatar-bg: hsl(258, 35%, 26%);
+  --ob-border: hsl(240, 6%, 24%);
+  --ob-text: hsl(0, 0%, 96%);
+  --ob-text-muted: hsl(240, 6%, 66%);
+  --ob-accent: hsl(258, 90%, 70%);
+  --ob-accent-hover: hsl(258, 88%, 76%);
+  --ob-on-accent: hsl(0, 0%, 100%);
+  --ob-success: hsl(150, 55%, 55%);
+  --ob-shadow: hsl(0, 0%, 0%, 0.5);
+}
+
+.page[data-ob-theme="navy"] {
+  --ob-page-bg: hsl(220, 45%, 12%);
+  --ob-surface: hsl(220, 40%, 17%);
+  --ob-surface-hover: hsl(220, 35%, 22%);
+  --ob-avatar-bg: hsl(210, 45%, 30%);
+  --ob-border: hsl(220, 30%, 28%);
+  --ob-text: hsl(210, 30%, 96%);
+  --ob-text-muted: hsl(214, 20%, 72%);
+  --ob-accent: hsl(210, 80%, 56%);
+  --ob-accent-hover: hsl(210, 80%, 50%);
+  --ob-on-accent: hsl(0, 0%, 100%);
+  --ob-success: hsl(150, 55%, 55%);
+  --ob-shadow: hsl(0, 0%, 0%, 0.45);
 }
 
 .stage {

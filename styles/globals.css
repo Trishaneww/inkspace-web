@@ -196,3 +196,72 @@
     @apply font-sans;
   }
 }
+
+[data-ob-theme="noir"] {
+  --color-primary: hsl(0, 0%, 12%);
+  --color-primary-hover: hsl(0, 0%, 26%);
+}
+
+[data-ob-theme="sand"] {
+  --color-primary: hsl(14, 72%, 52%);
+  --color-primary-hover: hsl(14, 70%, 46%);
+}
+
+[data-ob-theme="sage"] {
+  --color-primary: hsl(152, 46%, 37%);
+  --color-primary-hover: hsl(152, 48%, 31%);
+}
+
+[data-ob-theme="midnight"] {
+  --background: hsl(240, 8%, 13%);
+  --foreground: hsl(0, 0%, 96%);
+  --card: hsl(240, 8%, 16%);
+  --card-foreground: hsl(0, 0%, 96%);
+  --popover: hsl(240, 8%, 16%);
+  --popover-foreground: hsl(0, 0%, 96%);
+  --primary: hsl(258, 90%, 70%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(240, 7%, 22%);
+  --secondary-foreground: hsl(0, 0%, 96%);
+  --muted: hsl(240, 7%, 22%);
+  --muted-foreground: hsl(240, 8%, 72%);
+  --accent: hsl(240, 7%, 22%);
+  --accent-foreground: hsl(0, 0%, 96%);
+  --border: hsl(240, 6%, 26%);
+  --input: hsl(240, 6%, 26%);
+  --ring: hsl(258, 90%, 70%);
+
+  --color-primary: hsl(258, 90%, 70%);
+  --color-primary-hover: hsl(258, 88%, 76%);
+  --color-primary-subtle: hsl(258, 30%, 24%);
+  --color-neutral-background: hsl(240, 7%, 22%);
+  --color-neutral-border: hsl(240, 6%, 30%);
+  --color-neutral-foreground: hsl(0, 0%, 90%);
+}
+
+[data-ob-theme="navy"] {
+  --background: hsl(220, 40%, 17%);
+  --foreground: hsl(210, 30%, 96%);
+  --card: hsl(220, 38%, 21%);
+  --card-foreground: hsl(210, 30%, 96%);
+  --popover: hsl(220, 38%, 21%);
+  --popover-foreground: hsl(210, 30%, 96%);
+  --primary: hsl(210, 80%, 56%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(220, 33%, 26%);
+  --secondary-foreground: hsl(210, 30%, 96%);
+  --muted: hsl(220, 33%, 26%);
+  --muted-foreground: hsl(214, 22%, 74%);
+  --accent: hsl(220, 33%, 26%);
+  --accent-foreground: hsl(210, 30%, 96%);
+  --border: hsl(220, 28%, 30%);
+  --input: hsl(220, 28%, 30%);
+  --ring: hsl(210, 80%, 56%);
+
+  --color-primary: hsl(210, 80%, 56%);
+  --color-primary-hover: hsl(210, 80%, 50%);
+  --color-primary-subtle: hsl(210, 45%, 26%);
+  --color-neutral-background: hsl(220, 33%, 26%);
+  --color-neutral-border: hsl(220, 28%, 34%);
+  --color-neutral-foreground: hsl(210, 25%, 88%);
+}

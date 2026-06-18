@@ -164,16 +164,26 @@ export interface ClientInquiryListResponse {
   inquiries: ClientInquiry[];
 }
 
+export type OpenBookTheme =
+  | "inkspace"
+  | "noir"
+  | "sand"
+  | "sage"
+  | "midnight"
+  | "navy";
+
 export interface OpenBook {
   slug: string;
   schedulingMode: SchedulingMode;
   customQuestions: string[];
+  theme: OpenBookTheme;
 }
 
 export interface UpdateOpenBookPayload {
   slug?: string;
   schedulingMode?: SchedulingMode;
   customQuestions?: string[];
+  theme?: OpenBookTheme;
 }
 
 export interface OpenBookFaq {
@@ -192,6 +202,7 @@ export interface OpenBookProfile {
   artistId: string;
   hasFlashes: boolean;
   hasPortfolio: boolean;
+  theme: OpenBookTheme;
   displayName: string;
   avatarUrl: string;
   location: string;

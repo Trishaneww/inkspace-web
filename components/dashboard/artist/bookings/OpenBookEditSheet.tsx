@@ -18,6 +18,7 @@ import { Loader2, Plus, X } from "lucide-react";
 // Components
 import { AvailabilityScheduler } from "@/components/dashboard/artist/settings/AvailabilityScheduler";
 import { DaysOffPicker } from "@/components/dashboard/artist/settings/DaysOffPicker";
+import { OpenBookThemePicker } from "./OpenBookThemePicker";
 
 // Libs
 import { getApiErrorMessage } from "@/hooks/useAuthForm";
@@ -29,7 +30,7 @@ import { SCHEDULING_OPTIONS } from "@/constants/onboarding";
 // Types
 import type { ArtistSettingsController } from "@/hooks/useArtistSettings";
 import type { AvailabilityWindowInput } from "@/types/settings";
-import type { OpenBook, SchedulingMode } from "@/types/bookings";
+import type { OpenBook, OpenBookTheme, SchedulingMode } from "@/types/bookings";
 
 const MAX_QUESTIONS = 3;
 
@@ -82,6 +83,7 @@ const OpenBookEditForm = ({
   const [schedulingMode, setSchedulingMode] = useState<SchedulingMode>(
     openBook.schedulingMode,
   );
+  const [theme, setTheme] = useState<OpenBookTheme>(openBook.theme);
   const [windows, setWindows] = useState<AvailabilityWindowInput[]>(
     controller.data!.availability.map((w) => ({
       weekday: w.weekday,
@@ -111,6 +113,7 @@ const OpenBookEditForm = ({
 
       const updated = await openBookApi.update(token, {
         schedulingMode,
+        theme,
         customQuestions: questions.map((q) => q.trim()).filter(Boolean),
       });
       onOpenBookSaved(updated);
@@ -159,6 +162,14 @@ const OpenBookEditForm = ({
               </button>
             ))}
           </div>
+        </div>
+
+        <div className={styles.editField}>
+          <Label>Theme</Label>
+          <span className={styles.editHint}>
+            The color palette clients see on your public booking profile.
+          </span>
+          <OpenBookThemePicker value={theme} onChange={setTheme} />
         </div>
 
         <div className={styles.editField}>
