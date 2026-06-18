@@ -1,10 +1,12 @@
 // HTML Components
 import {
   Ban,
+  Banknote,
   CalendarCheck,
   CalendarClock,
   CalendarPlus,
-  DollarSign,
+  FileSignature,
+  RotateCcw,
   Undo2,
   X,
 } from "lucide-react";
@@ -19,6 +21,8 @@ import type {
   DepositStatus,
   InquiryAction,
   InquiryStatus,
+  PaymentType,
+  PaymentRequestStatus,
   RecencyFilter,
   RequestType,
   SortOrder,
@@ -55,6 +59,21 @@ export const APPOINTMENT_STATUS_META: Record<AppointmentStatus, BadgeMeta> = {
 export const APPOINTMENT_TYPE_LABELS: Record<AppointmentType, string> = {
   consultation: "Consultation",
   session: "Session",
+};
+
+export const PAYMENT_TYPE_LABELS: Record<PaymentType, string> = {
+  deposit: "Deposit",
+  final: "Session payment",
+};
+
+export const PAYMENT_STATUS_META: Record<PaymentRequestStatus, BadgeMeta> = {
+  requested: { label: "Requested", variant: "pending" },
+  processing: { label: "Processing", variant: "warning" },
+  paid: { label: "Paid", variant: "success" },
+  failed: { label: "Failed", variant: "failure" },
+  canceled: { label: "Canceled", variant: "inactive" },
+  expired: { label: "Expired", variant: "inactive" },
+  refunded: { label: "Refunded", variant: "inactive" },
 };
 
 export const CONSULTATION_FORMAT_LABELS: Record<ConsultationFormat, string> = {
@@ -153,51 +172,85 @@ export const INQUIRY_ACTIONS: InquiryAction[] = [
   {
     id: "accept",
     label: "Create booking",
+    description: "Set a date and time for the session",
     icon: CalendarCheck,
+    behavior: "nav",
     isAvailable: (i: Inquiry) => isUndecided(i.status),
-  },
-  {
-    id: "decline",
-    label: "Decline",
-    icon: X,
-    destructive: true,
-    isAvailable: (i: Inquiry) => isUndecided(i.status) && !hasLiveAppointment(i),
   },
   {
     id: "book_consultation",
     label: "Request consultation",
+    description: "Propose a consultation before booking",
     icon: CalendarPlus,
+    behavior: "nav",
     isAvailable: (i: Inquiry) => i.status === "pending" && !hasLiveAppointment(i),
   },
   {
-    id: "request_deposit",
-    label: "Request deposit",
-    icon: DollarSign,
-    isAvailable: (i: Inquiry) =>
-      i.status === "accepted" &&
-      i.depositStatus !== "paid" &&
-      i.depositStatus !== "refunded",
+    id: "request_payment",
+    label: "Request payment",
+    description: "Charge a deposit or full payment",
+    icon: Banknote,
+    behavior: "nav",
+    isAvailable: (i: Inquiry) => hasLiveAppointment(i),
+  },
+  {
+    id: "send_waiver",
+    label: "Send waiver",
+    description: "Send the consent form to the client",
+    icon: FileSignature,
+    behavior: "immediate",
+    isAvailable: (i: Inquiry) => hasLiveAppointment(i),
   },
   {
     id: "reschedule",
     label: "Reschedule",
+    description: "Move to a new date or time",
     icon: CalendarClock,
-    isAvailable: (i: Inquiry) => i.appointment?.status === "scheduled",
+    behavior: "nav",
+    perAppointment: true,
+    isAvailable: (i: Inquiry) => hasLiveAppointment(i),
   },
   {
-    id: "cancel",
-    label: "Cancel booking",
-    icon: Ban,
-    destructive: true,
-    isAvailable: (i: Inquiry) => hasLiveAppointment(i),
+    id: "refund",
+    label: "Refund payment",
+    description: "Return a paid charge to the client",
+    icon: RotateCcw,
+    behavior: "confirm",
+    perPayment: true,
+    isAvailable: (i: Inquiry) =>
+      (i.payments ?? []).some((p) => p.status === "paid"),
   },
   {
     id: "reopen",
     label: (i: Inquiry) =>
       i.status === "cancelled" ? "Reopen" : "Undo decline",
+    description: "Bring this request back",
     icon: Undo2,
+    behavior: "immediate",
     isAvailable: (i: Inquiry) =>
       i.status === "declined" || i.status === "cancelled",
+  },
+  {
+    id: "decline",
+    label: "Decline",
+    description: "Turn down this request",
+    icon: X,
+    behavior: "confirm",
+    destructive: true,
+    confirmMessage:
+      "Decline this request? The client will be notified that you're not available.",
+    isAvailable: (i: Inquiry) => isUndecided(i.status) && !hasLiveAppointment(i),
+  },
+  {
+    id: "cancel",
+    label: "Cancel booking",
+    description: "Cancel this appointment",
+    icon: Ban,
+    behavior: "confirm",
+    destructive: true,
+    perAppointment: true,
+    confirmMessage: "Cancel this appointment? The client will be notified.",
+    isAvailable: (i: Inquiry) => hasLiveAppointment(i),
   },
 ];
 

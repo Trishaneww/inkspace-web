@@ -19,8 +19,8 @@ import { convertDollarsToCents } from "@/lib/flashes";
 import {
   formatCentsAsInput,
   formatCurrency,
+  formatPrice,
   formatSelectValue,
-  formatPriceCents,
 } from "@/lib/formatters";
 import type { ArtistSettingsController } from "@/hooks/useArtistSettings";
 import type {
@@ -122,7 +122,7 @@ export const DepositsTab = ({
           description="Optional. The deposit clients pay to confirm a booking."
           value={
             settings.depositFlatFeeCents != null
-              ? formatPriceCents(settings.depositFlatFeeCents, settings.currency)
+              ? formatPrice(settings.depositFlatFeeCents, settings.currency)
               : "No fixed deposit"
           }
         >

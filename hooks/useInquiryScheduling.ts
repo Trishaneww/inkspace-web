@@ -16,6 +16,7 @@ import {
   createSchedulingForm,
 } from "@/lib/inquiryScheduling";
 import type {
+  Appointment,
   AppointmentType,
   Inquiry,
   InquirySchedulingForm,
@@ -31,6 +32,8 @@ export function useInquiryScheduling(
   const [appointmentType, setAppointmentType] =
     useState<AppointmentType | null>(null);
   const [isReschedule, setIsReschedule] = useState(false);
+  const [rescheduleAppointment, setRescheduleAppointment] =
+    useState<Appointment | null>(null);
   const [phase, setPhase] = useState<SchedulePhase>("schedule");
   const [form, setForm] = useState<InquirySchedulingForm>(() =>
     createSchedulingForm(inquiry),
@@ -49,19 +52,19 @@ export function useInquiryScheduling(
     setAppointmentType(type);
   };
 
-  const openReschedule = () => {
-    if (!inquiry.appointment) return;
-    const type = inquiry.appointment.type;
-    setForm(createRescheduleForm(inquiry));
+  const openReschedule = (appointment: Appointment) => {
+    setRescheduleAppointment(appointment);
+    setForm(createRescheduleForm(inquiry, appointment));
     setError(null);
     setIsReschedule(true);
-    setPhase(getStartingPhase(type));
-    setAppointmentType(type);
+    setPhase(getStartingPhase(appointment.type));
+    setAppointmentType(appointment.type);
   };
 
   const close = () => {
     setAppointmentType(null);
     setIsReschedule(false);
+    setRescheduleAppointment(null);
     setPhase("schedule");
     setError(null);
   };
@@ -101,12 +104,13 @@ export function useInquiryScheduling(
     setSubmitting(true);
     setError(null);
     try {
-      const updated = isReschedule
-        ? await bookingsApi.reschedule(
-            token,
-            inquiry.id,
-            buildReschedulePayload(inquiry, form),
-          )
+      const updated =
+        isReschedule && rescheduleAppointment
+          ? await bookingsApi.reschedule(
+              token,
+              inquiry.id,
+              buildReschedulePayload(rescheduleAppointment, form),
+            )
         : appointmentType === "consultation"
           ? await bookingsApi.requestConsultation(
               token,

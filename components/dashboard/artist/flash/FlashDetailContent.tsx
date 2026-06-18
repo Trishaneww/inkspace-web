@@ -27,7 +27,7 @@ import {
   getStartingPrice,
 } from "@/lib/flashes";
 import type { Flash } from "@/types/flash";
-import { formatDate, formatPriceCents } from "@/lib/formatters";
+import { formatDate, formatPrice } from "@/lib/formatters";
 
 interface FlashDetailContentProps {
   flash: Flash;
@@ -163,7 +163,7 @@ const MetadataCard = ({ flash }: { flash: Flash }) => {
         label="Starting price"
         value={
           startingCents !== null
-            ? formatPriceCents(startingCents, flash.currency)
+            ? formatPrice(startingCents, flash.currency)
             : "—"
         }
       />

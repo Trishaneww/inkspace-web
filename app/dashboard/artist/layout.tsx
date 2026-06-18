@@ -1,5 +1,5 @@
 // CSS
-import styles from "@/styles/ArtistDashboardLayout.module.css";
+import styles from "@/styles/DashboardSidebar.module.css";
 
 // HTML Components
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";

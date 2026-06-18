@@ -1,0 +1,32 @@
+.tableCard {
+  width: 100%;
+
+  border: 1px solid hsl(220, 13%, 90%);
+  border-radius: 0.75rem;
+  overflow-x: auto;
+}
+
+.pagination {
+  margin-top: 1rem;
+}
+
+.artistName {
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+}
+
+.artistLink {
+  font-weight: 500;
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.piece {
+  color: hsl(220, 13%, 25%);
+}
+
+.requested {
+  white-space: nowrap;
+
+  color: hsl(220, 9%, 46%);
+}

@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { formatDurationMinutes, formatTime } from "@/lib/formatters";
 import type {
   AcceptInquiryPayload,
+  Appointment,
   AppointmentType,
   ConsultationFormat,
   Inquiry,
@@ -20,7 +21,6 @@ export interface TimeOption {
   label: string;
 }
 
-// A labelled run of time options — "Your hours" surfaced ahead of "Other times".
 export interface TimeGroup {
   label: string;
   options: TimeOption[];
@@ -114,10 +114,12 @@ export function createSchedulingForm(inquiry: Inquiry): InquirySchedulingForm {
  * @param inquiry - The inquiry to create the form for.
  * @returns The pre-filled form.
  */
-export function createRescheduleForm(inquiry: Inquiry): InquirySchedulingForm {
+export function createRescheduleForm(
+  inquiry: Inquiry,
+  appointment: Appointment,
+): InquirySchedulingForm {
   const base = createSchedulingForm(inquiry);
-  const appointment = inquiry.appointment;
-  if (!appointment?.scheduledStart) return base;
+  if (!appointment.scheduledStart) return base;
 
   const start = new Date(appointment.scheduledStart);
   const startMinute = start.getHours() * 60 + start.getMinutes();
@@ -188,14 +190,15 @@ export function buildConsultationPayload(
  * @returns The payload for the reschedule API call.
  */
 export function buildReschedulePayload(
-  inquiry: Inquiry,
+  appointment: Appointment,
   form: InquirySchedulingForm,
 ): RescheduleAppointmentPayload {
   const start = form.startMinute ?? 0;
   const payload: RescheduleAppointmentPayload = {
     scheduledStart: form.date ? combineDateTime(form.date, start) : "",
+    appointmentId: appointment.id,
   };
-  if (inquiry.appointment?.type === "session") {
+  if (appointment.type === "session") {
     payload.durationMinutes = (form.endMinute ?? start) - start;
   } else {
     payload.durationMinutes = form.consultationDurationMinutes;

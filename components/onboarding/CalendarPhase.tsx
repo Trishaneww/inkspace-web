@@ -25,7 +25,7 @@ export const CalendarPhase = ({ googleCalendar }: CalendarPhaseProps) => {
           <GoogleCalendarLogo className={styles.calendarLogo} />
           <div className={styles.calendarCardText}>
             <span className={styles.calendarCardTitle}>Google Calendar</span>
-            bs<span className={styles.calendarCardSubtitle}>
+            <span className={styles.calendarCardSubtitle}>
               {connected
                 ? email
                   ? `Synced with ${email}`

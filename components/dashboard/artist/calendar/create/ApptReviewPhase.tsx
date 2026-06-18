@@ -6,6 +6,7 @@ import styles from "@/styles/dashboard/artist/CreateAppointment.module.css";
 // HTML Components
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
+  CalendarClock,
   CalendarDays,
   Clock,
   Mail,
@@ -17,13 +18,22 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+// Components
+import {
+  ReviewCard,
+  ReviewRow,
+  ReviewSection,
+  ReviewText,
+  ReviewTypeBox,
+} from "@/components/dashboard/artist/bookings/ReviewPrimitives";
+
 // Libs
 import { addMinutes, format } from "date-fns";
 import { useAuth } from "@/lib/auth";
 import { combineDateTime } from "@/lib/inquiryScheduling";
 import { formatDurationMinutes, formatInitials } from "@/lib/formatters";
-import { CONSULTATION_FORMAT_LABELS } from "@/constants/bookings";
 import { describeFormPiece } from "@/lib/calendar";
+import { CONSULTATION_FORMAT_LABELS } from "@/constants/bookings";
 
 // Types
 import type { ConsultationFormat } from "@/types/bookings";
@@ -57,87 +67,72 @@ export const ApptReviewPhase = ({ form, locations }: ApptReviewPhaseProps) => {
 
   const organizer = user ? `${user.firstName} ${user.lastName}`.trim() : "You";
   const location = locations.find((l) => l.id === form.locationId);
-  const isRemoteConsult =
+  const isRemoteConsultation =
     !isSession && (form.format === "online" || form.format === "phone");
   const locationLabel =
-    location && !isRemoteConsult
+    location && !isRemoteConsultation
       ? [location.address, location.city, location.country]
           .filter(Boolean)
           .join(", ")
       : null;
 
   const piece = describeFormPiece(form);
+  const typeIcon = isSession ? CalendarClock : FORMAT_ICON[form.format];
 
   return (
     <div className={styles.phase}>
-      <div className={styles.reviewCard}>
-        <div className={styles.reviewHead}>
-          <span className={styles.reviewType}>
-            {isSession ? "Tattoo session" : "Consultation"}
-          </span>
-          <span className={styles.reviewSub}>
-            {formatDurationMinutes(durationMinutes)} · with {form.clientName}
-          </span>
-        </div>
+      <ReviewCard>
+        <ReviewTypeBox
+          icon={typeIcon}
+          label={isSession ? "New session" : "New consultation"}
+          hint={`${formatDurationMinutes(durationMinutes)} · with ${form.clientName}`}
+        />
 
-        <div className={styles.reviewRows}>
-          <ReviewRow
-            icon={Clock}
-            value={`${format(startDate, "h:mm a")} - ${format(endDate, "h:mm a")}`}
-          />
-          <ReviewRow
-            icon={CalendarDays}
-            value={format(startDate, "EEEE, MMMM d, yyyy")}
-          />
-          {locationLabel && <ReviewRow icon={MapPin} value={locationLabel} />}
-          {!isSession && (
-            <ReviewRow
-              icon={FORMAT_ICON[form.format]}
-              value={CONSULTATION_FORMAT_LABELS[form.format]}
-            />
+        <ReviewSection>
+          <ReviewRow icon={Clock}>
+            {`${format(startDate, "h:mm a")} - ${format(endDate, "h:mm a")}`}
+          </ReviewRow>
+          <ReviewRow icon={CalendarDays}>
+            {format(startDate, "EEEE, MMMM d, yyyy")}
+          </ReviewRow>
+          {locationLabel && (
+            <ReviewRow icon={MapPin}>{locationLabel}</ReviewRow>
           )}
-        </div>
+          {!isSession && (
+            <ReviewRow icon={FORMAT_ICON[form.format]}>
+              {CONSULTATION_FORMAT_LABELS[form.format]}
+            </ReviewRow>
+          )}
+        </ReviewSection>
 
         {isSession && (piece || form.description.trim()) && (
-          <div className={styles.reviewSection}>
-            <span className={styles.reviewSectionLabel}>The piece</span>
-            {piece && <ReviewRow icon={PenTool} value={piece} />}
+          <ReviewSection label="The piece">
+            {piece && <ReviewRow icon={PenTool}>{piece}</ReviewRow>}
             {form.description.trim() && (
-              <p className={styles.reviewNote}>{form.description}</p>
+              <ReviewText>{form.description}</ReviewText>
             )}
-          </div>
+          </ReviewSection>
         )}
 
-        <div className={styles.reviewSection}>
-          <span className={styles.reviewSectionLabel}>People</span>
-          <div className={styles.reviewRow}>
-            <Avatar size="sm">
-              {user?.avatarUrl && (
-                <AvatarImage src={user.avatarUrl} alt={organizer} />
-              )}
-              <AvatarFallback>{formatInitials(organizer)}</AvatarFallback>
-            </Avatar>
-            <span>{organizer} (you)</span>
-          </div>
-          <ReviewRow icon={Mail} value={form.clientEmail} />
+        <ReviewSection label="People">
+          <ReviewRow
+            leading={
+              <Avatar size="sm">
+                {user?.avatarUrl && (
+                  <AvatarImage src={user.avatarUrl} alt={organizer} />
+                )}
+                <AvatarFallback>{formatInitials(organizer)}</AvatarFallback>
+              </Avatar>
+            }
+          >
+            {organizer} (you)
+          </ReviewRow>
+          <ReviewRow icon={Mail}>{form.clientEmail}</ReviewRow>
           {form.clientPhone.trim() && (
-            <ReviewRow icon={Phone} value={form.clientPhone} />
+            <ReviewRow icon={Phone}>{form.clientPhone}</ReviewRow>
           )}
-        </div>
-      </div>
+        </ReviewSection>
+      </ReviewCard>
     </div>
   );
 };
-
-const ReviewRow = ({
-  icon: Icon,
-  value,
-}: {
-  icon: LucideIcon;
-  value: string;
-}) => (
-  <div className={styles.reviewRow}>
-    <Icon size={18} className={styles.reviewRowIcon} />
-    <span>{value}</span>
-  </div>
-);
