@@ -21,7 +21,7 @@ import {
   getStartingPrice,
 } from "@/lib/flashes";
 import type { Flash } from "@/types/flash";
-import { formatPriceCents } from "@/lib/formatters";
+import { formatPrice } from "@/lib/formatters";
 
 interface FlashCardProps {
   flash: Flash;
@@ -103,7 +103,7 @@ export const FlashCard = ({ flash, onEdit }: FlashCardProps) => {
                 isClaimed && styles.priceStrikethrough,
               )}
             >
-              {formatPriceCents(priceCents, flash.currency)}
+              {formatPrice(priceCents, flash.currency)}
             </span>
           )}
         </div>

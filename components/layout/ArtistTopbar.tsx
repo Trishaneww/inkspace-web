@@ -4,7 +4,7 @@
 import Link from "next/link";
 
 // CSS
-import styles from "@/styles/ArtistTopbar.module.css";
+import styles from "@/styles/DashboardTopbar.module.css";
 
 // Components
 import { GlobalSearch } from "@/components/layout/GlobalSearch";

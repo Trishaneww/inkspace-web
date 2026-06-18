@@ -5,6 +5,7 @@ import {
   Calendar,
   Home,
   Image as ImageIcon,
+  Inbox,
   Receipt,
   Settings,
   Star,
@@ -79,4 +80,13 @@ export const artistOtherNav: NavLeaf[] = [
   },
   { href: "/dashboard/artist/reviews", label: "Reviews", icon: Star },
   { href: "/dashboard/artist/settings", label: "Settings", icon: Settings },
+];
+
+export const clientNav: NavLeaf[] = [
+  {
+    href: "/dashboard/client/bookings",
+    label: "Bookings & inquiries",
+    icon: BookOpenCheck,
+  },
+  { href: "/dashboard/client/messages", label: "Messages", icon: Inbox },
 ];

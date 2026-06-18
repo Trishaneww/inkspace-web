@@ -1,6 +1,6 @@
 "use client";
 
-// React
+// Next.js
 import { useState } from "react";
 import Link from "next/link";
 
@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/table";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { Button } from "@/components/ui/button";
-import { PanelRightOpen } from "lucide-react";
+import { PanelRightOpen, Zap } from "lucide-react";
 
 // Components
 import { StatusBadge } from "./StatusBadge";
@@ -26,21 +26,28 @@ import { StatusBadge } from "./StatusBadge";
 // Libs
 import { DEPOSIT_META, TYPE_LABELS, WAIVER_META } from "@/constants/bookings";
 import {
-  formatRelativeDate,
+  getInquiryActionItems,
   getInquiryStatusMeta,
   requestMeta,
 } from "@/lib/bookings";
-import { formatLocation } from "@/lib/formatters";
+import { formatLocation, formatRelativeDate } from "@/lib/formatters";
+
+// Types
 import type { Inquiry } from "@/types/bookings";
 
 interface BookingsTableProps {
   inquiries: Inquiry[];
   onSelect: (inquiry: Inquiry) => void;
+  onOpenActions: (inquiry: Inquiry) => void;
 }
 
 const DEFAULT_PAGE_SIZE = 10;
 
-export const BookingsTable = ({ inquiries, onSelect }: BookingsTableProps) => {
+export const BookingsTable = ({
+  inquiries,
+  onSelect,
+  onOpenActions,
+}: BookingsTableProps) => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [prevList, setPrevList] = useState(inquiries);
@@ -143,18 +150,33 @@ export const BookingsTable = ({ inquiries, onSelect }: BookingsTableProps) => {
                     />
                   </TableCell>
                   <TableCell className={styles.actionsCell}>
-                    <Button
-                      type="button"
-                      size="sm"
-                      className={styles.viewBtn}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        onSelect(inquiry);
-                      }}
-                    >
-                      <PanelRightOpen size={15} />
-                      View
-                    </Button>
+                    <div className={styles.rowActions}>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        disabled={getInquiryActionItems(inquiry).length === 0}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          onOpenActions(inquiry);
+                        }}
+                      >
+                        <Zap size={15} />
+                        Actions
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        className={styles.viewBtn}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          onSelect(inquiry);
+                        }}
+                      >
+                        <PanelRightOpen size={15} />
+                        View
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               );

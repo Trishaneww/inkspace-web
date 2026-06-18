@@ -31,8 +31,15 @@ type AuthState = {
   isLoading: boolean;
 };
 
+export type ClientSession = {
+  token: string;
+  refreshToken: string;
+  user: User;
+};
+
 type AuthContextValue = AuthState & {
   isAuthenticated: boolean;
+  applySession: (session: ClientSession) => void;
   login: (email: string, password: string) => Promise<LoginResponse>;
   signup: (
     payload: SignupPayload,
@@ -92,6 +99,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setState({ user: res.user, token: res.token, isLoading: false });
     return res;
   }, []);
+
+  const applySession = useCallback<AuthContextValue["applySession"]>(
+    (session) => {
+      setTokens(session.token, session.refreshToken);
+      setState({ user: session.user, token: session.token, isLoading: false });
+    },
+    [],
+  );
 
   const login = useCallback<AuthContextValue["login"]>(
     async (email, password) => {
@@ -156,6 +171,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         ...state,
         isAuthenticated: !!state.user,
+        applySession,
         login,
         signup,
         verifyPhone,

@@ -9,11 +9,15 @@ import styles from "@/styles/dashboard/artist/Bookings.module.css";
 
 // HTML Components
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Check, Copy, Loader2, Send } from "lucide-react";
 
 // Components
 import { StatusBadge } from "./StatusBadge";
 
 // Libs
+import { paymentsApi } from "@/lib/api/payments";
+import { useAuth } from "@/lib/auth";
+import { displayToast } from "@/lib/toast";
 import { TATTOO_STYLE_LABELS } from "@/constants/tattooStyles";
 import { FLASH_SIZE_LABELS } from "@/constants/flashes";
 import {
@@ -22,6 +26,8 @@ import {
   COLOR_TYPE_LABELS,
   CONSULTATION_FORMAT_LABELS,
   DEPOSIT_META,
+  PAYMENT_TYPE_LABELS,
+  PAYMENT_STATUS_META,
   TYPE_LABELS,
   WAIVER_META,
 } from "@/constants/bookings";
@@ -29,8 +35,12 @@ import {
   formatDateTime,
   formatDurationMinutes,
   formatLocation,
+  formatPrice,
 } from "@/lib/formatters";
-import type { Inquiry } from "@/types/bookings";
+import { PAYABLE_PAYMENT_STATUSES } from "@/constants/payments";
+
+// Types
+import type { Inquiry, InquiryPayment } from "@/types/bookings";
 
 export const InquiryDetailsPhase = ({ inquiry }: { inquiry: Inquiry }) => {
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
@@ -57,7 +67,8 @@ export const InquiryDetailsPhase = ({ inquiry }: { inquiry: Inquiry }) => {
           <DetailRow
             label="Size"
             value={
-              FLASH_SIZE_LABELS[inquiry.flash.sizeCode] ?? inquiry.flash.sizeCode
+              FLASH_SIZE_LABELS[inquiry.flash.sizeCode] ??
+              inquiry.flash.sizeCode
             }
           />
         )}
@@ -168,6 +179,15 @@ export const InquiryDetailsPhase = ({ inquiry }: { inquiry: Inquiry }) => {
         </div>
       </div>
 
+      {inquiry.payments.length > 0 && (
+        <div className={styles.detailCard}>
+          <span className={styles.detailCardTitle}>Payments</span>
+          {inquiry.payments.map((payment) => (
+            <PaymentRow key={payment.id} payment={payment} />
+          ))}
+        </div>
+      )}
+
       {inquiry.customAnswers.length > 0 && (
         <div className={styles.detailCard}>
           <span className={styles.detailCardTitle}>Custom Questions</span>
@@ -230,6 +250,76 @@ const DetailRow = ({ label, value }: { label: string; value: string }) => (
     <span className={styles.detailRowValue}>{value}</span>
   </div>
 );
+
+const PaymentRow = ({ payment }: { payment: InquiryPayment }) => {
+  const { token } = useAuth();
+  const [copied, setCopied] = useState(false);
+  const [resending, setResending] = useState(false);
+
+  const meta = PAYMENT_STATUS_META[payment.status];
+  const payable = PAYABLE_PAYMENT_STATUSES.has(payment.status);
+
+  const copyLink = async () => {
+    await navigator.clipboard.writeText(
+      `${window.location.origin}/pay/${payment.publicToken}`,
+    );
+    setCopied(true);
+    displayToast("Payment link copied", "success");
+  };
+
+  const resend = async () => {
+    if (!token) return;
+    setResending(true);
+    try {
+      await paymentsApi.resendPaymentRequest(token, payment.id);
+      displayToast("Payment link resent", "success");
+    } catch (err) {
+      displayToast(
+        err instanceof Error ? err.message : "Couldn't resend the link",
+        "error",
+      );
+    } finally {
+      setResending(false);
+    }
+  };
+
+  return (
+    <div className={styles.paymentRow}>
+      <div className={styles.detailRow}>
+        <span className={styles.detailRowLabel}>
+          {PAYMENT_TYPE_LABELS[payment.type]} ·{" "}
+          {formatPrice(payment.clientChargeCents, payment.currency)}
+        </span>
+        <StatusBadge label={meta.label} variant={meta.variant} />
+      </div>
+      {payable && (
+        <div className={styles.paymentActions}>
+          <button
+            type="button"
+            className={styles.paymentAction}
+            onClick={copyLink}
+          >
+            {copied ? <Check size={14} /> : <Copy size={14} />}
+            {copied ? "Copied" : "Copy link"}
+          </button>
+          <button
+            type="button"
+            className={styles.paymentAction}
+            disabled={resending}
+            onClick={resend}
+          >
+            {resending ? (
+              <Loader2 size={14} className="animate-spin" />
+            ) : (
+              <Send size={14} />
+            )}
+            Resend
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
 
 interface ReferenceLightboxProps {
   url: string | null;

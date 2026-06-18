@@ -21,7 +21,7 @@ export const StylesPhase = ({ form, update }: StylesPhaseProps) => (
   <div className={styles.field}>
     <Label>Styles you specialize in</Label>
     <p className={styles.reassure}>
-      Optional — this just helps us get to know your work. You can always update
+      This just helps us get to know your work. You can always update
       it later.
     </p>
     <TattooStylesPicker

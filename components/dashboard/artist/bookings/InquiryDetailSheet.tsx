@@ -15,18 +15,22 @@ import { InquiryDetailView } from "./InquiryDetailView";
 // Libs
 import { bookingsApi } from "@/lib/api/bookings";
 import { useAuth } from "@/lib/auth";
-import type { Inquiry, InquiryActionId } from "@/types/bookings";
+import type { Inquiry } from "@/types/bookings";
+
+type InquiryInitialView = "details" | "actions";
 
 interface InquiryDetailSheetProps {
   inquiryId: string | null;
   onClose: () => void;
   onActed: () => void;
+  initialView?: InquiryInitialView;
 }
 
 export const InquiryDetailSheet = ({
   inquiryId,
   onClose,
   onActed,
+  initialView = "details",
 }: InquiryDetailSheetProps) => {
   return (
     <Sheet
@@ -41,6 +45,8 @@ export const InquiryDetailSheet = ({
             key={inquiryId}
             inquiryId={inquiryId}
             onActed={onActed}
+            onClose={onClose}
+            initialView={initialView}
           />
         )}
       </SheetContent>
@@ -51,18 +57,21 @@ export const InquiryDetailSheet = ({
 interface InquiryDetailContentProps {
   inquiryId: string;
   onActed: () => void;
+  onClose: () => void;
+  initialView: InquiryInitialView;
 }
 
 const InquiryDetailContent = ({
   inquiryId,
   onActed,
+  onClose,
+  initialView,
 }: InquiryDetailContentProps) => {
   const { token } = useAuth();
 
   const [inquiry, setInquiry] = useState<Inquiry | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [actingId, setActingId] = useState<InquiryActionId | null>(null);
 
   useEffect(() => {
     if (!token) return;
@@ -93,8 +102,8 @@ const InquiryDetailContent = ({
       inquiry={inquiry}
       setInquiry={setInquiry}
       onActed={onActed}
-      actingId={actingId}
-      setActingId={setActingId}
+      onClose={onClose}
+      initialView={initialView}
     />
   );
 };

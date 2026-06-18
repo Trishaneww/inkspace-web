@@ -1,7 +1,7 @@
 "use client";
 
 // CSS
-import styles from "@/styles/ArtistMobileNavbar.module.css";
+import styles from "@/styles/DashboardMobileNavbar.module.css";
 
 // HTML Components
 import { Button } from "@/components/ui/button";

@@ -43,7 +43,7 @@ export const InquiryConsultLengthPhase = ({
             {formatDurationMinutes(option.minutes)}
           </span>
         </div>
-        <ChevronRight size={20} className={styles.lengthCardChevron} />
+        <ChevronRight size={18} className={styles.lengthCardChevron} />
       </button>
     ))}
   </div>
