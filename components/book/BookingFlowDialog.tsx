@@ -93,11 +93,15 @@ export const BookingFlowDialog = ({
         <div className={styles.content}>
           <div
             className={clsx(styles.phaseColumn, {
-              [styles.fullWidth]: phase === BookingFlowPhase.FlashGrid,
+              [styles.fullWidth]:
+                phase === BookingFlowPhase.FlashGrid ||
+                phase === BookingFlowPhase.FlashDetail,
             })}
             ref={phaseContentRef}
           >
-            {!isCompleted && <BookingFlowHeading phase={phase} />}
+            {!isCompleted && phase !== BookingFlowPhase.FlashDetail && (
+              <BookingFlowHeading phase={phase} />
+            )}
             <div className={styles.fields}>
               <PhaseContent
                 phase={phase}

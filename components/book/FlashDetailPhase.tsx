@@ -11,10 +11,15 @@ import bk from "@/styles/book/BookingFlow.module.css";
 // HTML Components
 import { Label } from "@/components/ui/label";
 
+// Components
+import { DetailLayout } from "./DetailLayout";
+
 // Libs
 import { FLASH_SIZE_OPTIONS } from "@/constants/flashes";
 import { PLACEMENT_OPTIONS } from "@/constants/tattooStyles";
+import { BOOKING_FLOW_PHASE_META } from "@/constants/bookingFlow";
 import { formatPrice } from "@/lib/formatters";
+import { BookingFlowPhase } from "@/types/bookingFlow";
 import type {
   BookingFlowFormState,
   UpdateBookingForm,
@@ -44,27 +49,29 @@ export const FlashDetailPhase = ({
       : PLACEMENT_OPTIONS.map((placement) => placement.value);
   const range = formatFlashPriceRange(flash);
 
-  return (
-    <div className={bk.flashDetail}>
-      <div className={bk.flashHero}>
-        {flash.image_url && (
-          <Image
-            src={flash.image_url}
-            alt={flash.title}
-            fill
-            unoptimized
-            className={bk.flashHeroImage}
-          />
-        )}
-      </div>
+  const { lead, rest } = BOOKING_FLOW_PHASE_META[BookingFlowPhase.FlashDetail];
 
+  const media = (
+    <div className={bk.flashHero}>
+      {flash.image_url && (
+        <Image
+          src={flash.image_url}
+          alt={flash.title}
+          fill
+          unoptimized
+          className={bk.flashHeroImage}
+        />
+      )}
+    </div>
+  );
+
+  return (
+    <DetailLayout lead={lead} rest={rest} media={media}>
       <div className={bk.flashSummary}>
         <h3 className={bk.flashName}>{flash.title}</h3>
         {flash.deposit_cents != null && (
           <p className={bk.flashDeposit}>
-            <strong>
-              {formatPrice(flash.deposit_cents, flash.currency)}
-            </strong>{" "}
+            <strong>{formatPrice(flash.deposit_cents, flash.currency)}</strong>{" "}
             deposit to claim
           </p>
         )}
@@ -136,6 +143,6 @@ export const FlashDetailPhase = ({
           ))}
         </div>
       </div>
-    </div>
+    </DetailLayout>
   );
 };

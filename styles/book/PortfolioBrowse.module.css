@@ -1,0 +1,155 @@
+.state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8rem;
+
+  font-size: 0.9rem;
+  color: var(--color-muted-foreground);
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+
+  gap: 0.6rem;
+}
+
+.tile {
+  position: relative;
+  aspect-ratio: 1 / 1;
+
+  border-radius: 0.75rem;
+
+  border: 2px solid transparent;
+  background-color: var(--color-neutral-background);
+
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 150ms ease;
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
+}
+
+.tileImage {
+  object-fit: cover;
+}
+
+.tilePlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  padding: 0.5rem;
+
+  font-size: 0.75rem;
+  color: var(--color-muted-foreground);
+  text-align: center;
+}
+
+.hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-height: 18rem;
+
+  border-radius: 0.875rem;
+
+  background-color: var(--color-neutral-background);
+  overflow: hidden;
+}
+
+.heroImage {
+  object-fit: cover;
+}
+
+.thumbs {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 0.5rem;
+}
+
+.thumb {
+  position: relative;
+  width: 3.5rem;
+  height: 3.5rem;
+
+  border-radius: 0.5rem;
+
+  border: 2px solid transparent;
+  background-color: var(--color-neutral-background);
+
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 150ms ease;
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
+}
+
+.thumbActive {
+  border-color: var(--color-primary);
+}
+
+.thumbImage {
+  object-fit: cover;
+}
+
+.name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.description {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-muted-foreground);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 0.5rem;
+}
+
+.chip {
+  padding: 0.25rem 0.6rem;
+
+  font-size: 0.75rem;
+  color: var(--foreground);
+
+  background-color: var(--color-neutral-background);
+  border-radius: 999px;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.5rem;
+}
+
+.metaRow {
+  display: flex;
+  justify-content: space-between;
+
+  gap: 1rem;
+  font-size: 0.8rem;
+}
+
+.metaLabel {
+  color: var(--color-muted-foreground);
+}
+
+.metaValue {
+  font-weight: 500;
+  color: var(--foreground);
+}

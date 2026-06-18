@@ -20,6 +20,7 @@ import InstagramLogo from "@/public/logos/instagram-logo.svg";
 
 // Components
 import { BookingFlowDialog } from "@/components/book/BookingFlowDialog";
+import { PortfolioBrowseDialog } from "@/components/book/PortfolioBrowseDialog";
 
 // Libs
 import { formatMonthDayRange, formatTime } from "@/lib/formatters";
@@ -32,6 +33,7 @@ import type { BookingFlowEntry } from "@/types/bookingFlow";
 
 export const OpenBookHub = ({ profile }: { profile: OpenBookProfile }) => {
   const [entry, setEntry] = useState<BookingFlowEntry | null>(null);
+  const [browsingPortfolio, setBrowsingPortfolio] = useState(false);
 
   return (
     <>
@@ -39,6 +41,7 @@ export const OpenBookHub = ({ profile }: { profile: OpenBookProfile }) => {
         profile={profile}
         onBook={() => setEntry("book")}
         onBrowseFlash={() => setEntry("flash")}
+        onBrowsePortfolio={() => setBrowsingPortfolio(true)}
       />
       {entry && (
         <BookingFlowDialog
@@ -46,6 +49,14 @@ export const OpenBookHub = ({ profile }: { profile: OpenBookProfile }) => {
           entry={entry}
           onOpenChange={(open) => {
             if (!open) setEntry(null);
+          }}
+        />
+      )}
+      {browsingPortfolio && (
+        <PortfolioBrowseDialog
+          artistId={profile.artistId}
+          onOpenChange={(open) => {
+            if (!open) setBrowsingPortfolio(false);
           }}
         />
       )}
@@ -57,10 +68,12 @@ const ProfileCard = ({
   profile,
   onBook,
   onBrowseFlash,
+  onBrowsePortfolio,
 }: {
   profile: OpenBookProfile;
   onBook: () => void;
   onBrowseFlash: () => void;
+  onBrowsePortfolio: () => void;
 }) => {
   const initial = profile.username.trim().charAt(0).toUpperCase() || "?";
 
@@ -117,11 +130,22 @@ const ProfileCard = ({
         <Button
           type="button"
           variant="outline"
-          className={styles.flashbookButton}
+          className={styles.browseButton}
           onClick={onBrowseFlash}
           disabled={!profile.acceptingBookings}
         >
           Browse flashbook
+        </Button>
+      )}
+
+      {profile.hasPortfolio && (
+        <Button
+          type="button"
+          variant="outline"
+          className={styles.browseButton}
+          onClick={onBrowsePortfolio}
+        >
+          Browse portfolio
         </Button>
       )}
 

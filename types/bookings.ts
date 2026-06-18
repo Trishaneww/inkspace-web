@@ -191,6 +191,7 @@ export interface OpenBookProfile {
   username: string;
   artistId: string;
   hasFlashes: boolean;
+  hasPortfolio: boolean;
   displayName: string;
   avatarUrl: string;
   location: string;
