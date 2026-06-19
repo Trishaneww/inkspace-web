@@ -50,6 +50,7 @@ export interface CheckoutResponse {
 export interface CreateClientAccountPayload {
   firstName: string;
   lastName: string;
+  phone: string;
   password: string;
   marketingOptIn: boolean;
 }
