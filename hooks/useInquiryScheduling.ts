@@ -75,7 +75,7 @@ export function useInquiryScheduling(
   };
 
   const canSubmit = appointmentType
-    ? canSubmitSchedule(inquiry, appointmentType, form, isReschedule)
+    ? canSubmitSchedule(appointmentType, form, isReschedule)
     : false;
 
   const goToReview = () => {
@@ -115,12 +115,12 @@ export function useInquiryScheduling(
           ? await bookingsApi.requestConsultation(
               token,
               inquiry.id,
-              buildConsultationPayload(inquiry, form),
+              buildConsultationPayload(form),
             )
           : await bookingsApi.accept(
               token,
               inquiry.id,
-              buildAcceptPayload(inquiry, form),
+              buildAcceptPayload(form),
             );
       displayToast(
         isReschedule

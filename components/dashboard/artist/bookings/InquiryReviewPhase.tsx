@@ -64,7 +64,7 @@ export const InquiryReviewPhase = ({
   isReschedule,
 }: InquiryReviewPhaseProps) => {
   const { user } = useAuth();
-  const review = buildScheduleReview(inquiry, type, form);
+  const review = buildScheduleReview(inquiry, type, form, isReschedule);
 
   const organizer = user ? `${user.firstName} ${user.lastName}`.trim() : "You";
   const piece = describePiece(inquiry);
@@ -94,8 +94,16 @@ export const InquiryReviewPhase = ({
         />
 
         <ReviewSection>
-          <ReviewRow icon={Clock}>{review.timeLabel}</ReviewRow>
-          <ReviewRow icon={CalendarDays}>{review.dateLabel}</ReviewRow>
+          {review.clientScheduled ? (
+            <ReviewRow icon={CalendarClock}>
+              {review.clientName.split(" ")[0]} picks their own start time
+            </ReviewRow>
+          ) : (
+            <>
+              <ReviewRow icon={Clock}>{review.timeLabel}</ReviewRow>
+              <ReviewRow icon={CalendarDays}>{review.dateLabel}</ReviewRow>
+            </>
+          )}
           {location && <ReviewRow icon={MapPin}>{location}</ReviewRow>}
           {review.format && (
             <ReviewRow icon={FORMAT_ICON[review.format]}>

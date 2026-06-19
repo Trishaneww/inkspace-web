@@ -982,3 +982,75 @@
   color: hsl(220, 13%, 18%);
   text-align: center;
 }
+
+/* ── Scheduling option cards (icon-left, like the stat cards) ──────────────── */
+.schedulingRow {
+  display: grid;
+  grid-template-columns: 1fr;
+
+  gap: 0.6rem;
+}
+
+@media (min-width: 480px) {
+  .schedulingRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.schedulingOption {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.5rem;
+  padding: 1rem;
+  text-align: left;
+
+  background-color: white;
+  border: 1px solid hsl(220, 13%, 88%);
+  border-radius: 0.75rem;
+
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
+}
+
+.schedulingOptionActive {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.schedulingIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+
+  color: var(--color-primary);
+
+  background-color: var(--color-neutral-background);
+  border-radius: 0.5rem;
+}
+
+.schedulingText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.schedulingLabel {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+}
+
+.schedulingHint {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: hsl(220, 9%, 46%);
+}

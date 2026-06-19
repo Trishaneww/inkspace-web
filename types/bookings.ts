@@ -72,6 +72,7 @@ export interface InquirySchedulingForm {
   timeFilter: TimeFilter;
   consultationDurationMinutes: number;
   consultationFormat: ConsultationFormat;
+  clientScheduled: boolean;
 }
 
 export interface CustomAnswer {
@@ -126,9 +127,29 @@ export interface Inquiry {
   payments: InquiryPayment[];
 }
 
+export interface SlotOption {
+  start: string;
+  label: string;
+}
+
+export interface SlotList {
+  slots: SlotOption[];
+  durationMinutes: number;
+}
+
+export interface PublicBookingRequest {
+  artistName: string;
+  clientEmail: string;
+  clientName: string;
+  status: InquiryStatus;
+  durationMinutes: number;
+  hasAccount: boolean;
+}
+
 export interface AcceptInquiryPayload {
   sessionDurationMinutes: number;
   scheduledStart?: string;
+  clientScheduled?: boolean;
 }
 
 export interface RequestConsultationPayload {
