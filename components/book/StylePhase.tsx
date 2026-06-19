@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 
 // Libs
 import { BOOKING_COLOR_TYPES } from "@/constants/bookings";
-import { TATTOO_STYLE_LABELS } from "@/constants/tattooStyles";
+import { TATTOO_STYLE_OPTIONS } from "@/constants/tattooStyles";
 import type {
   BookingFlowFormState,
   UpdateBookingForm,
@@ -18,10 +18,9 @@ import type {
 interface StylePhaseProps {
   form: BookingFlowFormState;
   update: UpdateBookingForm;
-  styles: string[];
 }
 
-export const StylePhase = ({ form, update, styles }: StylePhaseProps) => {
+export const StylePhase = ({ form, update }: StylePhaseProps) => {
   const toggleStyle = (style: string) =>
     update({
       selectedStyles: form.selectedStyles.includes(style)
@@ -50,26 +49,25 @@ export const StylePhase = ({ form, update, styles }: StylePhaseProps) => {
         </div>
       </div>
 
-      {styles.length > 0 && (
-        <div className={ob.field}>
-          <Label>Styles (optional)</Label>
-          <div className={ob.dayToggles}>
-            {styles.map((style) => (
-              <button
-                key={style}
-                type="button"
-                className={clsx(
-                  ob.dayToggle,
-                  form.selectedStyles.includes(style) && ob.dayToggleActive,
-                )}
-                onClick={() => toggleStyle(style)}
-              >
-                {TATTOO_STYLE_LABELS[style] ?? style}
-              </button>
-            ))}
-          </div>
+      <div className={ob.field}>
+        <Label>Styles (optional)</Label>
+        <div className={ob.dayToggles}>
+          {TATTOO_STYLE_OPTIONS.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              className={clsx(
+                ob.dayToggle,
+                form.selectedStyles.includes(option.value) &&
+                  ob.dayToggleActive,
+              )}
+              onClick={() => toggleStyle(option.value)}
+            >
+              {option.label}
+            </button>
+          ))}
         </div>
-      )}
+      </div>
     </>
   );
 };

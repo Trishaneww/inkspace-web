@@ -186,7 +186,7 @@ const PhaseContent = ({
     case BookingFlowPhase.Placement:
       return <PlacementPhase form={form} update={update} />;
     case BookingFlowPhase.Style:
-      return <StylePhase form={form} update={update} styles={profile.styles} />;
+      return <StylePhase form={form} update={update} />;
     case BookingFlowPhase.CustomQuestions:
       return (
         <CustomQuestionsPhase

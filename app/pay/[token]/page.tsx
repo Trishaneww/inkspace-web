@@ -12,7 +12,7 @@ import styles from "@/styles/pay/PayPage.module.css";
 import { CheckCircle2, CircleAlert, Loader2 } from "lucide-react";
 
 // Components
-import { ClientSignupCard } from "@/components/payment/ClientSignupCard";
+import { ExpressSignupCard } from "@/components/auth/ExpressSignupCard";
 import { PaymentRequestCard } from "@/components/payment/PaymentRequestCard";
 import { PayStatus } from "@/components/payment/PayStatus";
 
@@ -91,12 +91,13 @@ export default function PayPage() {
 
     if (request.status === "paid" || returnedFromStripe) {
       if (!request.hasAccount) {
+        const artist = request.artistName || "your artist";
         return (
-          <ClientSignupCard
-            token={token}
+          <ExpressSignupCard
             email={request.clientEmail}
             name={request.clientName}
-            artist={request.artistName || "your artist"}
+            description={`Your booking is confirmed. Create an account to manage your bookings and message ${artist} — it only takes a few seconds.`}
+            onSubmit={(input) => paymentsApi.createClientAccount(token, input)}
           />
         );
       }

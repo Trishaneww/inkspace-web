@@ -23,11 +23,16 @@ import { CalendarClock } from "lucide-react";
 // Components
 import { StatusBadge } from "@/components/dashboard/artist/bookings/StatusBadge";
 import { DashboardEmptyState } from "@/components/dashboard/DashboardEmptyState";
+import { ClientScheduleSheet } from "@/components/dashboard/client/ClientScheduleSheet";
 
 // Libs
 import { DEPOSIT_META, PAYMENT_STATUS_META } from "@/constants/bookings";
 import { getInquiryStatusMeta, describePiece } from "@/lib/bookings";
-import { findLatestPayment, findPayablePayment } from "@/lib/clientInquiries";
+import {
+  findLatestPayment,
+  findPayablePayment,
+  isAwaitingSchedule,
+} from "@/lib/clientInquiries";
 import { formatPrice, formatRelativeDate } from "@/lib/formatters";
 
 // Types
@@ -35,15 +40,18 @@ import type { ClientInquiry } from "@/types/bookings";
 
 interface ClientBookingsTableProps {
   inquiries: ClientInquiry[];
+  onScheduled: () => void;
 }
 
 const DEFAULT_PAGE_SIZE = 10;
 
 export const ClientBookingsTable = ({
   inquiries,
+  onScheduled,
 }: ClientBookingsTableProps) => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [scheduling, setScheduling] = useState<ClientInquiry | null>(null);
   const [prevList, setPrevList] = useState(inquiries);
   if (inquiries !== prevList) {
     setPrevList(inquiries);
@@ -82,7 +90,11 @@ export const ClientBookingsTable = ({
           </TableHeader>
           <TableBody>
             {rows.map((inquiry) => {
-              const status = getInquiryStatusMeta(inquiry);
+              const awaiting = isAwaitingSchedule(inquiry);
+              const status = awaiting
+                ? { label: "Action needed", variant: "warning" as const }
+                : getInquiryStatusMeta(inquiry);
+                
               return (
                 <TableRow key={inquiry.id}>
                   <TableCell>
@@ -112,7 +124,11 @@ export const ClientBookingsTable = ({
                     />
                   </TableCell>
                   <TableCell>
-                    <PaymentCell inquiry={inquiry} />
+                    <PaymentCell
+                      inquiry={inquiry}
+                      awaiting={awaiting}
+                      onPickTime={() => setScheduling(inquiry)}
+                    />
                   </TableCell>
                 </TableRow>
               );
@@ -132,11 +148,33 @@ export const ClientBookingsTable = ({
           setPage(1);
         }}
       />
+
+      <ClientScheduleSheet
+        inquiry={scheduling}
+        onClose={() => setScheduling(null)}
+        onScheduled={onScheduled}
+      />
     </>
   );
 };
 
-const PaymentCell = ({ inquiry }: { inquiry: ClientInquiry }) => {
+const PaymentCell = ({
+  inquiry,
+  awaiting,
+  onPickTime,
+}: {
+  inquiry: ClientInquiry;
+  awaiting: boolean;
+  onPickTime: () => void;
+}) => {
+  if (awaiting) {
+    return (
+      <Button size="sm" className={styles.pickTimeBtn} onClick={onPickTime}>
+        Pick a time
+      </Button>
+    );
+  }
+
   const payable = findPayablePayment(inquiry);
   if (payable) {
     return (

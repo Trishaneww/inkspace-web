@@ -105,6 +105,7 @@ export function createSchedulingForm(inquiry: Inquiry): InquirySchedulingForm {
     timeFilter: "any",
     consultationDurationMinutes: 30,
     consultationFormat: "in_person",
+    clientScheduled: !isArtistScheduled(inquiry),
   };
 }
 
@@ -139,15 +140,21 @@ export function isArtistScheduled(inquiry: Inquiry): boolean {
   return inquiry.schedulingMode === "artist_scheduled";
 }
 
-export function canSubmitSchedule(
-  inquiry: Inquiry,
+export function clientPicksTime(
   type: AppointmentType,
   form: InquirySchedulingForm,
-  pickConcreteTime = false,
+  isReschedule = false,
 ): boolean {
-  if (!isArtistScheduled(inquiry) && !pickConcreteTime) {
-    // Client picks their own start later; the artist only sizes a session.
-    return type === "session" ? form.durationMinutes > 0 : true;
+  return type === "session" && form.clientScheduled && !isReschedule;
+}
+
+export function canSubmitSchedule(
+  type: AppointmentType,
+  form: InquirySchedulingForm,
+  isReschedule = false,
+): boolean {
+  if (clientPicksTime(type, form, isReschedule)) {
+    return form.durationMinutes > 0;
   }
   if (!form.date || form.startMinute === null) return false;
   if (type === "consultation") return true;
@@ -155,29 +162,31 @@ export function canSubmitSchedule(
 }
 
 export function buildAcceptPayload(
-  inquiry: Inquiry,
   form: InquirySchedulingForm,
 ): AcceptInquiryPayload {
-  if (!isArtistScheduled(inquiry)) {
-    return { sessionDurationMinutes: form.durationMinutes };
+  if (form.clientScheduled) {
+    return {
+      sessionDurationMinutes: form.durationMinutes,
+      clientScheduled: true,
+    };
   }
   const start = form.startMinute ?? 0;
   const end = form.endMinute ?? start;
   return {
     sessionDurationMinutes: end - start,
     scheduledStart: form.date ? combineDateTime(form.date, start) : undefined,
+    clientScheduled: false,
   };
 }
 
 export function buildConsultationPayload(
-  inquiry: Inquiry,
   form: InquirySchedulingForm,
 ): RequestConsultationPayload {
   const payload: RequestConsultationPayload = {
     durationMinutes: form.consultationDurationMinutes,
     format: form.consultationFormat,
   };
-  if (isArtistScheduled(inquiry) && form.date && form.startMinute !== null) {
+  if (form.date && form.startMinute !== null) {
     payload.scheduledStart = combineDateTime(form.date, form.startMinute);
   }
   return payload;
@@ -227,13 +236,27 @@ export interface ScheduleReview {
   dateLabel: string;
   timeLabel: string;
   format: ConsultationFormat | null;
+  clientScheduled: boolean;
 }
 
 export function buildScheduleReview(
   inquiry: Inquiry,
   type: AppointmentType,
   form: InquirySchedulingForm,
+  isReschedule = false,
 ): ScheduleReview {
+  if (clientPicksTime(type, form, isReschedule)) {
+    return {
+      typeLabel: "Tattoo session",
+      durationLabel: formatDurationMinutes(form.durationMinutes),
+      clientName: inquiry.clientName,
+      dateLabel: "",
+      timeLabel: "",
+      format: null,
+      clientScheduled: true,
+    };
+  }
+
   const start = form.startMinute ?? 0;
   const duration =
     type === "session"
@@ -250,5 +273,6 @@ export function buildScheduleReview(
     dateLabel: form.date ? format(form.date, "EEEE, MMMM d, yyyy") : "",
     timeLabel: `${formatTime(start)} – ${formatTime(start + duration)}`,
     format: consultationFormat,
+    clientScheduled: false,
   };
 }

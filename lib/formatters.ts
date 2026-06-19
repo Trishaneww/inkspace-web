@@ -89,6 +89,18 @@ export function formatCentsAsInput(cents: number | null): string {
 }
 
 /**
+ * Formats a date as a YYYY-MM-DD string, e.g. "2026-06-18".
+ * @param date - The date to format.
+ * @returns The formatted YYYY-MM-DD string.
+ */
+export function formatDateParam(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+/**
  * Formats a date in ISO 8601 format as a human-readable date string,
  * e.g. "2026-06-03" -> "Jun 3, 2026".
  * @param iso - The ISO 8601 date string to format.

@@ -16,29 +16,34 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2 } from "lucide-react";
 
 // Libs
-import { paymentsApi } from "@/lib/api/payments";
 import { ApiError } from "@/lib/api/client";
 import { postAuthRedirect, useAuth } from "@/lib/auth";
 import { splitFullName } from "@/lib/payments";
+import { formatPhone } from "@/lib/formatters";
 
-interface ClientSignupCardProps {
-  token: string;
+// Types
+import type { ClientSession } from "@/lib/auth/context";
+import type { CreateClientAccountPayload } from "@/types/payments";
+
+interface ExpressSignupCardProps {
   email: string;
   name: string;
-  artist: string;
+  description: string;
+  onSubmit: (input: CreateClientAccountPayload) => Promise<ClientSession>;
 }
 
-export const ClientSignupCard = ({
-  token,
+export const ExpressSignupCard = ({
   email,
   name,
-  artist,
-}: ClientSignupCardProps) => {
+  description,
+  onSubmit,
+}: ExpressSignupCardProps) => {
   const router = useRouter();
   const { applySession } = useAuth();
 
   const [firstName, setFirstName] = useState(() => splitFullName(name).first);
   const [lastName, setLastName] = useState(() => splitFullName(name).last);
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [optIn, setOptIn] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -49,6 +54,10 @@ export const ClientSignupCard = ({
       setError("Please enter your first name.");
       return;
     }
+    if (phone.trim() === "") {
+      setError("Please enter your phone number.");
+      return;
+    }
     if (password.length < 8) {
       setError("Password must be at least 8 characters.");
       return;
@@ -56,22 +65,25 @@ export const ClientSignupCard = ({
     setSubmitting(true);
     setError(null);
     try {
-      const session = await paymentsApi.createClientAccount(token, {
+      const session = await onSubmit({
         firstName: firstName.trim(),
         lastName: lastName.trim(),
+        phone: phone.trim(),
         password,
         marketingOptIn: optIn,
       });
-      // Log the new client in and drop them into their dashboard. Keep the
-      // button spinning through the redirect rather than flashing a done state.
       applySession(session);
       router.replace(postAuthRedirect(session.user));
     } catch (err) {
-      setError(
-        err instanceof ApiError && err.status === 409
-          ? "You already have an account with this email — just log in."
-          : "Couldn't create your account. Please try again.",
-      );
+      if (err instanceof ApiError && err.status === 409) {
+        setError(
+          err.message.toLowerCase().includes("phone")
+            ? "That phone number is already linked to another account."
+            : "You already have an account with this email — just log in.",
+        );
+      } else {
+        setError("Couldn't create your account. Please try again.");
+      }
       setSubmitting(false);
     }
   };
@@ -87,10 +99,7 @@ export const ClientSignupCard = ({
       />
       <div className={styles.accountHeader}>
         <h1 className={styles.title}>Create your account</h1>
-        <p className={styles.description}>
-          Your booking is confirmed. Create an account to manage your bookings
-          and message {artist} — it only takes a few seconds.
-        </p>
+        <p className={styles.description}>{description}</p>
       </div>
 
       <form
@@ -126,6 +135,18 @@ export const ClientSignupCard = ({
         <div className={styles.accountField}>
           <Label htmlFor="account-email">Email</Label>
           <Input id="account-email" value={email} readOnly />
+        </div>
+
+        <div className={styles.accountField}>
+          <Label htmlFor="account-phone">Phone</Label>
+          <Input
+            id="account-phone"
+            type="tel"
+            autoComplete="tel"
+            placeholder="For appointment reminders"
+            value={phone}
+            onChange={(event) => setPhone(formatPhone(event.target.value))}
+          />
         </div>
 
         <div className={styles.accountField}>

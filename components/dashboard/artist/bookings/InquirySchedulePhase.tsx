@@ -6,6 +6,7 @@ import styles from "@/styles/dashboard/artist/Bookings.module.css";
 
 // HTML Components
 import { Calendar } from "@/components/ui/calendar";
+import { CalendarCheck, CalendarClock, type LucideIcon } from "lucide-react";
 
 // Components
 import { OptionsSelect } from "@/components/common/OptionsSelect";
@@ -16,7 +17,7 @@ import {
 } from "@/components/dashboard/artist/scheduling/SchedulePickers";
 
 // Libs
-import { isArtistScheduled } from "@/lib/inquiryScheduling";
+import { clientPicksTime } from "@/lib/inquiryScheduling";
 import {
   CONSULTATION_FORMAT_OPTIONS,
   SESSION_DURATION_OPTIONS,
@@ -45,47 +46,17 @@ export const InquirySchedulePhase = ({
   isReschedule = false,
 }: InquirySchedulePhaseProps) => {
   const firstName = inquiry.clientName.split(" ")[0];
-  const pickConcreteTime = isArtistScheduled(inquiry) || isReschedule;
-
-  // Client-scheduled: the artist never picks a slot — the client self-books later.
-  if (!pickConcreteTime) {
-    return (
-      <div className={styles.editFields}>
-        {type === "session" ? (
-          <div className={styles.editField}>
-            <label className={styles.toggleLabel}>Session length</label>
-            <OptionsSelect
-              ariaLabel="Session length"
-              value={String(form.durationMinutes)}
-              options={SESSION_DURATION_OPTIONS}
-              onValueChange={(value) =>
-                update({ durationMinutes: Number(value) })
-              }
-            />
-            <p className={styles.editHint}>
-              {firstName} will get an email to pick a start time for this{" "}
-              {formatDurationMinutes(form.durationMinutes)} session.
-            </p>
-          </div>
-        ) : (
-          <>
-            <ConsultationTypeBoxes
-              value={form.consultationFormat}
-              onChange={(consultationFormat) => update({ consultationFormat })}
-            />
-            <p className={styles.scheduleNote}>
-              {firstName} will get an email to pick a time for this{" "}
-              {formatDurationMinutes(form.consultationDurationMinutes)}{" "}
-              consultation.
-            </p>
-          </>
-        )}
-      </div>
-    );
-  }
+  const clientPicks = clientPicksTime(type, form, isReschedule);
 
   return (
     <div className={styles.editFields}>
+      {type === "session" && !isReschedule && (
+        <SchedulingModeBoxes
+          value={form.clientScheduled}
+          onChange={(clientScheduled) => update({ clientScheduled })}
+        />
+      )}
+
       {type === "consultation" && (
         <ConsultationTypeBoxes
           value={form.consultationFormat}
@@ -93,6 +64,51 @@ export const InquirySchedulePhase = ({
         />
       )}
 
+      {clientPicks && (
+        <div className={styles.editField}>
+          <label className={styles.toggleLabel}>Session length</label>
+          <OptionsSelect
+            ariaLabel="Session length"
+            value={String(form.durationMinutes)}
+            options={SESSION_DURATION_OPTIONS}
+            onValueChange={(value) =>
+              update({ durationMinutes: Number(value) })
+            }
+          />
+          <p className={styles.editHint}>
+            {firstName} will get an email to pick a start time for this{" "}
+            {formatDurationMinutes(form.durationMinutes)} session.
+          </p>
+        </div>
+      )}
+
+      {!clientPicks && (
+        <ConcreteTimePicker
+          inquiry={inquiry}
+          type={type}
+          form={form}
+          update={update}
+        />
+      )}
+    </div>
+  );
+};
+
+interface ConcreteTimePickerProps {
+  inquiry: Inquiry;
+  type: AppointmentType;
+  form: InquirySchedulingForm;
+  update: (patch: Partial<InquirySchedulingForm>) => void;
+}
+
+const ConcreteTimePicker = ({
+  inquiry,
+  type,
+  form,
+  update,
+}: ConcreteTimePickerProps) => {
+  return (
+    <>
       <div className={styles.scheduleSection}>
         <span className={styles.toggleLabel}>Preferred date</span>
         <div className={styles.calendarWrap}>
@@ -136,9 +152,64 @@ export const InquirySchedulePhase = ({
           )}
         </>
       )}
-    </div>
+    </>
   );
 };
+
+const SCHEDULING_MODE_BOXES: {
+  clientScheduled: boolean;
+  label: string;
+  hint: string;
+  icon: LucideIcon;
+}[] = [
+  {
+    clientScheduled: false,
+    label: "I'll set the time",
+    hint: "Pick a slot now",
+    icon: CalendarClock,
+  },
+  {
+    clientScheduled: true,
+    label: "Let the client pick",
+    hint: "Email them to choose",
+    icon: CalendarCheck,
+  },
+];
+
+const SchedulingModeBoxes = ({
+  value,
+  onChange,
+}: {
+  value: boolean;
+  onChange: (clientScheduled: boolean) => void;
+}) => (
+  <div className={styles.scheduleSection}>
+    <span className={styles.toggleLabel}>Who picks the time?</span>
+    <div className={styles.schedulingRow}>
+      {SCHEDULING_MODE_BOXES.map((option) => {
+        const Icon = option.icon;
+        return (
+          <button
+            key={option.label}
+            type="button"
+            className={clsx(styles.schedulingOption, {
+              [styles.schedulingOptionActive]: value === option.clientScheduled,
+            })}
+            onClick={() => onChange(option.clientScheduled)}
+          >
+            <span className={styles.schedulingIcon}>
+              <Icon size={18} />
+            </span>
+            <span className={styles.schedulingText}>
+              <span className={styles.schedulingLabel}>{option.label}</span>
+              <span className={styles.schedulingHint}>{option.hint}</span>
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  </div>
+);
 
 const ConsultationTypeBoxes = ({
   value,

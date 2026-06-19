@@ -1,5 +1,14 @@
 // Libs
-import type { ClientInquiry, InquiryPayment } from "@/types/bookings";
+import type { ClientInquiry, Inquiry, InquiryPayment } from "@/types/bookings";
+
+export function isAwaitingSchedule(inquiry: Inquiry): boolean {
+  const appointment = inquiry.appointment;
+  return (
+    !!appointment &&
+    appointment.status === "proposed" &&
+    !appointment.scheduledStart
+  );
+}
 
 export function findPayablePayment(
   inquiry: ClientInquiry,

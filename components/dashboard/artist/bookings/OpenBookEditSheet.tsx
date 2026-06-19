@@ -145,22 +145,34 @@ const OpenBookEditForm = ({
 
         <div className={styles.editField}>
           <Label>Scheduling</Label>
-          <div className={styles.timeFilterRow}>
-            {SCHEDULING_OPTIONS.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                className={clsx(styles.timeFilterBtn, {
-                  [styles.timeFilterBtnActive]: schedulingMode === option.value,
-                })}
-                onClick={() => setSchedulingMode(option.value)}
-              >
-                <span className={styles.timeFilterLabel}>{option.label}</span>
-                <span className={styles.timeFilterHint}>
-                  {option.description}
-                </span>
-              </button>
-            ))}
+          <div className={styles.schedulingRow}>
+            {SCHEDULING_OPTIONS.map((option) => {
+              const Icon = option.icon;
+
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={clsx(styles.schedulingOption, {
+                    [styles.schedulingOptionActive]:
+                      schedulingMode === option.value,
+                  })}
+                  onClick={() => setSchedulingMode(option.value)}
+                >
+                  <span className={styles.schedulingIcon}>
+                    <Icon size={18} />
+                  </span>
+                  <span className={styles.schedulingText}>
+                    <span className={styles.schedulingLabel}>
+                      {option.label}
+                    </span>
+                    <span className={styles.schedulingHint}>
+                      {option.description}
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
