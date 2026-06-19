@@ -1,10 +1,8 @@
 // HTML Components
 import {
-  BarChart3,
   BookOpenCheck,
   Calendar,
   CreditCard,
-  FileText,
   Home,
   Image as ImageIcon,
   Inbox,
@@ -37,17 +35,17 @@ export const ARTIST_SEARCH_PAGES: SearchPage[] = [
   },
   {
     label: "Open book",
-    href: "/dashboard/artist/bookings/open-book",
+    href: "/dashboard/artist/bookings/",
     breadcrumb: ["Bookings"],
     icon: BookOpenCheck,
     keywords: ["availability", "requests"],
   },
   {
-    label: "Payments",
-    href: "/dashboard/artist/bookings/payments",
+    label: "Earnings",
+    href: "/dashboard/artist/earnings",
     breadcrumb: ["Bookings"],
     icon: CreditCard,
-    keywords: ["deposits", "invoices"],
+    keywords: ["deposits", "invoices", "earnings"],
   },
   {
     label: "Calendar",
@@ -63,30 +61,23 @@ export const ARTIST_SEARCH_PAGES: SearchPage[] = [
     icon: Users,
   },
   {
-    label: "Inbox",
-    href: "/dashboard/artist/inbox",
+    label: "Messages",
+    href: "/dashboard/artist/messages",
     breadcrumb: [],
     icon: Inbox,
-    keywords: ["messages", "chat"],
+    keywords: ["inbox", "chat"],
   },
   {
     label: "Inquiries",
-    href: "/dashboard/artist/inquiries",
+    href: "/dashboard/artist/bookings",
     breadcrumb: [],
     icon: MessageSquare,
   },
   {
     label: "Leads",
-    href: "/dashboard/artist/leads",
+    href: "/dashboard/artist/bookings",
     breadcrumb: [],
     icon: UserPlus,
-  },
-  {
-    label: "Forms",
-    href: "/dashboard/artist/leads/forms",
-    breadcrumb: ["Leads"],
-    icon: FileText,
-    keywords: ["intake"],
   },
   {
     label: "Flashbook",
@@ -100,13 +91,6 @@ export const ARTIST_SEARCH_PAGES: SearchPage[] = [
     href: "/dashboard/artist/portfolio",
     breadcrumb: [],
     icon: ImageIcon,
-  },
-  {
-    label: "Analytics",
-    href: "/dashboard/artist/analytics",
-    breadcrumb: [],
-    icon: BarChart3,
-    keywords: ["stats", "insights"],
   },
   {
     label: "Reviews",
