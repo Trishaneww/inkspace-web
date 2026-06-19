@@ -46,6 +46,9 @@
   --color-failure-border: var(--color-failure-border);
   --color-failure-background: var(--color-failure-background);
   --color-failure-foreground: var(--color-failure-foreground);
+  --color-indigo-border: var(--color-indigo-border);
+  --color-indigo-background: var(--color-indigo-background);
+  --color-indigo-foreground: var(--color-indigo-foreground);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -139,6 +142,10 @@
   --color-failure-border: hsl(0, 65%, 75%);
   --color-failure-background: hsl(0, 80%, 95%);
   --color-failure-foreground: var(--color-error);
+
+  --color-indigo-border: hsl(250, 75%, 88%);
+  --color-indigo-background: hsl(250, 85%, 96%);
+  --color-indigo-foreground: hsl(250, 55%, 55%);
 
   /* Typography
      --font-app-sans is loaded by next/font/google in app/layout.tsx

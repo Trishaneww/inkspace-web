@@ -132,7 +132,19 @@
 }
 
 .pagination {
-  margin-top: 1rem;
+  margin-top: -0.5rem;
+}
+
+.clientCell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.clientText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .clientName {

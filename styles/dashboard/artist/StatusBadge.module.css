@@ -53,3 +53,10 @@
   background-color: var(--color-inactive-background);
   border-color: var(--color-inactive-border);
 }
+
+.indigo {
+  color: var(--color-indigo-foreground);
+
+  background-color: var(--color-indigo-background);
+  border-color: var(--color-indigo-border);
+}

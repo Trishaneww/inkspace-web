@@ -31,10 +31,11 @@ import {
 // Libs
 import { buildScheduleReview } from "@/lib/inquiryScheduling";
 import { useAuth } from "@/lib/auth";
-import { formatInitials, formatLocation } from "@/lib/formatters";
+import { formatLocation } from "@/lib/formatters";
 import { describePiece } from "@/lib/bookings";
 import { CONSULTATION_FORMAT_LABELS } from "@/constants/bookings";
 import { TATTOO_STYLE_LABELS } from "@/constants/tattooStyles";
+import { getInitials } from "@/lib/avatar";
 
 // Types
 import type {
@@ -133,7 +134,7 @@ export const InquiryReviewPhase = ({
                 {user?.avatarUrl && (
                   <AvatarImage src={user.avatarUrl} alt={organizer} />
                 )}
-                <AvatarFallback>{formatInitials(organizer)}</AvatarFallback>
+                <AvatarFallback>{getInitials(organizer)}</AvatarFallback>
               </Avatar>
             }
           >

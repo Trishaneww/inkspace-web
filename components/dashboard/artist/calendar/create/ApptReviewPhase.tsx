@@ -31,9 +31,10 @@ import {
 import { addMinutes, format } from "date-fns";
 import { useAuth } from "@/lib/auth";
 import { combineDateTime } from "@/lib/inquiryScheduling";
-import { formatDurationMinutes, formatInitials } from "@/lib/formatters";
+import { formatDurationMinutes } from "@/lib/formatters";
 import { describeFormPiece } from "@/lib/calendar";
 import { CONSULTATION_FORMAT_LABELS } from "@/constants/bookings";
+import { getInitials } from "@/lib/avatar";
 
 // Types
 import type { ConsultationFormat } from "@/types/bookings";
@@ -121,7 +122,7 @@ export const ApptReviewPhase = ({ form, locations }: ApptReviewPhaseProps) => {
                 {user?.avatarUrl && (
                   <AvatarImage src={user.avatarUrl} alt={organizer} />
                 )}
-                <AvatarFallback>{formatInitials(organizer)}</AvatarFallback>
+                <AvatarFallback>{getInitials(organizer)}</AvatarFallback>
               </Avatar>
             }
           >

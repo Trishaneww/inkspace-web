@@ -325,18 +325,3 @@ export function formatLocationWithTimeRange(location: DatedLocation): string {
     ? `${place} · ${formatDateRange(location.startDate, location.endDate ?? null)}`
     : place;
 }
-
-/**
- * Formats a name as two initials, e.g. "John Doe" -> "JD".
- * @param name - The name to format.
- * @returns The formatted initials string.
- */
-export function formatInitials(name: string): string {
-  return name
-    .split(" ")
-    .map((part) => part[0])
-    .filter(Boolean)
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}

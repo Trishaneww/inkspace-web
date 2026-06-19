@@ -289,7 +289,8 @@ export type BadgeVariant =
   | "warning"
   | "failure"
   | "neutral"
-  | "inactive";
+  | "inactive"
+  | "indigo";
 
 export interface BadgeMeta {
   label: string;

@@ -22,6 +22,7 @@ import { PanelRightOpen, Zap } from "lucide-react";
 
 // Components
 import { StatusBadge } from "./StatusBadge";
+import { InitialsAvatar } from "@/components/common/InitialsAvatar";
 
 // Libs
 import { DEPOSIT_META, TYPE_LABELS, WAIVER_META } from "@/constants/bookings";
@@ -104,18 +105,26 @@ export const BookingsTable = ({
                   onClick={() => onSelect(inquiry)}
                 >
                   <TableCell>
-                    <div className={styles.clientName}>
-                      {inquiry.clientName}
+                    <div className={styles.clientCell}>
+                      <InitialsAvatar
+                        name={inquiry.clientName}
+                        seed={inquiry.clientEmail}
+                      />
+                      <div className={styles.clientText}>
+                        <div className={styles.clientName}>
+                          {inquiry.clientName}
+                        </div>
+                        <Link
+                          href={`mailto:${inquiry.clientEmail}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.clientEmail}
+                          onClick={(event) => event.stopPropagation()}
+                        >
+                          {inquiry.clientEmail}
+                        </Link>
+                      </div>
                     </div>
-                    <Link
-                      href={`mailto:${inquiry.clientEmail}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.clientEmail}
-                      onClick={(event) => event.stopPropagation()}
-                    >
-                      {inquiry.clientEmail}
-                    </Link>
                   </TableCell>
                   <TableCell>
                     <div className={styles.requestType}>
