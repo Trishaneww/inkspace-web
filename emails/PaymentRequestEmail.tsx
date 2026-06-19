@@ -64,7 +64,7 @@ export const PaymentRequestEmail = ({
       <Section style={styles.summary}>
         <Row style={styles.summaryRow}>
           <Column style={styles.summaryLabel}>{summaryLabel}</Column>
-          <Column style={styles.summaryAmount}>{amount}</Column>
+          <Column style={styles.summaryValue}>{amount}</Column>
         </Row>
       </Section>
 
