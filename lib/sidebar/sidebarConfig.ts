@@ -6,10 +6,10 @@ import {
   Home,
   Image as ImageIcon,
   Inbox,
-  Receipt,
   Settings,
   Star,
   Users,
+  Wallet,
   Zap,
 } from "lucide-react";
 
@@ -51,9 +51,9 @@ export const artistMainNav: NavLeaf[] = [
     icon: BookOpenCheck,
   },
   {
-    href: "/dashboard/artist/invoices",
-    label: "Invoices",
-    icon: Receipt,
+    href: "/dashboard/artist/earnings",
+    label: "Earnings",
+    icon: Wallet,
   },
   {
     href: "/dashboard/artist/clients",

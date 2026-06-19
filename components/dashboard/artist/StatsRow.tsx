@@ -7,7 +7,7 @@ import type { LucideIcon } from "lucide-react";
 export interface StatCard {
   key: string;
   label: string;
-  value: number;
+  value: number | string;
   icon: LucideIcon;
 }
 
@@ -29,7 +29,9 @@ export const StatsRow = ({ cards }: StatsRowProps) => {
               <span className={styles.statLabel}>{card.label}</span>
             </div>
             <span className={styles.statValue}>
-              {card.value.toLocaleString()}
+              {typeof card.value === "number"
+                ? card.value.toLocaleString()
+                : card.value}
             </span>
           </div>
         );
