@@ -6,6 +6,7 @@ export enum OnboardingPhase {
   Availability,
   Styles,
   Bookings,
+  Goals,
   Calendar,
   Complete,
 }
@@ -33,6 +34,7 @@ export interface OnboardingPayload {
 
   depositFlatFeeCents?: number | null;
   schedulingMode: SchedulingMode;
+  monthlyBookingGoal?: number;
 }
 
 export interface OnboardingResponse {
@@ -60,6 +62,7 @@ export type OnboardingFormState = {
   styles: string[];
   deposit: string;
   schedulingMode: SchedulingMode | "";
+  monthlyBookingGoal: string;
 };
 
 export type UsernameStatus =

@@ -18,6 +18,7 @@ import {
 } from "@/lib/onboarding";
 import {
   DEFAULT_END_MINUTE,
+  DEFAULT_MONTHLY_BOOKING_GOAL,
   DEFAULT_START_MINUTE,
   DEFAULT_WORK_DAYS,
   ONBOARDING_INPUT_PHASES,
@@ -45,6 +46,7 @@ const initialForm = (): OnboardingFormState => ({
   styles: [],
   deposit: "",
   schedulingMode: "",
+  monthlyBookingGoal: String(DEFAULT_MONTHLY_BOOKING_GOAL),
 });
 
 export const useOnboardingForm = () => {
@@ -121,6 +123,8 @@ export const useOnboardingForm = () => {
         return true;
       case OnboardingPhase.Bookings:
         return form.schedulingMode !== "";
+      case OnboardingPhase.Goals:
+        return true;
       case OnboardingPhase.Calendar:
         return true;
       default:

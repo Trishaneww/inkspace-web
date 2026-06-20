@@ -43,5 +43,11 @@ export function buildOnboardingPayload(
       ? Math.round(parseFloat(form.deposit) * 100)
       : null,
     schedulingMode: form.schedulingMode as SchedulingMode,
+    monthlyBookingGoal: parseGoal(form.monthlyBookingGoal),
   };
+}
+
+function parseGoal(value: string): number | undefined {
+  const goal = Math.round(Number(value));
+  return Number.isFinite(goal) && goal > 0 ? goal : undefined;
 }

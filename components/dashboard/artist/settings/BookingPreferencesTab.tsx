@@ -5,6 +5,7 @@ import styles from "@/styles/dashboard/artist/settings/Settings.module.css";
 
 // HTML Components
 import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
 import GoogleCalendarLogo from "@/public/logos/google-calendar-logo.svg";
 
 // Components
@@ -101,6 +102,35 @@ export const BookingPreferencesTab = ({
             value={form.availability.draft.timezone}
             options={TIMEZONE_OPTIONS}
             onValueChange={(timezone) => form.availability.update({ timezone })}
+          />
+        </CardRow>
+      </EditableCard>
+
+      <EditableCard
+        title="Monthly goal"
+        description="The number of bookings you're aiming for each month. Your dashboard tracks your progress toward it."
+        onSubmit={form.submitGoal}
+        successToast="Monthly goal updated"
+        errorToast="Couldn't save your goal"
+        onCancel={form.goal.reset}
+        disableSubmit={!form.goalChanged}
+      >
+        <CardRow
+          label="Bookings per month"
+          description="Aim high, but keep it realistic."
+          value={`${settings.monthlyBookingGoal} bookings`}
+        >
+          <Input
+            type="number"
+            min={1}
+            aria-label="Monthly booking goal"
+            className={styles.controlFull}
+            value={form.goal.draft.monthlyBookingGoal}
+            onChange={(event) =>
+              form.goal.update({
+                monthlyBookingGoal: Number(event.target.value),
+              })
+            }
           />
         </CardRow>
       </EditableCard>
