@@ -50,9 +50,9 @@ export const artistMainNav: NavLeaf[] = [
     icon: BookOpenCheck,
   },
   {
-    href: "/dashboard/artist/earnings",
-    label: "Earnings",
-    icon: Wallet,
+    href: "/dashboard/artist/calendar",
+    label: "Calendar",
+    icon: Calendar,
   },
   {
     href: "/dashboard/artist/clients",
@@ -60,14 +60,22 @@ export const artistMainNav: NavLeaf[] = [
     icon: Users,
   },
   {
-    href: "/dashboard/artist/calendar",
-    label: "Calendar",
-    icon: Calendar,
-  },
-  {
     href: "/dashboard/artist/messages",
     label: "Messages",
     icon: Inbox,
+  },
+];
+
+export const artistBusinessNav: NavLeaf[] = [
+  {
+    href: "/dashboard/artist/earnings",
+    label: "Earnings",
+    icon: Wallet,
+  },
+  {
+    href: "/dashboard/artist/reviews",
+    label: "Reviews",
+    icon: Star,
   },
 ];
 
@@ -77,7 +85,6 @@ export const artistWorkNav: NavLeaf[] = [
 ];
 
 export const artistOtherNav: NavLeaf[] = [
-  { href: "/dashboard/artist/reviews", label: "Reviews", icon: Star },
   { href: "/dashboard/artist/settings", label: "Settings", icon: Settings },
 ];
 
