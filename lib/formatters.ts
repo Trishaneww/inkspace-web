@@ -121,6 +121,21 @@ export function formatDateTime(iso: string): string {
 }
 
 /**
+ * Formats an appointment's time span from its start timestamp and duration,
+ * e.g. ("2026-06-23T15:30:00Z", 120) -> "11:30 AM – 1:30 PM" (in local time).
+ * @param iso - The ISO 8601 start timestamp.
+ * @param durationMinutes - The appointment length in minutes.
+ * @returns The formatted start–end time range.
+ */
+export function formatTimeRange(iso: string, durationMinutes: number): string {
+  const parsed = parseISO(iso);
+  const start = isValid(parsed) ? parsed : new Date(iso);
+  if (!isValid(start)) return iso;
+  const end = new Date(start.getTime() + durationMinutes * 60_000);
+  return `${format(start, "h:mm a")} – ${format(end, "h:mm a")}`;
+}
+
+/**
  * Formats an ISO 8601 date or timestamp with the given date-fns pattern,
  * falling back to the raw input when it cannot be parsed.
  * @param iso - The ISO 8601 date or timestamp to format.

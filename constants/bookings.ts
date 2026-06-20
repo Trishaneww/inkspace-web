@@ -61,6 +61,16 @@ export const APPOINTMENT_TYPE_LABELS: Record<AppointmentType, string> = {
   session: "Session",
 };
 
+export const APPOINTMENT_TYPE_META: Record<AppointmentType, BadgeMeta> = {
+  session: { label: "Session", variant: "indigo" },
+  consultation: { label: "Consultation", variant: "neutral" },
+};
+
+export const REQUEST_TYPE_META: Record<RequestType, BadgeMeta> = {
+  custom: { label: "Custom", variant: "success" },
+  flash: { label: "Flash", variant: "warning" },
+};
+
 export const PAYMENT_TYPE_LABELS: Record<PaymentType, string> = {
   deposit: "Deposit",
   final: "Session payment",

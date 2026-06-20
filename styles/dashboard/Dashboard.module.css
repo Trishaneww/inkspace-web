@@ -18,10 +18,32 @@
   width: 100%;
 }
 
+.greetingBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
 .dashboardTitle {
-  font-size: 1.3rem;
-  font-weight: 500;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
   color: hsl(220, 13%, 18%);
+}
+
+.greetingSub {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.errorBanner {
+  padding: 0.9rem 1rem;
+
+  font-size: 0.9rem;
+  color: hsl(0, 75%, 35%);
+
+  background-color: hsl(0, 80%, 96%);
+  border-radius: 0.5rem;
 }
 
 .dashboardHeaderButtons {
@@ -31,13 +53,18 @@
   column-gap: 0.4rem;
 }
 
-.secondaryBtn,
-.primaryBtn {
+.rangeSelect[data-slot="select-trigger"] {
+  height: 2rem;
+
   font-size: 0.9rem;
   color: hsl(220, 13%, 18%);
+
+  background-color: white;
 }
 
 .primaryBtn {
+  font-size: 0.9rem;
+
   background-color: var(--color-primary);
   color: white;
 
