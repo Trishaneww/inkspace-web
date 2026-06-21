@@ -1,5 +1,6 @@
 // HTML Components
 import {
+  Repeat,
   BookOpenCheck,
   Calendar,
   Home,
@@ -8,7 +9,6 @@ import {
   Settings,
   Star,
   Users,
-  Wallet,
   Zap,
 } from "lucide-react";
 
@@ -68,9 +68,9 @@ export const artistMainNav: NavLeaf[] = [
 
 export const artistBusinessNav: NavLeaf[] = [
   {
-    href: "/dashboard/artist/earnings",
-    label: "Earnings",
-    icon: Wallet,
+    href: "/dashboard/artist/transactions",
+    label: "Transactions",
+    icon: Repeat,
   },
   {
     href: "/dashboard/artist/reviews",

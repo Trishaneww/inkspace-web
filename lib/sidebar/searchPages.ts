@@ -1,8 +1,8 @@
 // HTML Components
 import {
+  Repeat,
   BookOpenCheck,
   Calendar,
-  CreditCard,
   Home,
   Image as ImageIcon,
   Inbox,
@@ -41,11 +41,11 @@ export const ARTIST_SEARCH_PAGES: SearchPage[] = [
     keywords: ["availability", "requests"],
   },
   {
-    label: "Earnings",
-    href: "/dashboard/artist/earnings",
-    breadcrumb: ["Bookings"],
-    icon: CreditCard,
-    keywords: ["deposits", "invoices", "earnings"],
+    label: "Transactions",
+    href: "/dashboard/artist/transactions",
+    breadcrumb: [],
+    icon: Repeat,
+    keywords: ["earnings", "deposits", "invoices", "payouts", "income"],
   },
   {
     label: "Calendar",

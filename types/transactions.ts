@@ -62,7 +62,6 @@ export interface Payout {
   amountCents: number;
   status: PayoutStatus;
   bankLast4: string;
-  paymentCount: number;
   initiatedAt: string;
   arrivalAt: string;
 }
