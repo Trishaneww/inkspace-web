@@ -13,7 +13,7 @@ import { PAYMENT_TYPE_LABELS, TYPE_LABELS } from "@/constants/bookings";
 import { formatPrice } from "@/lib/formatters";
 
 // Types
-import type { RecentPayment } from "@/types/earnings";
+import type { RecentPayment } from "@/types/transactions";
 
 interface InvoiceDocumentProps {
   issuerName: string;

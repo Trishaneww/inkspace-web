@@ -4,7 +4,7 @@
 import { useState } from "react";
 
 // CSS
-import styles from "@/styles/dashboard/artist/Earnings.module.css";
+import styles from "@/styles/dashboard/artist/Transactions.module.css";
 
 // HTML Components
 import {
@@ -27,19 +27,19 @@ import { PAYMENT_TYPE_LABELS } from "@/constants/bookings";
 import { formatDate, formatPrice } from "@/lib/formatters";
 
 // Types
-import type { RecentPayment } from "@/types/earnings";
+import type { RecentPayment } from "@/types/transactions";
 
-interface EarningsTableProps {
+interface IncomeTableProps {
   payments: RecentPayment[];
   onDownloadInvoice: (payment: RecentPayment) => Promise<void>;
 }
 
 const DEFAULT_PAGE_SIZE = 10;
 
-export const EarningsTable = ({
+export const IncomeTable = ({
   payments,
   onDownloadInvoice,
-}: EarningsTableProps) => {
+}: IncomeTableProps) => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [busyId, setBusyId] = useState<string | null>(null);

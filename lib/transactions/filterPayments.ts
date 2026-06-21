@@ -1,6 +1,6 @@
 // Types
 import type { RecencyFilter } from "@/types/bookings";
-import type { PaymentFilters, RecentPayment } from "@/types/earnings";
+import type { PaymentFilters, RecentPayment } from "@/types/transactions";
 
 const RECENCY_WINDOW_DAYS: Record<Exclude<RecencyFilter, "all">, number> = {
   "24h": 1,

@@ -2,7 +2,7 @@
 import { format } from "date-fns";
 
 // Types
-import type { RecentPayment } from "@/types/earnings";
+import type { RecentPayment } from "@/types/transactions";
 
 const INKSPACE_LOGO_PATH = "/logos/inkspace-logo.png";
 
@@ -18,7 +18,7 @@ export async function openInvoicePdf(
 
   const [{ pdf }, { InvoiceDocument }] = await Promise.all([
     import("@react-pdf/renderer"),
-    import("@/components/dashboard/artist/earnings/InvoiceDocument"),
+    import("@/components/dashboard/artist/transactions/InvoiceDocument"),
   ]);
 
   const document = InvoiceDocument({

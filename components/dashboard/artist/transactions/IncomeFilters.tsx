@@ -5,25 +5,25 @@ import { FiltersRow } from "@/components/dashboard/artist/FiltersRow";
 
 // Libs
 import { RECENCY_FILTER_OPTIONS } from "@/constants/bookings";
-import { PAYMENT_TYPE_FILTER_OPTIONS } from "@/constants/earnings";
-import { hasActivePaymentFilters } from "@/lib/earnings/filterPayments";
+import { PAYMENT_TYPE_FILTER_OPTIONS } from "@/constants/transactions";
+import { hasActivePaymentFilters } from "@/lib/transactions/filterPayments";
 
 // Types
 import type { RecencyFilter } from "@/types/bookings";
-import type { PaymentFilters, PaymentTypeFilter } from "@/types/earnings";
+import type { PaymentFilters, PaymentTypeFilter } from "@/types/transactions";
 import type { FilterSelectConfig } from "@/types/filters";
 
-interface EarningsFiltersProps {
+interface IncomeFiltersProps {
   filters: PaymentFilters;
   onFilterChange: (patch: Partial<PaymentFilters>) => void;
   onReset: () => void;
 }
 
-export const EarningsFilters = ({
+export const IncomeFilters = ({
   filters,
   onFilterChange,
   onReset,
-}: EarningsFiltersProps) => {
+}: IncomeFiltersProps) => {
   const selects: FilterSelectConfig[] = [
     {
       placeholder: "Type",

@@ -11,14 +11,14 @@ import {
 import { formatPrice } from "@/lib/formatters";
 
 // Types
-import type { Earnings } from "@/types/earnings";
+import type { Transactions } from "@/types/transactions";
 
-interface EarningsStatsProps {
-  earnings: Earnings;
+interface TransactionsStatsProps {
+  transactions: Transactions;
 }
 
-export const EarningsStats = ({ earnings }: EarningsStatsProps) => {
-  const { allTime, thisMonth, currency } = earnings;
+export const TransactionsStats = ({ transactions }: TransactionsStatsProps) => {
+  const { allTime, thisMonth, currency } = transactions;
 
   const cards: StatCard[] = [
     {
