@@ -35,7 +35,11 @@ export default async function ArtistProfilePage({
   }
 
   return (
-    <OpenBookFrame theme={profile.theme}>
+    <OpenBookFrame
+      theme={profile.theme}
+      customTheme={profile.customTheme}
+      backgroundImageUrl={profile.backgroundImageUrl}
+    >
       <OpenBookHub profile={profile} />
     </OpenBookFrame>
   );

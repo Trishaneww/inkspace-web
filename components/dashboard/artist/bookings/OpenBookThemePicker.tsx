@@ -48,6 +48,37 @@ export const OpenBookThemePicker = ({
           <span className={styles.themeLabel}>{theme.label}</span>
         </button>
       ))}
+
+      <button
+        type="button"
+        className={clsx(styles.themeOption, {
+          [styles.themeOptionActive]: value === "custom",
+        })}
+        onClick={() => onChange("custom")}
+        aria-pressed={value === "custom"}
+      >
+        <span
+          className={styles.themeSwatch}
+          style={{
+            background:
+              "linear-gradient(135deg, hsl(280, 90%, 88%), hsl(230, 90%, 85%), hsl(25, 95%, 80%))",
+          }}
+        >
+          <span
+            className={styles.themeCard}
+            style={{ backgroundColor: "hsl(0, 0%, 100%)" }}
+          >
+            <span
+              className={styles.themeAccent}
+              style={{
+                background:
+                  "linear-gradient(135deg, hsl(258, 90%, 66%), hsl(330, 85%, 60%))",
+              }}
+            />
+          </span>
+        </span>
+        <span className={styles.themeLabel}>Custom</span>
+      </button>
     </div>
   );
 };

@@ -198,13 +198,23 @@ export type OpenBookTheme =
   | "sand"
   | "sage"
   | "midnight"
-  | "navy";
+  | "navy"
+  | "custom";
+
+export interface CustomTheme {
+  background: string;
+  card: string;
+  button: string;
+  text: string;
+}
 
 export interface OpenBook {
   slug: string;
   schedulingMode: SchedulingMode;
   customQuestions: string[];
   theme: OpenBookTheme;
+  customTheme?: CustomTheme;
+  backgroundImageUrl?: string;
 }
 
 export interface UpdateOpenBookPayload {
@@ -212,6 +222,9 @@ export interface UpdateOpenBookPayload {
   schedulingMode?: SchedulingMode;
   customQuestions?: string[];
   theme?: OpenBookTheme;
+  customTheme?: CustomTheme;
+  backgroundImageKey?: string;
+  clearBackgroundImage?: boolean;
 }
 
 export interface OpenBookFaq {
@@ -231,6 +244,8 @@ export interface OpenBookProfile {
   hasFlashes: boolean;
   hasPortfolio: boolean;
   theme: OpenBookTheme;
+  customTheme?: CustomTheme;
+  backgroundImageUrl?: string;
   displayName: string;
   avatarUrl: string;
   location: string;

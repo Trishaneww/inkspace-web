@@ -1,5 +1,5 @@
 // Types
-import type { OpenBookTheme } from "@/types/bookings";
+import type { CustomTheme, OpenBookTheme } from "@/types/bookings";
 
 export interface OpenBookThemeOption {
   slug: OpenBookTheme;
@@ -8,6 +8,13 @@ export interface OpenBookThemeOption {
   surface: string;
   accent: string;
 }
+
+export const DEFAULT_CUSTOM_THEME: CustomTheme = {
+  background: "#ffffff",
+  card: "#ffffff",
+  button: "#7c5cff",
+  text: "#1c1b22",
+};
 
 export const OPEN_BOOK_THEMES: OpenBookThemeOption[] = [
   {
