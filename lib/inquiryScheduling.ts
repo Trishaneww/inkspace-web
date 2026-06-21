@@ -1,6 +1,7 @@
 // Libs
 import { format } from "date-fns";
 import { formatDurationMinutes, formatTime } from "@/lib/formatters";
+import { MIN_CHARGE_CENTS } from "@/constants/payments";
 import type {
   AcceptInquiryPayload,
   Appointment,
@@ -96,7 +97,10 @@ export function groupTimeOptions(
   return groups;
 }
 
-export function createSchedulingForm(inquiry: Inquiry): InquirySchedulingForm {
+export function createSchedulingForm(
+  inquiry: Inquiry,
+  defaultDepositCents: number | null = null,
+): InquirySchedulingForm {
   return {
     date: null,
     startMinute: null,
@@ -106,7 +110,18 @@ export function createSchedulingForm(inquiry: Inquiry): InquirySchedulingForm {
     consultationDurationMinutes: 30,
     consultationFormat: "in_person",
     clientScheduled: !isArtistScheduled(inquiry),
+    depositAmount:
+      defaultDepositCents && defaultDepositCents > 0
+        ? (defaultDepositCents / 100).toString()
+        : "",
   };
+}
+
+export function parseDepositCents(depositAmount: string): number {
+  const trimmed = depositAmount.trim();
+  if (trimmed === "") return 0;
+  const dollars = Number(trimmed);
+  return Number.isFinite(dollars) ? Math.round(dollars * 100) : NaN;
 }
 
 /**
@@ -153,6 +168,13 @@ export function canSubmitSchedule(
   form: InquirySchedulingForm,
   isReschedule = false,
 ): boolean {
+  if (
+    type === "session" &&
+    !isReschedule &&
+    !isValidDeposit(form.depositAmount)
+  ) {
+    return false;
+  }
   if (clientPicksTime(type, form, isReschedule)) {
     return form.durationMinutes > 0;
   }
@@ -161,13 +183,21 @@ export function canSubmitSchedule(
   return form.endMinute !== null && form.endMinute > form.startMinute;
 }
 
+export function isValidDeposit(depositAmount: string): boolean {
+  if (depositAmount.trim() === "") return true;
+  const cents = parseDepositCents(depositAmount);
+  return Number.isFinite(cents) && cents >= MIN_CHARGE_CENTS;
+}
+
 export function buildAcceptPayload(
   form: InquirySchedulingForm,
 ): AcceptInquiryPayload {
+  const depositAmountCents = parseDepositCents(form.depositAmount);
   if (form.clientScheduled) {
     return {
       sessionDurationMinutes: form.durationMinutes,
       clientScheduled: true,
+      depositAmountCents,
     };
   }
   const start = form.startMinute ?? 0;
@@ -176,6 +206,7 @@ export function buildAcceptPayload(
     sessionDurationMinutes: end - start,
     scheduledStart: form.date ? combineDateTime(form.date, start) : undefined,
     clientScheduled: false,
+    depositAmountCents,
   };
 }
 

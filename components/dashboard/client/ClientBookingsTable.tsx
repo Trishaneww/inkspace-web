@@ -4,6 +4,9 @@
 import Link from "next/link";
 import { useState } from "react";
 
+// Hooks
+import { useSlideTransition } from "@/hooks/useSlideTransition";
+
 // CSS
 import styles from "@/styles/dashboard/client/ClientBookingsTable.module.css";
 
@@ -18,12 +21,14 @@ import {
 } from "@/components/ui/table";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { CalendarClock } from "lucide-react";
 
 // Components
 import { StatusBadge } from "@/components/dashboard/artist/bookings/StatusBadge";
 import { DashboardEmptyState } from "@/components/dashboard/DashboardEmptyState";
-import { ClientScheduleSheet } from "@/components/dashboard/client/ClientScheduleSheet";
+import { ScheduleForm } from "@/components/dashboard/client/ClientScheduleSheet";
+import { PayForm } from "@/components/dashboard/client/ClientPaySheet";
 
 // Libs
 import { DEPOSIT_META, PAYMENT_STATUS_META } from "@/constants/bookings";
@@ -33,7 +38,8 @@ import {
   findPayablePayment,
   isAwaitingSchedule,
 } from "@/lib/clientInquiries";
-import { formatPrice, formatRelativeDate } from "@/lib/formatters";
+import { formatRelativeDate } from "@/lib/formatters";
+import { displayToast } from "@/lib/toast";
 
 // Types
 import type { ClientInquiry } from "@/types/bookings";
@@ -51,12 +57,29 @@ export const ClientBookingsTable = ({
 }: ClientBookingsTableProps) => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
-  const [scheduling, setScheduling] = useState<ClientInquiry | null>(null);
+  const [flow, setFlow] = useState<{
+    mode: "schedule" | "pay";
+    inquiry: ClientInquiry;
+  } | null>(null);
   const [prevList, setPrevList] = useState(inquiries);
   if (inquiries !== prevList) {
     setPrevList(inquiries);
     setPage(1);
   }
+
+  const slideRef = useSlideTransition<HTMLDivElement>(
+    flow?.mode === "pay" ? 1 : 0,
+  );
+
+  const handleScheduled = (updated: ClientInquiry) => {
+    onScheduled();
+    if (findPayablePayment(updated)) {
+      setFlow({ mode: "pay", inquiry: updated });
+    } else {
+      setFlow(null);
+      displayToast("Your time is booked", "success");
+    }
+  };
 
   if (inquiries.length === 0) {
     return (
@@ -86,6 +109,7 @@ export const ClientBookingsTable = ({
               <TableHead>Requested</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Payment</TableHead>
+              <TableHead aria-label="Actions" />
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -94,7 +118,7 @@ export const ClientBookingsTable = ({
               const status = awaiting
                 ? { label: "Action needed", variant: "warning" as const }
                 : getInquiryStatusMeta(inquiry);
-                
+
               return (
                 <TableRow key={inquiry.id}>
                   <TableCell>
@@ -124,10 +148,14 @@ export const ClientBookingsTable = ({
                     />
                   </TableCell>
                   <TableCell>
-                    <PaymentCell
+                    <PaymentBadge inquiry={inquiry} />
+                  </TableCell>
+                  <TableCell className={styles.actionsCell}>
+                    <ActionCell
                       inquiry={inquiry}
                       awaiting={awaiting}
-                      onPickTime={() => setScheduling(inquiry)}
+                      onPickTime={() => setFlow({ mode: "schedule", inquiry })}
+                      onPay={() => setFlow({ mode: "pay", inquiry })}
                     />
                   </TableCell>
                 </TableRow>
@@ -149,51 +177,83 @@ export const ClientBookingsTable = ({
         }}
       />
 
-      <ClientScheduleSheet
-        inquiry={scheduling}
-        onClose={() => setScheduling(null)}
-        onScheduled={onScheduled}
-      />
+      <Sheet
+        open={!!flow}
+        onOpenChange={(open) => {
+          if (!open) setFlow(null);
+        }}
+      >
+        <SheetContent side="right" className={styles.flowSheet} showCloseButton>
+          <div ref={slideRef} className={styles.flowBody}>
+            {flow?.mode === "schedule" && (
+              <ScheduleForm
+                key={flow.inquiry.id}
+                inquiry={flow.inquiry}
+                onClose={() => setFlow(null)}
+                onScheduled={handleScheduled}
+              />
+            )}
+            {flow?.mode === "pay" && (
+              <PayForm
+                key={flow.inquiry.id}
+                inquiry={flow.inquiry}
+                onClose={() => setFlow(null)}
+                onChangeTime={(inquiry) =>
+                  setFlow({ mode: "schedule", inquiry })
+                }
+              />
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
     </>
   );
 };
 
-const PaymentCell = ({
+// The Payment column always shows a status badge — the latest payment's state,
+// or the booking's deposit status when no payment exists yet. "processing" (a
+// checkout that was opened but not completed) reads as "Requested" to the client,
+// since nothing has actually been charged until the payment clears.
+const PaymentBadge = ({ inquiry }: { inquiry: ClientInquiry }) => {
+  const latestPayment = findLatestPayment(inquiry);
+  if (!latestPayment) {
+    const deposit = DEPOSIT_META[inquiry.depositStatus];
+    return <StatusBadge label={deposit.label} variant={deposit.variant} />;
+  }
+  const status =
+    latestPayment.status === "processing" ? "requested" : latestPayment.status;
+  const meta = PAYMENT_STATUS_META[status];
+  return <StatusBadge label={meta.label} variant={meta.variant} />;
+};
+
+// The Actions column holds the row's one actionable button — schedule or pay —
+// and falls back to a muted dash when nothing is needed.
+const ActionCell = ({
   inquiry,
   awaiting,
   onPickTime,
+  onPay,
 }: {
   inquiry: ClientInquiry;
   awaiting: boolean;
   onPickTime: () => void;
+  onPay: () => void;
 }) => {
-  if (awaiting) {
-    return (
-      <Button size="sm" className={styles.pickTimeBtn} onClick={onPickTime}>
-        Pick a time
-      </Button>
-    );
-  }
-
+  // A payable deposit/balance opens the review/pay step (which offers "Change
+  // time" for client-scheduled bookings); otherwise an unpicked slot opens the
+  // time picker.
   const payable = findPayablePayment(inquiry);
-  if (payable) {
+  if (payable || awaiting) {
     return (
       <Button
         size="sm"
-        nativeButton={false}
-        render={<Link href={`/pay/${payable.publicToken}`} />}
+        className={styles.payBtn}
+        onClick={payable ? onPay : onPickTime}
       >
-        Pay {formatPrice(payable.clientChargeCents, payable.currency)}
+        Complete booking
       </Button>
     );
   }
 
-  const latestPayment = findLatestPayment(inquiry);
-  if (latestPayment) {
-    const meta = PAYMENT_STATUS_META[latestPayment.status];
-    return <StatusBadge label={meta.label} variant={meta.variant} />;
-  }
-
-  const deposit = DEPOSIT_META[inquiry.depositStatus];
-  return <StatusBadge label={deposit.label} variant={deposit.variant} />;
+  return <span className={styles.noAction}>—</span>;
 };

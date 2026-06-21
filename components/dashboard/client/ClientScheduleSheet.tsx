@@ -8,7 +8,7 @@ import clsx from "clsx";
 import styles from "@/styles/dashboard/client/ClientScheduleSheet.module.css";
 
 // HTML Components
-import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
+import { SheetTitle } from "@/components/ui/sheet";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
@@ -17,51 +17,22 @@ import { Loader2 } from "lucide-react";
 import { clientInquiriesApi } from "@/lib/api/clientInquiries";
 import { getApiErrorMessage } from "@/hooks/useAuthForm";
 import { useAuth } from "@/lib/auth";
-import { displayToast } from "@/lib/toast";
 import { formatDurationMinutes, formatDateParam } from "@/lib/formatters";
 
 // Types
 import type { ClientInquiry, SlotOption } from "@/types/bookings";
 
-interface ClientScheduleSheetProps {
-  inquiry: ClientInquiry | null;
-  onClose: () => void;
-  onScheduled: () => void;
-}
-
-export const ClientScheduleSheet = ({
-  inquiry,
-  onClose,
-  onScheduled,
-}: ClientScheduleSheetProps) => {
-  return (
-    <Sheet
-      open={!!inquiry}
-      onOpenChange={(open) => {
-        if (!open) onClose();
-      }}
-    >
-      <SheetContent side="right" className={styles.sheet} showCloseButton>
-        {inquiry && (
-          <ScheduleForm
-            key={inquiry.id}
-            inquiry={inquiry}
-            onClose={onClose}
-            onScheduled={onScheduled}
-          />
-        )}
-      </SheetContent>
-    </Sheet>
-  );
-};
-
 interface ScheduleFormProps {
   inquiry: ClientInquiry;
   onClose: () => void;
-  onScheduled: () => void;
+  onScheduled: (updated: ClientInquiry) => void;
 }
 
-const ScheduleForm = ({ inquiry, onClose, onScheduled }: ScheduleFormProps) => {
+export const ScheduleForm = ({
+  inquiry,
+  onClose,
+  onScheduled,
+}: ScheduleFormProps) => {
   const { token } = useAuth();
 
   const [date, setDate] = useState<Date | null>(null);
@@ -102,15 +73,18 @@ const ScheduleForm = ({ inquiry, onClose, onScheduled }: ScheduleFormProps) => {
     setSubmitting(true);
     setError(null);
     try {
-      await clientInquiriesApi.schedule(token, inquiry.id, selected);
-      displayToast("Your time is booked", "success");
-      onScheduled();
-      onClose();
+      const updated = await clientInquiriesApi.schedule(
+        token,
+        inquiry.id,
+        selected,
+      );
+
+      onScheduled({ ...inquiry, ...updated });
     } catch (err) {
       setError(
         getApiErrorMessage(
           err,
-          "Couldn't book that time — it may have just been taken.",
+          "Couldn't book that time. It may have just been taken.",
         ),
       );
       setSubmitting(false);
@@ -119,6 +93,7 @@ const ScheduleForm = ({ inquiry, onClose, onScheduled }: ScheduleFormProps) => {
 
   const duration = inquiry.appointment?.durationMinutes ?? 0;
   const artist = inquiry.artistName || "your artist";
+  const requiresDeposit = (inquiry.depositAmountCents ?? 0) > 0;
 
   return (
     <div className={styles.form}>
@@ -190,7 +165,7 @@ const ScheduleForm = ({ inquiry, onClose, onScheduled }: ScheduleFormProps) => {
           disabled={!selected || submitting}
         >
           {submitting && <Loader2 size={16} className="animate-spin" />}
-          Confirm time
+          {requiresDeposit ? "Continue" : "Confirm time"}
         </Button>
       </div>
     </div>

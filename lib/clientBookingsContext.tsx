@@ -37,27 +37,32 @@ export function ClientBookingsProvider({
   const [error, setError] = useState<string | null>(null);
   const lastFetchKey = useRef<string | null>(null);
 
-  const refresh = useCallback(async () => {
-    if (!token) return;
-    setIsLoading(true);
-    setError(null);
-    try {
-      const data = await clientInquiriesApi.list(token);
-      setInquiries(data.inquiries);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to load your bookings",
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }, [token]);
+  const load = useCallback(
+    async (silent = false) => {
+      if (!token) return;
+      if (!silent) setIsLoading(true);
+      setError(null);
+      try {
+        const data = await clientInquiriesApi.list(token);
+        setInquiries(data.inquiries);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to load your bookings",
+        );
+      } finally {
+        if (!silent) setIsLoading(false);
+      }
+    },
+    [token],
+  );
+
+  const refresh = useCallback(() => load(true), [load]);
 
   useEffect(() => {
     if (lastFetchKey.current === token) return;
     lastFetchKey.current = token;
-    queueMicrotask(refresh);
-  }, [refresh, token]);
+    queueMicrotask(() => load(false));
+  }, [load, token]);
 
   return (
     <ClientBookingsContext.Provider
