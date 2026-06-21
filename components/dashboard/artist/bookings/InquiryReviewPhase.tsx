@@ -6,6 +6,7 @@ import styles from "@/styles/dashboard/artist/Bookings.module.css";
 // HTML Components
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
+  Banknote,
   CalendarClock,
   CalendarDays,
   Clock,
@@ -22,6 +23,7 @@ import {
 import {
   ReviewCard,
   ReviewChips,
+  ReviewLineItem,
   ReviewRow,
   ReviewSection,
   ReviewText,
@@ -29,11 +31,16 @@ import {
 } from "@/components/dashboard/artist/bookings/ReviewPrimitives";
 
 // Libs
-import { buildScheduleReview } from "@/lib/inquiryScheduling";
+import { buildScheduleReview, parseDepositCents } from "@/lib/inquiryScheduling";
 import { useAuth } from "@/lib/auth";
-import { formatLocation } from "@/lib/formatters";
+import { formatLocation, formatPrice } from "@/lib/formatters";
 import { describePiece } from "@/lib/bookings";
+import { getPaymentBreakdown } from "@/lib/payments";
 import { CONSULTATION_FORMAT_LABELS } from "@/constants/bookings";
+import {
+  FEE_PAYER_NOTE,
+  PLATFORM_FEE_PERCENT_LABEL,
+} from "@/constants/payments";
 import { TATTOO_STYLE_LABELS } from "@/constants/tattooStyles";
 import { getInitials } from "@/lib/avatar";
 
@@ -44,6 +51,7 @@ import type {
   Inquiry,
   InquirySchedulingForm,
 } from "@/types/bookings";
+import type { PlatformFeePayer } from "@/types/settings";
 
 const FORMAT_ICON: Record<ConsultationFormat, LucideIcon> = {
   in_person: Users,
@@ -55,6 +63,8 @@ interface InquiryReviewPhaseProps {
   inquiry: Inquiry;
   type: AppointmentType;
   form: InquirySchedulingForm;
+  currency: string;
+  feePayer: PlatformFeePayer;
   isReschedule: boolean;
 }
 
@@ -62,10 +72,17 @@ export const InquiryReviewPhase = ({
   inquiry,
   type,
   form,
+  currency,
+  feePayer,
   isReschedule,
 }: InquiryReviewPhaseProps) => {
   const { user } = useAuth();
   const review = buildScheduleReview(inquiry, type, form, isReschedule);
+  const showDeposit = type === "session" && !isReschedule;
+  const depositCents = showDeposit ? parseDepositCents(form.depositAmount) : 0;
+  const depositBreakdown =
+    depositCents > 0 ? getPaymentBreakdown(depositCents, feePayer) : null;
+  const feeAddedToClient = feePayer !== "artist";
 
   const organizer = user ? `${user.firstName} ${user.lastName}`.trim() : "You";
   const piece = describePiece(inquiry);
@@ -142,6 +159,36 @@ export const InquiryReviewPhase = ({
           </ReviewRow>
           <ReviewRow icon={Mail}>{inquiry.clientEmail}</ReviewRow>
         </ReviewSection>
+
+        {showDeposit && (
+          <ReviewSection label="Deposit">
+            {depositBreakdown ? (
+              <>
+                <ReviewLineItem
+                  label="Deposit"
+                  value={formatPrice(depositBreakdown.amountCents, currency)}
+                />
+                <ReviewLineItem
+                  label={`Platform fee (${PLATFORM_FEE_PERCENT_LABEL})`}
+                  note={FEE_PAYER_NOTE[feePayer]}
+                  value={`${feeAddedToClient ? "+" : ""}${formatPrice(depositBreakdown.platformFeeCents, currency)}`}
+                />
+                <ReviewLineItem
+                  label="Client pays"
+                  value={formatPrice(depositBreakdown.clientChargeCents, currency)}
+                  variant="total"
+                />
+                <ReviewLineItem
+                  label="You receive"
+                  value={formatPrice(depositBreakdown.artistNetCents, currency)}
+                  variant="muted"
+                />
+              </>
+            ) : (
+              <ReviewRow icon={Banknote}>No deposit</ReviewRow>
+            )}
+          </ReviewSection>
+        )}
       </ReviewCard>
     </div>
   );

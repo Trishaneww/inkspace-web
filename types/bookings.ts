@@ -33,6 +33,7 @@ export interface InquiryPayment {
   amountCents: number;
   clientChargeCents: number;
   publicToken: string;
+  scheduledStart?: string;
   createdAt: string;
   paidAt?: string;
 }
@@ -45,6 +46,7 @@ export type AppointmentType = "consultation" | "session";
 
 export type AppointmentStatus =
   | "proposed"
+  | "awaiting_deposit"
   | "scheduled"
   | "completed"
   | "cancelled"
@@ -73,6 +75,9 @@ export interface InquirySchedulingForm {
   consultationDurationMinutes: number;
   consultationFormat: ConsultationFormat;
   clientScheduled: boolean;
+  // Deposit dollar string for a session. "" means no deposit. Prefilled from the
+  // artist's default; cleared via the "No deposit" control.
+  depositAmount: string;
 }
 
 export interface CustomAnswer {
@@ -116,6 +121,7 @@ export interface Inquiry {
   clientPhone?: string;
   status: InquiryStatus;
   depositStatus: DepositStatus;
+  depositAmountCents?: number;
   waiverStatus: WaiverStatus;
   sessionDurationMinutes?: number;
   createdAt: string;
@@ -150,6 +156,7 @@ export interface AcceptInquiryPayload {
   sessionDurationMinutes: number;
   scheduledStart?: string;
   clientScheduled?: boolean;
+  depositAmountCents?: number;
 }
 
 export interface RequestConsultationPayload {

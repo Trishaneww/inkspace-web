@@ -287,6 +287,13 @@
   }
 }
 
+.fieldHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
 .editHint {
   font-size: 0.8rem;
   color: hsl(220, 9%, 46%);

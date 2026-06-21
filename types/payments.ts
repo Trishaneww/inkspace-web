@@ -18,6 +18,8 @@ export interface PaymentRequest {
   expiresAt: string;
   paidAt?: string;
   createdAt: string;
+  jobTotalCents: number;
+  depositAppliedCents: number;
 }
 
 export interface CreatePaymentRequestPayload {

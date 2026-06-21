@@ -57,6 +57,18 @@
   gap: 0.4rem;
 }
 
+.fieldHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.fieldHint {
+  font-size: 0.8rem;
+  color: hsl(220, 9%, 46%);
+}
+
 .optional {
   font-size: 0.8rem;
   font-weight: 400;

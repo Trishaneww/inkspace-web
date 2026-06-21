@@ -31,6 +31,7 @@ export interface ManualAppointmentForm {
   approxSizeInches: string;
   colorType: string;
   description: string;
+  depositAmount: string;
 }
 
 export interface CreateAppointmentPayload {
@@ -46,6 +47,7 @@ export interface CreateAppointmentPayload {
   approxSizeInches?: number;
   colorType: string;
   description: string;
+  depositAmountCents?: number;
 }
 
 export interface CalendarEvent {

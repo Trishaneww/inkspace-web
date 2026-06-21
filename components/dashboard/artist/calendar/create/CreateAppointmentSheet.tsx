@@ -25,7 +25,7 @@ import { CreateAppointmentPhase } from "@/types/calendar";
 
 // Types
 import type { OpenBookAvailabilityWindow } from "@/types/bookings";
-import type { Location } from "@/types/settings";
+import type { Location, PlatformFeePayer } from "@/types/settings";
 
 interface CreateAppointmentSheetProps {
   open: boolean;
@@ -61,6 +61,9 @@ const CreateAppointmentLoader = ({ onCreated }: { onCreated: () => void }) => {
       locations={locations}
       availability={availability}
       defaultLocationId={defaultLocationId}
+      defaultDepositCents={settings.data.settings.depositFlatFeeCents ?? null}
+      currency={settings.data.settings.currency ?? "CAD"}
+      feePayer={settings.data.settings.platformFeePayer ?? "client"}
     />
   );
 };
@@ -70,6 +73,9 @@ interface CreateAppointmentContentProps {
   locations: Location[];
   availability: OpenBookAvailabilityWindow[];
   defaultLocationId: string;
+  defaultDepositCents: number | null;
+  currency: string;
+  feePayer: PlatformFeePayer;
 }
 
 const CreateAppointmentContent = ({
@@ -77,8 +83,15 @@ const CreateAppointmentContent = ({
   locations,
   availability,
   defaultLocationId,
+  defaultDepositCents,
+  currency,
+  feePayer,
 }: CreateAppointmentContentProps) => {
-  const create = useCreateAppointment(onCreated, defaultLocationId);
+  const create = useCreateAppointment(
+    onCreated,
+    defaultLocationId,
+    defaultDepositCents,
+  );
   const slideRef = useSlideTransition<HTMLDivElement>(create.phaseIndex);
   const meta = CREATE_APPOINTMENT_PHASE_META[create.phase];
 
@@ -101,10 +114,18 @@ const CreateAppointmentContent = ({
             update={create.update}
             locations={locations}
             availability={availability}
+            currency={currency}
           />
         );
       case CreateAppointmentPhase.Review:
-        return <ApptReviewPhase form={create.form} locations={locations} />;
+        return (
+          <ApptReviewPhase
+            form={create.form}
+            locations={locations}
+            currency={currency}
+            feePayer={feePayer}
+          />
+        );
       default:
         return null;
     }

@@ -6,6 +6,9 @@ import styles from "@/styles/dashboard/artist/Bookings.module.css";
 
 // HTML Components
 import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { CalendarCheck, CalendarClock, type LucideIcon } from "lucide-react";
 
 // Components
@@ -22,6 +25,7 @@ import {
   CONSULTATION_FORMAT_OPTIONS,
   SESSION_DURATION_OPTIONS,
 } from "@/constants/bookings";
+import { MIN_CHARGE_DOLLARS } from "@/constants/payments";
 import { formatDurationMinutes } from "@/lib/formatters";
 import type {
   AppointmentType,
@@ -35,6 +39,7 @@ interface InquirySchedulePhaseProps {
   type: AppointmentType;
   form: InquirySchedulingForm;
   update: (patch: Partial<InquirySchedulingForm>) => void;
+  currency: string;
   isReschedule?: boolean;
 }
 
@@ -43,6 +48,7 @@ export const InquirySchedulePhase = ({
   type,
   form,
   update,
+  currency,
   isReschedule = false,
 }: InquirySchedulePhaseProps) => {
   const firstName = inquiry.clientName.split(" ")[0];
@@ -90,6 +96,65 @@ export const InquirySchedulePhase = ({
           update={update}
         />
       )}
+
+      {type === "session" && !isReschedule && (
+        <DepositField
+          currency={currency}
+          value={form.depositAmount}
+          clientScheduled={form.clientScheduled}
+          onChange={(depositAmount) => update({ depositAmount })}
+        />
+      )}
+    </div>
+  );
+};
+
+interface DepositFieldProps {
+  currency: string;
+  value: string;
+  clientScheduled: boolean;
+  onChange: (depositAmount: string) => void;
+}
+
+const DepositField = ({
+  currency,
+  value,
+  clientScheduled,
+  onChange,
+}: DepositFieldProps) => {
+  const hasDeposit = value.trim() !== "";
+  return (
+    <div className={styles.editField}>
+      <div className={styles.fieldHeader}>
+        <Label htmlFor="deposit-amount">Deposit ({currency})</Label>
+        {hasDeposit && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => onChange("")}
+          >
+            No deposit
+          </Button>
+        )}
+      </div>
+      <Input
+        id="deposit-amount"
+        type="number"
+        min={MIN_CHARGE_DOLLARS}
+        step="1"
+        inputMode="decimal"
+        placeholder="0.00"
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+      />
+      <p className={styles.editHint}>
+        {hasDeposit
+          ? clientScheduled
+            ? "After picking a time, the client pays this deposit to claim the slot. We hold it for 48 hours."
+            : "The client pays this deposit to confirm the session. We hold the time for 48 hours until they do."
+          : "No deposit — the session is booked right away."}
+      </p>
     </div>
   );
 };
