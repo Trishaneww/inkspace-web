@@ -44,7 +44,7 @@ export const PaymentRequestEmail = ({
         "Your payment is processed end-to-end by Stripe, so your card details are never shared with Inkspace or your artist. As soon as it's received, your booking is confirmed and you're all set.",
       ]
     : [
-        "You can settle it in just a few seconds using the secure button below. No account or sign-up needed.",
+        "Log in or create your Inkspace account from the button below, then settle up securely from your dashboard.",
         "Your payment is processed end-to-end by Stripe, so your card details are never shared with Inkspace or your artist. Once it goes through, you'll get a confirmation that everything's taken care of.",
       ];
   const summaryLabel = isDeposit ? "Deposit due" : "Payment due";
