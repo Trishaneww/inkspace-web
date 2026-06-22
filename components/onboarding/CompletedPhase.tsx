@@ -1,13 +1,13 @@
 "use client";
 
-// Next.js
-import Image from "next/image";
-
 // CSS
 import styles from "@/styles/onboarding/Onboarding.module.css";
 
 // HTML Components
 import { Check } from "lucide-react";
+
+// Components
+import { ShowcaseCard } from "@/components/landing/ShowcaseCard";
 
 // Libs
 import { COMPLETION_BULLETS } from "@/constants/onboarding";
@@ -38,15 +38,7 @@ export const CompletedPhase = () => (
     </div>
 
     <div className={styles.completionImage}>
-      <div className={styles.completionImageInner}>
-        <Image
-          src="/inkspace-dashboard.png"
-          alt="Your Inkspace dashboard"
-          fill
-          sizes="(max-width: 860px) 100vw, 32rem"
-          style={{ objectFit: "cover", objectPosition: "left top" }}
-        />
-      </div>
+      <ShowcaseCard />
     </div>
   </div>
 );

@@ -1,7 +1,6 @@
 "use client";
 
 // Next.js
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -15,6 +14,7 @@ import { Button } from "@/components/ui/button";
 
 // Components
 import { PayStatus } from "@/components/payment/PayStatus";
+import { ShowcaseCard } from "@/components/landing/ShowcaseCard";
 
 // Libs
 import { paymentsApi } from "@/lib/api/payments";
@@ -125,14 +125,7 @@ export default function PayPage() {
   return (
     <main className={styles.page}>
       <div className={styles.imageSide}>
-        <Image
-          src="/inkspace-dashboard.png"
-          alt="Inkspace dashboard preview"
-          width={1000}
-          height={2000}
-          className={styles.image}
-          priority
-        />
+        <ShowcaseCard />
       </div>
 
       <div className={styles.contentSide}>{renderContent()}</div>

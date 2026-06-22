@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 // Components
 import { ExpressSignupCard } from "@/components/auth/ExpressSignupCard";
 import { PayStatus } from "@/components/payment/PayStatus";
+import { ShowcaseCard } from "@/components/landing/ShowcaseCard";
 
 // Libs
 import { publicBookingApi } from "@/lib/api/publicBooking";
@@ -111,14 +112,7 @@ export default function BookPage() {
   return (
     <main className={styles.page}>
       <div className={styles.imageSide}>
-        <Image
-          src="/inkspace-dashboard.png"
-          alt="Inkspace dashboard preview"
-          width={1000}
-          height={2000}
-          className={styles.image}
-          priority
-        />
+        <ShowcaseCard />
       </div>
 
       <div className={styles.contentSide}>{renderContent()}</div>
