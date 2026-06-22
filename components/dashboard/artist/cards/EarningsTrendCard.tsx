@@ -10,6 +10,8 @@ import { Wallet } from "lucide-react";
 import {
   Area,
   AreaChart,
+  Bar,
+  BarChart,
   CartesianGrid,
   ResponsiveContainer,
   Tooltip,
@@ -46,6 +48,8 @@ export const EarningsTrendCard = ({
     label: month.label,
     net: month.netCents / 100,
   }));
+
+  const isSinglePeriod = data.length <= 1;
   const delta = comparable
     ? buildDelta(earnings.thisPeriodNetCents, earnings.prevPeriodNetCents)
     : { type: "none" as const };
@@ -68,45 +72,80 @@ export const EarningsTrendCard = ({
 
       <div className={styles.chart}>
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart
-            data={data}
-            margin={{ top: 8, right: 8, bottom: 0, left: 8 }}
-          >
-            <defs>
-              <linearGradient id="earningsFill" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="0%"
-                  stopColor={CHART_COLORS.primary}
-                  stopOpacity={0.35}
-                />
-                <stop
-                  offset="100%"
-                  stopColor={CHART_COLORS.primary}
-                  stopOpacity={0.02}
-                />
-              </linearGradient>
-            </defs>
-            <CartesianGrid vertical={false} stroke={CHART_COLORS.grid} />
-            <XAxis
-              dataKey="label"
-              tickLine={false}
-              axisLine={false}
-              tick={{ fill: CHART_COLORS.axis, fontSize: 12 }}
-            />
-            <Tooltip
-              cursor={{ stroke: CHART_COLORS.grid }}
-              content={<ChartTooltip currency={currency} />}
-            />
-            <Area
-              type="monotone"
-              dataKey="net"
-              stroke={CHART_COLORS.primary}
-              strokeWidth={2.5}
-              fill="url(#earningsFill)"
-              dot={{ r: 3, fill: CHART_COLORS.primary, strokeWidth: 0 }}
-              activeDot={{ r: 5 }}
-            />
-          </AreaChart>
+          {isSinglePeriod ? (
+            <BarChart data={data} margin={{ top: 8, right: 0, bottom: 0, left: 0 }}>
+              <defs>
+                <linearGradient id="earningsBarFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="0%"
+                    stopColor={CHART_COLORS.primary}
+                    stopOpacity={1}
+                  />
+                  <stop
+                    offset="100%"
+                    stopColor={CHART_COLORS.primary}
+                    stopOpacity={0.55}
+                  />
+                </linearGradient>
+              </defs>
+              <XAxis
+                dataKey="label"
+                tickLine={false}
+                axisLine={false}
+                tick={{ fill: CHART_COLORS.axis, fontSize: 12 }}
+              />
+              <Tooltip
+                cursor={{ fill: CHART_COLORS.primarySoft }}
+                content={<ChartTooltip currency={currency} />}
+              />
+              <Bar
+                dataKey="net"
+                fill="url(#earningsBarFill)"
+                radius={[8, 8, 0, 0]}
+                maxBarSize={48}
+              />
+            </BarChart>
+          ) : (
+            <AreaChart
+              data={data}
+              margin={{ top: 8, right: 8, bottom: 0, left: 8 }}
+            >
+              <defs>
+                <linearGradient id="earningsFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="0%"
+                    stopColor={CHART_COLORS.primary}
+                    stopOpacity={0.35}
+                  />
+                  <stop
+                    offset="100%"
+                    stopColor={CHART_COLORS.primary}
+                    stopOpacity={0.02}
+                  />
+                </linearGradient>
+              </defs>
+              <CartesianGrid vertical={false} stroke={CHART_COLORS.grid} />
+              <XAxis
+                dataKey="label"
+                tickLine={false}
+                axisLine={false}
+                tick={{ fill: CHART_COLORS.axis, fontSize: 12 }}
+              />
+              <Tooltip
+                cursor={{ stroke: CHART_COLORS.grid }}
+                content={<ChartTooltip currency={currency} />}
+              />
+              <Area
+                type="monotone"
+                dataKey="net"
+                stroke={CHART_COLORS.primary}
+                strokeWidth={2.5}
+                fill="url(#earningsFill)"
+                dot={{ r: 3, fill: CHART_COLORS.primary, strokeWidth: 0 }}
+                activeDot={{ r: 5 }}
+              />
+            </AreaChart>
+          )}
         </ResponsiveContainer>
       </div>
     </DashboardCard>

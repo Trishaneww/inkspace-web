@@ -70,8 +70,8 @@ export const PaymentReminderEmail = ({
 (
   PaymentReminderEmail as { PreviewProps?: PaymentReminderEmailProps }
 ).PreviewProps = {
-  clientName: "Justin Neale",
-  artistName: "Josh Allen",
+  clientName: "Justin Suede",
+  artistName: "Joshua Moore",
   amountCents: 22000,
   currency: "CAD",
   payUrl: "https://inkspace.com/pay/preview-token",

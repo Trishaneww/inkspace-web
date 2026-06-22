@@ -1,0 +1,302 @@
+.openbook {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  font-size: clamp(0.45rem, 2.45cqw, 0.82rem);
+}
+
+.sources {
+  position: absolute;
+  top: 10%;
+  left: 0;
+  z-index: 0;
+  display: flex;
+  flex-wrap: wrap;
+  width: 60%;
+
+  gap: 0.6em;
+}
+
+.source {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.4em;
+  padding: 0.45em 0.7em;
+  border-radius: 999px;
+
+  border: 1px solid hsl(220, 13%, 88%);
+  background-color: hsl(0, 0%, 100%);
+  color: hsl(220, 9%, 52%);
+  font-size: 0.8em;
+  font-weight: 500;
+
+  box-shadow: 0 0.5em 1em hsl(235, 30%, 30%, 0.08);
+  opacity: 0.7;
+}
+
+.source:nth-child(1) {
+  transform: rotate(-5deg);
+}
+
+.source:nth-child(2) {
+  transform: rotate(3deg);
+}
+
+.source:nth-child(3) {
+  transform: rotate(-2deg);
+}
+
+.sourceIcon {
+  width: 1em;
+  height: 1em;
+}
+
+.profile {
+  position: absolute;
+  top: 18%;
+  left: 8%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 15.5em;
+
+  padding: 1.4em 1.1em;
+  border-radius: 1.1em;
+
+  border: 1px solid hsl(220, 13%, 90%);
+  background-color: hsl(0, 0%, 100%);
+  box-shadow: 0 1.5em 3em hsl(235, 40%, 22%, 0.16);
+
+  text-align: center;
+}
+
+.profileAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3em;
+  height: 3em;
+  border-radius: 999px;
+
+  background-color: hsl(240, 100%, 95%);
+  color: var(--color-primary);
+  font-size: 1em;
+  font-weight: 700;
+}
+
+.profileHandle {
+  margin-top: 0.7em;
+
+  font-size: 1.05em;
+  font-weight: 700;
+  color: hsl(220, 13%, 16%);
+}
+
+.profileLocation {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.3em;
+  margin-top: 0.2em;
+
+  font-size: 0.82em;
+  color: hsl(220, 9%, 50%);
+}
+
+.profilePin {
+  width: 0.9em;
+  height: 0.9em;
+}
+
+.profileStatus {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.4em;
+  margin-top: 0.5em;
+
+  font-size: 0.8em;
+  font-weight: 500;
+  color: hsl(150, 55%, 38%);
+}
+
+.profileDot {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 999px;
+
+  background-color: hsl(150, 60%, 45%);
+}
+
+.profileBook {
+  width: 100%;
+
+  margin-top: 1.1em;
+  padding: 0.7em;
+  border-radius: 0.6em;
+
+  background-color: var(--color-primary);
+  color: hsl(0, 0%, 100%);
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+.profileGhost {
+  width: 100%;
+
+  margin-top: 0.6em;
+  padding: 0.7em;
+  border-radius: 0.6em;
+
+  border: 1px solid hsl(220, 13%, 90%);
+  background-color: hsl(0, 0%, 100%);
+  color: hsl(220, 13%, 30%);
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.request {
+  position: absolute;
+  top: 24%;
+  right: 8%;
+  z-index: 2;
+  width: 21em;
+
+  padding: 1.2em;
+  border-radius: 1.1em;
+
+  border: 1px solid hsl(220, 13%, 90%);
+  background-color: hsl(0, 0%, 100%);
+  box-shadow: 0 1.75em 3.5em hsl(235, 40%, 22%, 0.2);
+}
+
+.requestHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 0.5em;
+}
+
+.requestTitle {
+  font-size: 1em;
+  font-weight: 700;
+  color: hsl(220, 13%, 16%);
+}
+
+.requestBadge {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.35em;
+  padding: 0.3em 0.6em;
+  border-radius: 999px;
+
+  background-color: hsl(240, 100%, 96%);
+  color: var(--color-primary);
+  font-size: 0.72em;
+  font-weight: 600;
+}
+
+.requestBadgeMark {
+  width: 0.85em;
+  height: 0.85em;
+
+  fill: var(--color-primary);
+}
+
+.requestClient {
+  display: flex;
+  align-items: center;
+
+  gap: 0.5em;
+  margin-top: 0.9em;
+  padding-bottom: 0.9em;
+
+  border-bottom: 1px solid hsl(220, 13%, 93%);
+}
+
+.requestAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9em;
+  height: 1.9em;
+  border-radius: 999px;
+
+  background-color: hsl(20, 60%, 92%);
+  color: hsl(20, 50%, 40%);
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.requestName {
+  flex: 1;
+
+  font-size: 0.92em;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.requestNew {
+  padding: 0.2em 0.55em;
+  border-radius: 999px;
+
+  background-color: hsl(150, 60%, 94%);
+  color: hsl(150, 55%, 32%);
+  font-size: 0.72em;
+  font-weight: 600;
+}
+
+.requestFields {
+  display: flex;
+  flex-direction: column;
+
+  margin-top: 0.5em;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 1em;
+  padding: 0.5em 0;
+
+  border-bottom: 1px solid hsl(220, 13%, 95%);
+}
+
+.fieldLabel {
+  font-size: 0.85em;
+  color: hsl(220, 9%, 50%);
+}
+
+.fieldValue {
+  font-size: 0.85em;
+  font-weight: 600;
+  color: hsl(220, 13%, 22%);
+}
+
+.requestRefs {
+  display: flex;
+  align-items: center;
+
+  gap: 0.5em;
+  margin-top: 0.9em;
+}
+
+.refThumb {
+  width: 2em;
+  height: 2em;
+  border-radius: 0.4em;
+
+  background: linear-gradient(135deg, hsl(240, 80%, 88%), hsl(280, 70%, 86%));
+}
+
+.refNote {
+  font-size: 0.8em;
+  color: hsl(220, 9%, 50%);
+}
