@@ -22,6 +22,7 @@ export const SETTINGS_TABS: SettingsTab[] = [
   { id: "personal", label: "Personal Info" },
   { id: "email", label: "Email & Password" },
   { id: "payments", label: "Payments & Payouts" },
+  { id: "billing", label: "Billing" },
   { id: "deposits", label: "Deposits" },
   { id: "booking", label: "Booking Preferences" },
   { id: "policies", label: "Terms & Waiver" },

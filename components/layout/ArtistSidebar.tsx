@@ -20,6 +20,6 @@ export const ArtistSidebar = () => (
       { label: "Other", items: artistOtherNav },
     ]}
     settingsHref="/dashboard/artist/settings"
-    userMenu={{ subtitle: "Pro", showUpgrade: true }}
+    userMenu={{ subtitle: "Free", showUpgrade: true, subscriptionAware: true }}
   />
 );

@@ -235,6 +235,66 @@ export const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
+export type PricingCtaAction = "signup" | "subscribe";
+
+export interface PricingTier {
+  key: string;
+  name: string;
+  price: string;
+  period: string;
+  description: string;
+  ctaLabel: string;
+  ctaHref: string;
+  ctaAction: PricingCtaAction;
+  featured: boolean;
+  featuresLead: string;
+  features: string[];
+}
+
+export const PRICING_TIERS: PricingTier[] = [
+  {
+    key: "free",
+    name: "Free",
+    price: "$0",
+    period: "free forever",
+    description:
+      "Everything you need to run your bookings, calendar, and payments in one place.",
+    ctaLabel: "Get started free",
+    ctaHref: "/signup",
+    ctaAction: "signup",
+    featured: false,
+    featuresLead: "What's included",
+    features: [
+      "6% fee on payments",
+      "Your Open Book booking link",
+      "Calendar sync & scheduling",
+      "Deposits & payments via Stripe",
+      "Flashbook & portfolio",
+      "Automated client reminders",
+    ],
+  },
+  {
+    key: "premium",
+    name: "Premium",
+    price: "$19",
+    period: "per month",
+    description:
+      "AI that works your inquiries for you, plus a lower fee on every payment.",
+    ctaLabel: "Go Premium",
+    ctaHref: "/signup",
+    ctaAction: "subscribe",
+    featured: true,
+    featuresLead: "Everything in Free, plus",
+    features: [
+      "Reduced 5% fee on payments",
+      "AI review of every new request",
+      "AI consultation prep briefs",
+      "Pipeline insights & stale-lead alerts",
+      "Priority support",
+    ],
+  },
+];
+
 export interface Faq {
   question: string;
   answer: string;
@@ -279,6 +339,6 @@ export const FAQS: Faq[] = [
   {
     question: "How much does Inkspace cost?",
     answer:
-      "You can start for free and explore the platform. Paid plans unlock the full suite for running your studio, and you can upgrade whenever you're ready. Book a demo and we'll walk you through the options.",
+      "Inkspace is free to use, with a 6% fee on payments. Premium is $19/month and adds AI that reviews your new requests and preps your consultations, pipeline insights, and a reduced 5% payment fee. You can start free and upgrade whenever you're ready.",
   },
 ];

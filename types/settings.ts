@@ -9,6 +9,7 @@ export type SettingsTabId =
   | "personal"
   | "email"
   | "payments"
+  | "billing"
   | "deposits"
   | "booking"
   | "policies"

@@ -3,6 +3,7 @@
 // Next.js
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 
 // CSS
 import styles from "@/styles/DashboardSidebar.module.css";
@@ -42,6 +43,10 @@ import {
 
 // Libs
 import { useAuth } from "@/lib/auth";
+import { useSubscription } from "@/hooks/useSubscription";
+import { subscriptionApi } from "@/lib/api/subscription";
+import { ApiError } from "@/lib/api/client";
+import { displayToast } from "@/lib/toast";
 import { type NavLeaf } from "@/lib/sidebar/sidebarConfig";
 import {
   getDisplayName,
@@ -57,6 +62,7 @@ export interface SidebarNavGroup {
 export interface SidebarUserMenu {
   subtitle: string;
   showUpgrade: boolean;
+  subscriptionAware?: boolean;
 }
 
 interface DashboardSidebarProps {
@@ -185,15 +191,49 @@ const LeafNavItem = ({ item, pathname }: LeafNavItemProps) => {
 
 const UserMenu = ({ userMenu }: { userMenu: SidebarUserMenu }) => {
   const router = useRouter();
-  const { user, logout } = useAuth();
+  const { user, token, logout } = useAuth();
+  const { status } = useSubscription(userMenu.subscriptionAware ?? false);
+  const [isUpgrading, setIsUpgrading] = useState(false);
 
   const handleLogout = async () => {
     await logout();
     router.replace("/");
   };
 
+  const handleUpgrade = async () => {
+    if (!token) return;
+    setIsUpgrading(true);
+    try {
+      const { url } = await subscriptionApi.createCheckout(token);
+      window.location.href = url;
+    } catch (err) {
+      setIsUpgrading(false);
+      if (err instanceof ApiError && err.status === 409) {
+        router.push("/dashboard/artist/settings?tab=billing");
+        return;
+      }
+      displayToast(
+        "Couldn't start checkout",
+        "error",
+        "Please try again in a moment.",
+      );
+    }
+  };
+
   if (!user) return null;
   const name = getDisplayName(user);
+
+  const subtitle =
+    userMenu.subscriptionAware && status
+      ? status.isPremium
+        ? "Premium"
+        : "Free"
+      : userMenu.subtitle;
+  const showUpgrade = userMenu.subscriptionAware
+    ? status
+      ? !status.isPremium
+      : userMenu.showUpgrade
+    : userMenu.showUpgrade;
 
   return (
     <div className={styles.userCard}>
@@ -202,7 +242,7 @@ const UserMenu = ({ userMenu }: { userMenu: SidebarUserMenu }) => {
       </div>
       <div className={styles.userInfo}>
         <div className={styles.userName}>{name}</div>
-        <div className={styles.userSubtitle}>{userMenu.subtitle}</div>
+        <div className={styles.userSubtitle}>{subtitle}</div>
       </div>
 
       <Popover>
@@ -218,14 +258,16 @@ const UserMenu = ({ userMenu }: { userMenu: SidebarUserMenu }) => {
           <div className={styles.popoverHeader}>
             <div className={styles.popoverName}>{name}</div>
             <div className={styles.popoverEmail}>{user.email}</div>
-            {userMenu.showUpgrade && (
+            {showUpgrade && (
               <Button
                 variant="ghost"
                 type="button"
                 className={styles.upgradeButton}
+                onClick={() => void handleUpgrade()}
+                disabled={isUpgrading}
               >
                 <Sparkles className={styles.upgradeIcon} />
-                <span>Upgrade to Pro+</span>
+                <span>Upgrade to Premium</span>
               </Button>
             )}
           </div>
