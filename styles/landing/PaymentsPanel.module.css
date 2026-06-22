@@ -1,0 +1,372 @@
+
+.payments {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  font-size: clamp(0.45rem, 2.45cqw, 0.82rem);
+}
+
+.requestCard {
+  position: absolute;
+  top: 4%;
+  left: 6%;
+  z-index: 1;
+  width: 26em;
+
+  padding: 1.3em;
+  border-radius: 1.1em;
+
+  border: 1px solid hsl(220, 13%, 90%);
+  background-color: hsl(0, 0%, 100%);
+  box-shadow: 0 1.5em 3em hsl(235, 40%, 22%, 0.16);
+}
+
+.reqHead {
+  display: flex;
+  align-items: center;
+
+  gap: 0.6em;
+}
+
+.reqName {
+  font-size: 1.05em;
+  font-weight: 700;
+  color: hsl(220, 13%, 16%);
+}
+
+.reqBadge {
+  padding: 0.2em 0.6em;
+  border-radius: 999px;
+
+  background-color: hsl(150, 60%, 93%);
+  color: hsl(150, 55%, 30%);
+  font-size: 0.72em;
+  font-weight: 600;
+}
+
+.reqClose {
+  width: 1.1em;
+  height: 1.1em;
+  margin-left: auto;
+
+  color: hsl(220, 9%, 60%);
+}
+
+.reqSub {
+  margin-top: 0.2em;
+
+  font-size: 0.82em;
+  color: hsl(220, 9%, 50%);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+
+  gap: 0.7em;
+  margin-top: 1em;
+  padding: 0.8em;
+  border-radius: 0.7em;
+
+  border: 1px solid var(--color-primary);
+  background-color: hsl(240, 100%, 98%);
+}
+
+.optionIcon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.1em;
+  height: 2.1em;
+  border-radius: 0.5em;
+
+  background-color: hsl(240, 100%, 95%);
+  color: var(--color-primary);
+}
+
+.optionIconMark {
+  width: 1.1em;
+  height: 1.1em;
+}
+
+.optionText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.optionTitle {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.optionDesc {
+  font-size: 0.78em;
+  color: hsl(220, 9%, 50%);
+}
+
+.optionRadio {
+  flex-shrink: 0;
+  width: 1.05em;
+  height: 1.05em;
+  border-radius: 999px;
+
+  border: 0.32em solid var(--color-primary);
+  background-color: hsl(0, 0%, 100%);
+}
+
+/* Breakdown */
+.breakdown {
+  margin-top: 1em;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 1em;
+  padding: 0.5em 0;
+}
+
+.rowLabel {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.15em;
+
+  font-size: 0.85em;
+  color: hsl(220, 10%, 38%);
+}
+
+.rowNote {
+  font-size: 0.82em;
+  color: hsl(220, 9%, 58%);
+}
+
+.rowVal {
+  font-size: 0.85em;
+  font-weight: 500;
+  color: hsl(220, 13%, 22%);
+}
+
+.rowDivider {
+  height: 1px;
+  margin: 0.4em 0;
+
+  background-color: hsl(220, 13%, 92%);
+}
+
+.rowStrong {
+  font-size: 0.95em;
+  font-weight: 700;
+  color: hsl(220, 13%, 16%);
+}
+
+.rowStrongVal {
+  font-size: 1.05em;
+  font-weight: 700;
+  color: hsl(220, 13%, 14%);
+}
+
+.rowMuted {
+  font-size: 0.82em;
+  color: hsl(220, 9%, 52%);
+}
+
+/* Billed to */
+.billedLabel {
+  margin-top: 1em;
+
+  font-size: 0.7em;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: hsl(220, 9%, 55%);
+}
+
+.billed {
+  margin-top: 0.5em;
+}
+
+.billRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 1em;
+  padding: 0.4em 0;
+
+  border-bottom: 1px solid hsl(220, 13%, 95%);
+}
+
+.billLabel {
+  font-size: 0.82em;
+  color: hsl(220, 9%, 50%);
+}
+
+.billVal {
+  font-size: 0.82em;
+  font-weight: 500;
+  color: hsl(220, 13%, 25%);
+}
+
+.reqFooter {
+  display: flex;
+  align-items: center;
+
+  gap: 0.45em;
+  margin-top: 1em;
+
+  font-size: 0.78em;
+  color: hsl(220, 9%, 52%);
+}
+
+.reqFooterIcon {
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+
+  color: hsl(150, 50%, 45%);
+}
+
+.stripeCard {
+  position: absolute;
+  top: 28%;
+  left: 60%;
+  z-index: 2;
+  width: 15em;
+
+  padding: 1.3em;
+  border-radius: 1.1em;
+
+  border: 1px solid hsl(220, 13%, 90%);
+  background-color: hsl(0, 0%, 100%);
+  box-shadow: 0 1.75em 3.5em hsl(245, 60%, 35%, 0.28);
+
+  text-align: center;
+}
+
+.stripeWord {
+  display: block;
+
+  font-size: 1.1em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: hsl(245, 100%, 68%);
+}
+
+.stripeCheck {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6em;
+  height: 2.6em;
+  margin-top: 1em;
+  border-radius: 999px;
+
+  background-color: hsl(150, 60%, 45%);
+}
+
+.stripeCheckMark {
+  width: 1.4em;
+  height: 1.4em;
+
+  color: hsl(0, 0%, 100%);
+}
+
+.stripeTitle {
+  margin-top: 0.7em;
+
+  font-size: 0.95em;
+  font-weight: 700;
+  color: hsl(220, 13%, 16%);
+}
+
+.stripeSub {
+  margin-top: 0.15em;
+
+  font-size: 0.78em;
+  color: hsl(220, 9%, 50%);
+}
+
+.stripeRows {
+  margin-top: 1em;
+
+  text-align: left;
+}
+
+.sRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 0.8em;
+  padding: 0.4em 0;
+
+  border-top: 1px solid hsl(220, 13%, 94%);
+}
+
+.sLabel {
+  font-size: 0.76em;
+  color: hsl(220, 9%, 52%);
+}
+
+.sVal {
+  font-size: 0.76em;
+  font-weight: 500;
+  color: hsl(220, 13%, 25%);
+}
+
+.sCard {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.4em;
+
+  font-size: 0.76em;
+  font-weight: 500;
+  color: hsl(220, 13%, 25%);
+}
+
+.mcMark {
+  position: relative;
+  display: inline-block;
+  width: 1.5em;
+  height: 0.95em;
+}
+
+.mcMark::before,
+.mcMark::after {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  width: 0.95em;
+  height: 0.95em;
+  border-radius: 999px;
+}
+
+.mcMark::before {
+  left: 0;
+
+  background-color: hsl(353, 75%, 55%);
+}
+
+.mcMark::after {
+  right: 0;
+
+  background-color: hsl(36, 95%, 55%);
+
+  mix-blend-mode: multiply;
+}
+
+.stripeFooter {
+  margin-top: 0.9em;
+
+  font-size: 0.72em;
+  color: hsl(220, 9%, 58%);
+}
