@@ -25,6 +25,7 @@ import type { AppointmentType } from "@/types/bookings";
 export const useCreateAppointment = (
   onCreated: () => void,
   defaultLocationId = "",
+  defaultDepositCents: number | null = null,
 ) => {
   const { token } = useAuth();
 
@@ -32,7 +33,7 @@ export const useCreateAppointment = (
     CreateAppointmentPhase.Type,
   );
   const [form, setForm] = useState<ManualAppointmentForm>(() =>
-    buildInitialAppointmentForm(defaultLocationId),
+    buildInitialAppointmentForm(defaultLocationId, defaultDepositCents),
   );
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);

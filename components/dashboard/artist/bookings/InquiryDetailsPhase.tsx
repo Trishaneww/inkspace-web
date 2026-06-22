@@ -16,6 +16,7 @@ import { StatusBadge } from "./StatusBadge";
 
 // Libs
 import { paymentsApi } from "@/lib/api/payments";
+import { bookingsApi } from "@/lib/api/bookings";
 import { useAuth } from "@/lib/auth";
 import { displayToast } from "@/lib/toast";
 import { TATTOO_STYLE_LABELS } from "@/constants/tattooStyles";
@@ -51,7 +52,10 @@ export const InquiryDetailsPhase = ({ inquiry }: { inquiry: Inquiry }) => {
   return (
     <div className={styles.editFields}>
       {inquiry.appointment && (
-        <AppointmentSummary appointment={inquiry.appointment} />
+        <AppointmentSummary
+          appointment={inquiry.appointment}
+          inquiryId={inquiry.id}
+        />
       )}
 
       <div className={styles.detailCard}>
@@ -210,10 +214,34 @@ export const InquiryDetailsPhase = ({ inquiry }: { inquiry: Inquiry }) => {
 
 const AppointmentSummary = ({
   appointment,
+  inquiryId,
 }: {
   appointment: NonNullable<Inquiry["appointment"]>;
+  inquiryId: string;
 }) => {
+  const { token } = useAuth();
+  const [resending, setResending] = useState(false);
+
   const statusMeta = APPOINTMENT_STATUS_META[appointment.status];
+  const awaitingClient =
+    appointment.status === "proposed" && !appointment.scheduledStart;
+
+  const resend = async () => {
+    if (!token) return;
+    setResending(true);
+    try {
+      await bookingsApi.resendScheduleLink(token, inquiryId);
+      displayToast("Booking link resent", "success");
+    } catch (err) {
+      displayToast(
+        err instanceof Error ? err.message : "Couldn't resend the link",
+        "error",
+      );
+    } finally {
+      setResending(false);
+    }
+  };
+
   return (
     <div className={styles.detailCard}>
       <div className={styles.detailTitleRow}>
@@ -239,6 +267,23 @@ const AppointmentSummary = ({
           label="Where"
           value={CONSULTATION_FORMAT_LABELS[appointment.format]}
         />
+      )}
+      {awaitingClient && (
+        <div className={styles.paymentActions}>
+          <button
+            type="button"
+            className={styles.paymentAction}
+            disabled={resending}
+            onClick={resend}
+          >
+            {resending ? (
+              <Loader2 size={14} className="animate-spin" />
+            ) : (
+              <Send size={14} />
+            )}
+            Resend booking link
+          </button>
+        </div>
       )}
     </div>
   );

@@ -27,6 +27,7 @@ export type SchedulePhase = "length" | "schedule" | "review";
 export function useInquiryScheduling(
   inquiry: Inquiry,
   onScheduled: (updated: Inquiry) => void,
+  defaultDepositCents: number | null = null,
 ) {
   const { token } = useAuth();
   const [appointmentType, setAppointmentType] =
@@ -36,7 +37,7 @@ export function useInquiryScheduling(
     useState<Appointment | null>(null);
   const [phase, setPhase] = useState<SchedulePhase>("schedule");
   const [form, setForm] = useState<InquirySchedulingForm>(() =>
-    createSchedulingForm(inquiry),
+    createSchedulingForm(inquiry, defaultDepositCents),
   );
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -45,7 +46,7 @@ export function useInquiryScheduling(
     setForm((prev) => ({ ...prev, ...patch }));
 
   const openSchedule = (type: AppointmentType) => {
-    setForm(createSchedulingForm(inquiry));
+    setForm(createSchedulingForm(inquiry, defaultDepositCents));
     setError(null);
     setIsReschedule(false);
     setPhase(getStartingPhase(type));
@@ -75,7 +76,7 @@ export function useInquiryScheduling(
   };
 
   const canSubmit = appointmentType
-    ? canSubmitSchedule(inquiry, appointmentType, form, isReschedule)
+    ? canSubmitSchedule(appointmentType, form, isReschedule)
     : false;
 
   const goToReview = () => {
@@ -97,7 +98,7 @@ export function useInquiryScheduling(
     ? "Save new time"
     : appointmentType === "consultation"
       ? "Request consultation"
-      : "Create booking";
+      : "Schedule booking";
 
   const submit = async () => {
     if (!token || !appointmentType || !canSubmit) return;
@@ -115,12 +116,12 @@ export function useInquiryScheduling(
           ? await bookingsApi.requestConsultation(
               token,
               inquiry.id,
-              buildConsultationPayload(inquiry, form),
+              buildConsultationPayload(form),
             )
           : await bookingsApi.accept(
               token,
               inquiry.id,
-              buildAcceptPayload(inquiry, form),
+              buildAcceptPayload(form),
             );
       displayToast(
         isReschedule

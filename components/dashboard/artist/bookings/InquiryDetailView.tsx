@@ -93,6 +93,8 @@ export const InquiryDetailView = ({
                 inquiry={inquiry}
                 type={appointmentType}
                 form={scheduling.form}
+                currency={currency}
+                feePayer={feePayer}
                 isReschedule={scheduling.isReschedule}
               />
               {scheduling.error && (
@@ -105,6 +107,7 @@ export const InquiryDetailView = ({
               type={appointmentType}
               form={scheduling.form}
               update={scheduling.update}
+              currency={currency}
               isReschedule={scheduling.isReschedule}
             />
           ))}
@@ -117,6 +120,7 @@ export const InquiryDetailView = ({
                 form={payment.form}
                 currency={currency}
                 feePayer={feePayer}
+                depositPaidCents={payment.depositPaidCents}
               />
               {payment.error && (
                 <p className={styles.editError}>{payment.error}</p>
@@ -126,7 +130,6 @@ export const InquiryDetailView = ({
             <RequestPaymentTypePhase
               form={payment.form}
               currency={currency}
-              selectType={payment.selectType}
               update={payment.update}
             />
           ))}

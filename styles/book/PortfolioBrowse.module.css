@@ -101,9 +101,17 @@
   object-fit: cover;
 }
 
+.summary {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.25rem;
+}
+
 .name {
   font-size: 1.1rem;
   font-weight: 600;
+  line-height: 1.25;
   color: var(--foreground);
 }
 
@@ -142,7 +150,7 @@
   justify-content: space-between;
 
   gap: 1rem;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
 }
 
 .metaLabel {

@@ -59,12 +59,9 @@ export const getPaymentBreakdown = (
   };
 };
 
-export const createPaymentForm = (
-  defaultDepositCents: number | null,
-): RequestPaymentForm => ({
-  type: "deposit",
-  amount:
-    defaultDepositCents != null ? (defaultDepositCents / 100).toString() : "",
+export const createPaymentForm = (): RequestPaymentForm => ({
+  type: "final",
+  amount: "",
 });
 
 export const getPaymentAmountCents = (form: RequestPaymentForm): number => {
@@ -72,9 +69,36 @@ export const getPaymentAmountCents = (form: RequestPaymentForm): number => {
   return Number.isFinite(dollars) ? Math.round(dollars * 100) : NaN;
 };
 
-export const canSubmitPaymentRequest = (form: RequestPaymentForm): boolean => {
-  const cents = getPaymentAmountCents(form);
-  return Number.isFinite(cents) && cents >= MIN_CHARGE_CENTS;
+export const getPaidDepositCents = (inquiry: {
+  payments: { type: PaymentType; status: string; amountCents: number }[];
+}): number =>
+  inquiry.payments
+    .filter((p) => p.type === "deposit" && p.status === "paid")
+    .reduce((sum, p) => sum + p.amountCents, 0);
+
+export interface FinalPaymentBreakdown extends PaymentBreakdown {
+  jobTotalCents: number;
+  depositAppliedCents: number;
+  netCents: number;
+}
+
+export const getFinalPaymentBreakdown = (
+  jobTotalCents: number,
+  depositAppliedCents: number,
+  feePayer: PlatformFeePayer,
+): FinalPaymentBreakdown => {
+  const netCents = Math.max(jobTotalCents - depositAppliedCents, 0);
+  const base = getPaymentBreakdown(netCents, feePayer);
+  return { ...base, jobTotalCents, depositAppliedCents, netCents };
+};
+
+export const canSubmitFinalPayment = (
+  form: RequestPaymentForm,
+  depositPaidCents: number,
+): boolean => {
+  const total = getPaymentAmountCents(form);
+  if (!Number.isFinite(total)) return false;
+  return total - depositPaidCents >= MIN_CHARGE_CENTS;
 };
 
 export function isUnavailable(request: PublicPaymentRequest): boolean {

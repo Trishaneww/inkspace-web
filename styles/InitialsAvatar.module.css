@@ -1,0 +1,40 @@
+.avatar {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+
+  border-radius: 50%;
+  user-select: none;
+}
+
+.variant0 {
+  color: hsl(228, 54%, 19%);
+
+  background-color: hsl(216, 33%, 97%);
+  border: 1px solid hsl(220, 13%, 88%);
+}
+
+.variant1 {
+  color: white;
+
+  background-color: hsl(228, 54%, 19%);
+}
+
+.variant2 {
+  color: white;
+
+  background-color: hsl(223, 51%, 37%);
+}
+
+.variant3 {
+  color: white;
+
+  background-color: hsl(79, 61%, 30%);
+}

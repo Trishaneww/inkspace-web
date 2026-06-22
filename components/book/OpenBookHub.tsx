@@ -55,6 +55,8 @@ export const OpenBookHub = ({ profile }: { profile: OpenBookProfile }) => {
       {browsingPortfolio && (
         <PortfolioBrowseDialog
           artistId={profile.artistId}
+          theme={profile.theme}
+          customTheme={profile.customTheme}
           onOpenChange={(open) => {
             if (!open) setBrowsingPortfolio(false);
           }}

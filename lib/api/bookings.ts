@@ -45,6 +45,14 @@ export const bookingsApi = {
     );
   },
 
+  resendScheduleLink(token: string, id: string) {
+    return api.post<Inquiry>(
+      `/v1/current-user/bookings/${id}/resend-schedule-link`,
+      {},
+      token,
+    );
+  },
+
   cancel(token: string, id: string, appointmentId?: string) {
     return api.post<Inquiry>(
       `/v1/current-user/bookings/${id}/cancel`,

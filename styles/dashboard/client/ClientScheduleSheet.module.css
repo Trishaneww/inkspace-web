@@ -1,0 +1,155 @@
+.sheet {
+  width: 100%;
+  max-width: 33rem;
+  padding: 1.5rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  height: 100%;
+  padding: 1.5rem;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.lead {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 18%);
+}
+
+.calendarWrap {
+  padding: 0.5rem;
+
+  border: 1px solid hsl(220, 13%, 90%);
+  border-radius: 0.75rem;
+}
+
+.calendarWrap :global([data-slot="calendar"]) {
+  width: 100%;
+}
+
+.calendarWrap :global([data-slot="calendar"] td) {
+  height: 2.5rem;
+  aspect-ratio: auto;
+}
+
+.calendarWrap :global([data-slot="calendar"] button[data-day]) {
+  width: 2.5rem;
+  height: 2.5rem;
+  min-width: 0;
+
+  margin-inline: auto;
+}
+
+.calendarWrap :global(button[data-selected-single="true"]),
+.calendarWrap :global(button[data-selected-single="true"]:hover) {
+  color: white;
+
+  background-color: var(--color-primary);
+}
+
+.slots {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 0.5rem;
+}
+
+.slot {
+  padding: 0.5rem 0.4rem;
+
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: hsl(220, 13%, 25%);
+
+  background-color: var(--color-neutral-background);
+  border: 1px solid hsl(220, 13%, 88%);
+  border-radius: 0.5rem;
+
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
+}
+
+.slotActive {
+  color: white;
+
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.slotsLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 1.5rem;
+
+  color: hsl(220, 9%, 46%);
+}
+
+.empty {
+  font-size: 0.85rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.error {
+  font-size: 0.85rem;
+  color: hsl(0, 75%, 45%);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.cancelBtn {
+  cursor: pointer;
+}
+
+.confirmBtn {
+  color: white;
+
+  background-color: var(--color-primary);
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-primary-hover);
+  }
+}

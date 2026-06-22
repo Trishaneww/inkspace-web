@@ -81,20 +81,20 @@ export const useInquiryDetailView = ({
 
   // Completing a scheduling or payment flow keeps the sheet open and returns to
   // Details so the artist sees the updated booking.
-  const scheduling = useInquiryScheduling(inquiry, (updated) => {
-    onActed();
-    setInquiry(updated);
-    setView("details");
-  });
-  const payment = useRequestPayment(
+  const scheduling = useInquiryScheduling(
     inquiry,
-    settings.data?.settings.depositFlatFeeCents ?? null,
-    () => {
+    (updated) => {
       onActed();
-      void refreshInquiry();
+      setInquiry(updated);
       setView("details");
     },
+    settings.data?.settings.depositFlatFeeCents ?? null,
   );
+  const payment = useRequestPayment(inquiry, () => {
+    onActed();
+    void refreshInquiry();
+    setView("details");
+  });
 
   const currency = settings.data?.settings.currency ?? "CAD";
   const feePayer = settings.data?.settings.platformFeePayer ?? "client";

@@ -28,6 +28,8 @@ import { BookingFlowFooter } from "./BookingFlowFooter";
 import { useBookingFlow } from "@/hooks/useBookingFlow";
 
 // Libs
+import { OpenBookThemeContext } from "@/lib/openBookTheme";
+import { buildCustomThemeStyle } from "@/lib/openBookThemeStyle";
 import { BOOKING_FLOW_PHASE_META } from "@/constants/bookingFlow";
 import { BookingFlowPhase } from "@/types/bookingFlow";
 import type {
@@ -77,7 +79,15 @@ export const BookingFlowDialog = ({
     close,
   } = useBookingFlow(profile, entry, onOpenChange);
 
+  const customStyle =
+    profile.theme === "custom" && profile.customTheme
+      ? buildCustomThemeStyle(profile.customTheme)
+      : undefined;
+
   return (
+    <OpenBookThemeContext.Provider
+      value={{ theme: profile.theme, customStyle }}
+    >
     <Dialog
       open
       onOpenChange={(next) => {
@@ -87,6 +97,8 @@ export const BookingFlowDialog = ({
       <DialogContent
         showCloseButton={false}
         className={styles.onboardingDialog}
+        data-ob-theme={profile.theme}
+        style={customStyle}
       >
         <BookingFlowHeader progress={progress} showProgress={showProgress} />
 
@@ -134,6 +146,7 @@ export const BookingFlowDialog = ({
         />
       </DialogContent>
     </Dialog>
+    </OpenBookThemeContext.Provider>
   );
 };
 
@@ -182,7 +195,7 @@ const PhaseContent = ({
     case BookingFlowPhase.Placement:
       return <PlacementPhase form={form} update={update} />;
     case BookingFlowPhase.Style:
-      return <StylePhase form={form} update={update} styles={profile.styles} />;
+      return <StylePhase form={form} update={update} />;
     case BookingFlowPhase.CustomQuestions:
       return (
         <CustomQuestionsPhase

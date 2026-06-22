@@ -6,6 +6,7 @@ import styles from "@/styles/dashboard/artist/CreateAppointment.module.css";
 // HTML Components
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
+  Banknote,
   CalendarClock,
   CalendarDays,
   Clock,
@@ -21,6 +22,7 @@ import {
 // Components
 import {
   ReviewCard,
+  ReviewLineItem,
   ReviewRow,
   ReviewSection,
   ReviewText,
@@ -30,15 +32,21 @@ import {
 // Libs
 import { addMinutes, format } from "date-fns";
 import { useAuth } from "@/lib/auth";
-import { combineDateTime } from "@/lib/inquiryScheduling";
-import { formatDurationMinutes, formatInitials } from "@/lib/formatters";
+import { combineDateTime, parseDepositCents } from "@/lib/inquiryScheduling";
+import { formatDurationMinutes, formatPrice } from "@/lib/formatters";
 import { describeFormPiece } from "@/lib/calendar";
+import { getPaymentBreakdown } from "@/lib/payments";
 import { CONSULTATION_FORMAT_LABELS } from "@/constants/bookings";
+import {
+  FEE_PAYER_NOTE,
+  PLATFORM_FEE_PERCENT_LABEL,
+} from "@/constants/payments";
+import { getInitials } from "@/lib/avatar";
 
 // Types
 import type { ConsultationFormat } from "@/types/bookings";
 import type { ManualAppointmentForm } from "@/types/calendar";
-import type { Location } from "@/types/settings";
+import type { Location, PlatformFeePayer } from "@/types/settings";
 
 const FORMAT_ICON: Record<ConsultationFormat, LucideIcon> = {
   in_person: Users,
@@ -49,12 +57,23 @@ const FORMAT_ICON: Record<ConsultationFormat, LucideIcon> = {
 interface ApptReviewPhaseProps {
   form: ManualAppointmentForm;
   locations: Location[];
+  currency: string;
+  feePayer: PlatformFeePayer;
 }
 
-export const ApptReviewPhase = ({ form, locations }: ApptReviewPhaseProps) => {
+export const ApptReviewPhase = ({
+  form,
+  locations,
+  currency,
+  feePayer,
+}: ApptReviewPhaseProps) => {
   const { user } = useAuth();
 
   const isSession = form.type === "session";
+  const depositCents = isSession ? parseDepositCents(form.depositAmount) : 0;
+  const depositBreakdown =
+    depositCents > 0 ? getPaymentBreakdown(depositCents, feePayer) : null;
+  const feeAddedToClient = feePayer !== "artist";
   const durationMinutes =
     isSession && form.startMinute !== null && form.endMinute !== null
       ? form.endMinute - form.startMinute
@@ -121,7 +140,7 @@ export const ApptReviewPhase = ({ form, locations }: ApptReviewPhaseProps) => {
                 {user?.avatarUrl && (
                   <AvatarImage src={user.avatarUrl} alt={organizer} />
                 )}
-                <AvatarFallback>{formatInitials(organizer)}</AvatarFallback>
+                <AvatarFallback>{getInitials(organizer)}</AvatarFallback>
               </Avatar>
             }
           >
@@ -132,6 +151,36 @@ export const ApptReviewPhase = ({ form, locations }: ApptReviewPhaseProps) => {
             <ReviewRow icon={Phone}>{form.clientPhone}</ReviewRow>
           )}
         </ReviewSection>
+
+        {isSession && (
+          <ReviewSection label="Deposit">
+            {depositBreakdown ? (
+              <>
+                <ReviewLineItem
+                  label="Deposit"
+                  value={formatPrice(depositBreakdown.amountCents, currency)}
+                />
+                <ReviewLineItem
+                  label={`Platform fee (${PLATFORM_FEE_PERCENT_LABEL})`}
+                  note={FEE_PAYER_NOTE[feePayer]}
+                  value={`${feeAddedToClient ? "+" : ""}${formatPrice(depositBreakdown.platformFeeCents, currency)}`}
+                />
+                <ReviewLineItem
+                  label="Client pays"
+                  value={formatPrice(depositBreakdown.clientChargeCents, currency)}
+                  variant="total"
+                />
+                <ReviewLineItem
+                  label="You receive"
+                  value={formatPrice(depositBreakdown.artistNetCents, currency)}
+                  variant="muted"
+                />
+              </>
+            ) : (
+              <ReviewRow icon={Banknote}>No deposit</ReviewRow>
+            )}
+          </ReviewSection>
+        )}
       </ReviewCard>
     </div>
   );

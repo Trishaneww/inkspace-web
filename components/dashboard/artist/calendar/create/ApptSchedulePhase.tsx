@@ -5,7 +5,9 @@ import styles from "@/styles/dashboard/artist/CreateAppointment.module.css";
 
 // HTML Components
 import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 // Components
 import { OptionsSelect } from "@/components/common/OptionsSelect";
@@ -19,6 +21,7 @@ import {
 // Libs
 import { startOfDay } from "date-fns";
 import { CONSULTATION_DURATION_OPTIONS } from "@/constants/calendar";
+import { MIN_CHARGE_DOLLARS } from "@/constants/payments";
 
 // Types
 import type { ManualAppointmentForm } from "@/types/calendar";
@@ -30,6 +33,7 @@ interface ApptSchedulePhaseProps {
   update: (patch: Partial<ManualAppointmentForm>) => void;
   locations: Location[];
   availability: OpenBookAvailabilityWindow[];
+  currency: string;
 }
 
 export const ApptSchedulePhase = ({
@@ -37,6 +41,7 @@ export const ApptSchedulePhase = ({
   update,
   locations,
   availability,
+  currency,
 }: ApptSchedulePhaseProps) => {
   const locationOptions = locations.map((location) => ({
     value: location.id,
@@ -114,6 +119,39 @@ export const ApptSchedulePhase = ({
             />
           )}
         </>
+      )}
+
+      {form.type === "session" && (
+        <div className={styles.field}>
+          <div className={styles.fieldHeader}>
+            <Label htmlFor="appt-deposit">Deposit ({currency})</Label>
+            {form.depositAmount.trim() !== "" && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => update({ depositAmount: "" })}
+              >
+                No deposit
+              </Button>
+            )}
+          </div>
+          <Input
+            id="appt-deposit"
+            type="number"
+            min={MIN_CHARGE_DOLLARS}
+            step="1"
+            inputMode="decimal"
+            placeholder="0.00"
+            value={form.depositAmount}
+            onChange={(event) => update({ depositAmount: event.target.value })}
+          />
+          <p className={styles.fieldHint}>
+            {form.depositAmount.trim() === ""
+              ? "No deposit — the session is booked right away."
+              : "The client pays this deposit to confirm. We hold the time for 48 hours."}
+          </p>
+        </div>
       )}
     </div>
   );

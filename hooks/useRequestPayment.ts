@@ -9,36 +9,35 @@ import { ApiError } from "@/lib/api/client";
 import { useAuth } from "@/lib/auth";
 import { displayToast } from "@/lib/toast";
 import {
-  canSubmitPaymentRequest,
+  canSubmitFinalPayment,
   createPaymentForm,
+  getPaidDepositCents,
   getPaymentAmountCents,
 } from "@/lib/payments";
 
 // Types
-import type { Inquiry, PaymentType } from "@/types/bookings";
+import type { Inquiry } from "@/types/bookings";
 import type { RequestPaymentForm } from "@/types/payments";
 
 export type RequestPaymentPhase = "type" | "review";
 
-export function useRequestPayment(
-  inquiry: Inquiry,
-  defaultDepositCents: number | null,
-  onCreated: () => void,
-) {
+export function useRequestPayment(inquiry: Inquiry, onCreated: () => void) {
   const { token } = useAuth();
   const [isActive, setIsActive] = useState(false);
   const [phase, setPhase] = useState<RequestPaymentPhase>("type");
   const [form, setForm] = useState<RequestPaymentForm>(() =>
-    createPaymentForm(defaultDepositCents),
+    createPaymentForm(),
   );
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const depositPaidCents = getPaidDepositCents(inquiry);
 
   const update = (patch: Partial<RequestPaymentForm>) =>
     setForm((prev) => ({ ...prev, ...patch }));
 
   const open = () => {
-    setForm(createPaymentForm(defaultDepositCents));
+    setForm(createPaymentForm());
     setPhase("type");
     setError(null);
     setIsActive(true);
@@ -50,9 +49,7 @@ export function useRequestPayment(
     setError(null);
   };
 
-  const selectType = (type: PaymentType) => update({ type });
-
-  const canSubmit = canSubmitPaymentRequest(form);
+  const canSubmit = canSubmitFinalPayment(form, depositPaidCents);
 
   const goToReview = () => {
     if (canSubmit) setPhase("review");
@@ -96,7 +93,7 @@ export function useRequestPayment(
     phase,
     form,
     update,
-    selectType,
+    depositPaidCents,
     open,
     close,
     back,

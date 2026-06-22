@@ -1,12 +1,11 @@
 // HTML Components
 import {
-  BarChart3,
+  Repeat,
   BookOpenCheck,
   Calendar,
   Home,
   Image as ImageIcon,
   Inbox,
-  Receipt,
   Settings,
   Star,
   Users,
@@ -51,9 +50,9 @@ export const artistMainNav: NavLeaf[] = [
     icon: BookOpenCheck,
   },
   {
-    href: "/dashboard/artist/invoices",
-    label: "Invoices",
-    icon: Receipt,
+    href: "/dashboard/artist/calendar",
+    label: "Calendar",
+    icon: Calendar,
   },
   {
     href: "/dashboard/artist/clients",
@@ -61,9 +60,22 @@ export const artistMainNav: NavLeaf[] = [
     icon: Users,
   },
   {
-    href: "/dashboard/artist/calendar",
-    label: "Calendar",
-    icon: Calendar,
+    href: "/dashboard/artist/messages",
+    label: "Messages",
+    icon: Inbox,
+  },
+];
+
+export const artistBusinessNav: NavLeaf[] = [
+  {
+    href: "/dashboard/artist/transactions",
+    label: "Transactions",
+    icon: Repeat,
+  },
+  {
+    href: "/dashboard/artist/reviews",
+    label: "Reviews",
+    icon: Star,
   },
 ];
 
@@ -73,12 +85,6 @@ export const artistWorkNav: NavLeaf[] = [
 ];
 
 export const artistOtherNav: NavLeaf[] = [
-  {
-    href: "/dashboard/artist/analytics",
-    label: "Analytics",
-    icon: BarChart3,
-  },
-  { href: "/dashboard/artist/reviews", label: "Reviews", icon: Star },
   { href: "/dashboard/artist/settings", label: "Settings", icon: Settings },
 ];
 

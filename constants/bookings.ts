@@ -50,6 +50,7 @@ export const DEPOSIT_META: Record<DepositStatus, BadgeMeta> = {
 
 export const APPOINTMENT_STATUS_META: Record<AppointmentStatus, BadgeMeta> = {
   proposed: { label: "Proposed", variant: "pending" },
+  awaiting_deposit: { label: "Awaiting deposit", variant: "pending" },
   scheduled: { label: "Scheduled", variant: "success" },
   completed: { label: "Completed", variant: "success" },
   cancelled: { label: "Cancelled", variant: "failure" },
@@ -59,6 +60,16 @@ export const APPOINTMENT_STATUS_META: Record<AppointmentStatus, BadgeMeta> = {
 export const APPOINTMENT_TYPE_LABELS: Record<AppointmentType, string> = {
   consultation: "Consultation",
   session: "Session",
+};
+
+export const APPOINTMENT_TYPE_META: Record<AppointmentType, BadgeMeta> = {
+  session: { label: "Session", variant: "indigo" },
+  consultation: { label: "Consultation", variant: "neutral" },
+};
+
+export const REQUEST_TYPE_META: Record<RequestType, BadgeMeta> = {
+  custom: { label: "Custom", variant: "success" },
+  flash: { label: "Flash", variant: "warning" },
 };
 
 export const PAYMENT_TYPE_LABELS: Record<PaymentType, string> = {
@@ -168,14 +179,29 @@ const isUndecided = (status: InquiryStatus) =>
 const hasLiveAppointment = (i: Inquiry) =>
   i.appointment?.status === "scheduled" || i.appointment?.status === "proposed";
 
+const hasLiveSession = (i: Inquiry) =>
+  (i.liveAppointments ?? []).some(
+    (a) =>
+      a.type === "session" &&
+      (a.status === "scheduled" ||
+        a.status === "proposed" ||
+        a.status === "awaiting_deposit"),
+  );
+
+const canScheduleSession = (i: Inquiry) =>
+  (i.status === "pending" ||
+    i.status === "consultation_requested" ||
+    i.status === "accepted") &&
+  !hasLiveSession(i);
+
 export const INQUIRY_ACTIONS: InquiryAction[] = [
   {
     id: "accept",
-    label: "Create booking",
+    label: "Schedule booking",
     description: "Set a date and time for the session",
     icon: CalendarCheck,
     behavior: "nav",
-    isAvailable: (i: Inquiry) => isUndecided(i.status),
+    isAvailable: canScheduleSession,
   },
   {
     id: "book_consultation",
@@ -183,7 +209,8 @@ export const INQUIRY_ACTIONS: InquiryAction[] = [
     description: "Propose a consultation before booking",
     icon: CalendarPlus,
     behavior: "nav",
-    isAvailable: (i: Inquiry) => i.status === "pending" && !hasLiveAppointment(i),
+    isAvailable: (i: Inquiry) =>
+      i.status === "pending" && !hasLiveAppointment(i),
   },
   {
     id: "request_payment",
@@ -239,7 +266,8 @@ export const INQUIRY_ACTIONS: InquiryAction[] = [
     destructive: true,
     confirmMessage:
       "Decline this request? The client will be notified that you're not available.",
-    isAvailable: (i: Inquiry) => isUndecided(i.status) && !hasLiveAppointment(i),
+    isAvailable: (i: Inquiry) =>
+      isUndecided(i.status) && !hasLiveAppointment(i),
   },
   {
     id: "cancel",

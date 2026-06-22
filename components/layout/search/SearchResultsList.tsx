@@ -36,7 +36,7 @@ export const SearchResultsList = ({
         return (
           <Button
             variant="ghost"
-            key={page.href}
+            key={page.label}
             type="button"
             className={clsx(
               styles.searchResult,

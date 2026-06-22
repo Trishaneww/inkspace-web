@@ -42,6 +42,7 @@ export interface ArtistSettings {
   cancellationNoticeHours: number | null;
 
   acceptingBookings: boolean;
+  monthlyBookingGoal: number;
   timezone: string;
   googleCalendarConnected: boolean;
   googleCalendarEmail: string;
@@ -165,6 +166,7 @@ export interface UpdateSettingsPayload {
   platformFeePayer?: PlatformFeePayer;
   depositRefundPolicy?: DepositRefundPolicy;
   acceptingBookings?: boolean;
+  monthlyBookingGoal?: number;
   timezone?: string;
   slotIntervalMinutes?: number;
   bufferMinutes?: number;

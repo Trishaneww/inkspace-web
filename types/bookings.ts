@@ -33,6 +33,7 @@ export interface InquiryPayment {
   amountCents: number;
   clientChargeCents: number;
   publicToken: string;
+  scheduledStart?: string;
   createdAt: string;
   paidAt?: string;
 }
@@ -45,6 +46,7 @@ export type AppointmentType = "consultation" | "session";
 
 export type AppointmentStatus =
   | "proposed"
+  | "awaiting_deposit"
   | "scheduled"
   | "completed"
   | "cancelled"
@@ -72,6 +74,10 @@ export interface InquirySchedulingForm {
   timeFilter: TimeFilter;
   consultationDurationMinutes: number;
   consultationFormat: ConsultationFormat;
+  clientScheduled: boolean;
+  // Deposit dollar string for a session. "" means no deposit. Prefilled from the
+  // artist's default; cleared via the "No deposit" control.
+  depositAmount: string;
 }
 
 export interface CustomAnswer {
@@ -115,6 +121,7 @@ export interface Inquiry {
   clientPhone?: string;
   status: InquiryStatus;
   depositStatus: DepositStatus;
+  depositAmountCents?: number;
   waiverStatus: WaiverStatus;
   sessionDurationMinutes?: number;
   createdAt: string;
@@ -126,9 +133,30 @@ export interface Inquiry {
   payments: InquiryPayment[];
 }
 
+export interface SlotOption {
+  start: string;
+  label: string;
+}
+
+export interface SlotList {
+  slots: SlotOption[];
+  durationMinutes: number;
+}
+
+export interface PublicBookingRequest {
+  artistName: string;
+  clientEmail: string;
+  clientName: string;
+  status: InquiryStatus;
+  durationMinutes: number;
+  hasAccount: boolean;
+}
+
 export interface AcceptInquiryPayload {
   sessionDurationMinutes: number;
   scheduledStart?: string;
+  clientScheduled?: boolean;
+  depositAmountCents?: number;
 }
 
 export interface RequestConsultationPayload {
@@ -164,16 +192,39 @@ export interface ClientInquiryListResponse {
   inquiries: ClientInquiry[];
 }
 
+export type OpenBookTheme =
+  | "inkspace"
+  | "noir"
+  | "sand"
+  | "sage"
+  | "midnight"
+  | "navy"
+  | "custom";
+
+export interface CustomTheme {
+  background: string;
+  card: string;
+  button: string;
+  text: string;
+}
+
 export interface OpenBook {
   slug: string;
   schedulingMode: SchedulingMode;
   customQuestions: string[];
+  theme: OpenBookTheme;
+  customTheme?: CustomTheme;
+  backgroundImageUrl?: string;
 }
 
 export interface UpdateOpenBookPayload {
   slug?: string;
   schedulingMode?: SchedulingMode;
   customQuestions?: string[];
+  theme?: OpenBookTheme;
+  customTheme?: CustomTheme;
+  backgroundImageKey?: string;
+  clearBackgroundImage?: boolean;
 }
 
 export interface OpenBookFaq {
@@ -192,6 +243,9 @@ export interface OpenBookProfile {
   artistId: string;
   hasFlashes: boolean;
   hasPortfolio: boolean;
+  theme: OpenBookTheme;
+  customTheme?: CustomTheme;
+  backgroundImageUrl?: string;
   displayName: string;
   avatarUrl: string;
   location: string;
@@ -257,7 +311,8 @@ export type BadgeVariant =
   | "warning"
   | "failure"
   | "neutral"
-  | "inactive";
+  | "inactive"
+  | "indigo";
 
 export interface BadgeMeta {
   label: string;

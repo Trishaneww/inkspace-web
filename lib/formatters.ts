@@ -89,6 +89,18 @@ export function formatCentsAsInput(cents: number | null): string {
 }
 
 /**
+ * Formats a date as a YYYY-MM-DD string, e.g. "2026-06-18".
+ * @param date - The date to format.
+ * @returns The formatted YYYY-MM-DD string.
+ */
+export function formatDateParam(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+/**
  * Formats a date in ISO 8601 format as a human-readable date string,
  * e.g. "2026-06-03" -> "Jun 3, 2026".
  * @param iso - The ISO 8601 date string to format.
@@ -106,6 +118,21 @@ export function formatDate(iso: string): string {
  */
 export function formatDateTime(iso: string): string {
   return formatISO(iso, "MMM d, yyyy · h:mm a");
+}
+
+/**
+ * Formats an appointment's time span from its start timestamp and duration,
+ * e.g. ("2026-06-23T15:30:00Z", 120) -> "11:30 AM – 1:30 PM" (in local time).
+ * @param iso - The ISO 8601 start timestamp.
+ * @param durationMinutes - The appointment length in minutes.
+ * @returns The formatted start–end time range.
+ */
+export function formatTimeRange(iso: string, durationMinutes: number): string {
+  const parsed = parseISO(iso);
+  const start = isValid(parsed) ? parsed : new Date(iso);
+  if (!isValid(start)) return iso;
+  const end = new Date(start.getTime() + durationMinutes * 60_000);
+  return `${format(start, "h:mm a")} – ${format(end, "h:mm a")}`;
 }
 
 /**
@@ -312,19 +339,4 @@ export function formatLocationWithTimeRange(location: DatedLocation): string {
   return location.startDate
     ? `${place} · ${formatDateRange(location.startDate, location.endDate ?? null)}`
     : place;
-}
-
-/**
- * Formats a name as two initials, e.g. "John Doe" -> "JD".
- * @param name - The name to format.
- * @returns The formatted initials string.
- */
-export function formatInitials(name: string): string {
-  return name
-    .split(" ")
-    .map((part) => part[0])
-    .filter(Boolean)
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
 }

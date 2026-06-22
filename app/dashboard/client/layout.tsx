@@ -11,6 +11,7 @@ import { ClientSidebar } from "@/components/layout/ClientSidebar";
 import { RequireRole } from "@/components/auth/RequireRole";
 
 // Libs
+import { ClientBookingsProvider } from "@/lib/clientBookingsContext";
 import { UserRole } from "@/types/index";
 
 export default function ClientDashboardLayout({
@@ -20,14 +21,16 @@ export default function ClientDashboardLayout({
 }) {
   return (
     <RequireRole role={UserRole.User}>
-      <SidebarProvider>
-        <ClientSidebar />
-        <SidebarInset className={styles.inset}>
-          <ClientMobileNavbar />
-          <ClientTopbar />
-          <div className={styles.scrollArea}>{children}</div>
-        </SidebarInset>
-      </SidebarProvider>
+      <ClientBookingsProvider>
+        <SidebarProvider>
+          <ClientSidebar />
+          <SidebarInset className={styles.inset}>
+            <ClientMobileNavbar />
+            <ClientTopbar />
+            <div className={styles.scrollArea}>{children}</div>
+          </SidebarInset>
+        </SidebarProvider>
+      </ClientBookingsProvider>
     </RequireRole>
   );
 }

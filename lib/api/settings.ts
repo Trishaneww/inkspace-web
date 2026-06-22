@@ -135,6 +135,14 @@ export const settingsApi = {
     );
   },
 
+  presignOpenBookBackground(token: string, contentType: string) {
+    return api.post<PresignUploadResponse>(
+      `${BASE}/open-book/background/presign`,
+      { contentType },
+      token,
+    );
+  },
+
   connectStripe(token: string) {
     return api.post<StripeConnectResponse>(
       `${BASE}/settings/stripe/connect`,
@@ -192,6 +200,14 @@ async function uploadToS3(
 
 export async function uploadAvatar(token: string, file: File): Promise<string> {
   const presign = await settingsApi.presignAvatar(token, file.type);
+  return uploadToS3(presign, file);
+}
+
+export async function uploadOpenBookBackground(
+  token: string,
+  file: File,
+): Promise<string> {
+  const presign = await settingsApi.presignOpenBookBackground(token, file.type);
   return uploadToS3(presign, file);
 }
 

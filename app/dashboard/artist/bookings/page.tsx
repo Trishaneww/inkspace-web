@@ -48,7 +48,10 @@ export default function ArtistBookingsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
 
-  const [filters, setFilters] = useState<BookingFilters>(EMPTY_BOOKING_FILTERS);
+  const [filters, setFilters] = useState<BookingFilters>(() => ({
+    ...EMPTY_BOOKING_FILTERS,
+    search: searchParams.get("search") ?? "",
+  }));
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isCreateBookingOpen, setIsCreateBookingOpen] = useState(false);
   const [isSeeding, setIsSeeding] = useState(false);

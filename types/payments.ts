@@ -18,6 +18,8 @@ export interface PaymentRequest {
   expiresAt: string;
   paidAt?: string;
   createdAt: string;
+  jobTotalCents: number;
+  depositAppliedCents: number;
 }
 
 export interface CreatePaymentRequestPayload {
@@ -50,6 +52,7 @@ export interface CheckoutResponse {
 export interface CreateClientAccountPayload {
   firstName: string;
   lastName: string;
+  phone: string;
   password: string;
   marketingOptIn: boolean;
 }

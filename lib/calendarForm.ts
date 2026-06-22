@@ -1,5 +1,9 @@
 // Libs
-import { combineDateTime } from "@/lib/inquiryScheduling";
+import {
+  combineDateTime,
+  isValidDeposit,
+  parseDepositCents,
+} from "@/lib/inquiryScheduling";
 import { CreateAppointmentPhase } from "@/types/calendar";
 import type {
   CreateAppointmentPayload,
@@ -11,6 +15,7 @@ export const DEFAULT_CONSULTATION_DURATION = 30;
 
 export function buildInitialAppointmentForm(
   locationId = "",
+  defaultDepositCents: number | null = null,
 ): ManualAppointmentForm {
   return {
     type: "session",
@@ -28,6 +33,10 @@ export function buildInitialAppointmentForm(
     approxSizeInches: "",
     colorType: "",
     description: "",
+    depositAmount:
+      defaultDepositCents && defaultDepositCents > 0
+        ? (defaultDepositCents / 100).toString()
+        : "",
   };
 }
 
@@ -43,6 +52,7 @@ export function canProceedAppointmentPhase(
     case CreateAppointmentPhase.Schedule:
       if (form.date === null || form.startMinute === null) return false;
       if (form.type === "session") {
+        if (!isValidDeposit(form.depositAmount)) return false;
         return form.endMinute !== null && form.endMinute > form.startMinute;
       }
       return true;
@@ -82,5 +92,6 @@ export function buildCreateAppointmentPayload(
         : undefined,
     colorType: isSession ? form.colorType : "",
     description: form.description.trim(),
+    depositAmountCents: isSession ? parseDepositCents(form.depositAmount) : 0,
   };
 }

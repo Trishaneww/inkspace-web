@@ -104,11 +104,12 @@ export const PortfolioDetailPhase = ({
 
   return (
     <DetailLayout lead={lead} rest={rest} media={media}>
-      <h3 className={styles.name}>{item.title}</h3>
-
-      {item.description && (
-        <p className={styles.description}>{item.description}</p>
-      )}
+      <div className={styles.summary}>
+        <h3 className={styles.name}>{item.title}</h3>
+        {item.description && (
+          <p className={styles.description}>{item.description}</p>
+        )}
+      </div>
 
       {item.styles.length > 0 && (
         <div className={styles.chips}>

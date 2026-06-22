@@ -4,7 +4,7 @@
 import styles from "@/styles/dashboard/artist/Bookings.module.css";
 
 // HTML Components
-import { CreditCard, Lock, ShieldCheck, type LucideIcon } from "lucide-react";
+import { CreditCard, Lock, type LucideIcon } from "lucide-react";
 
 // Components
 import {
@@ -17,28 +17,25 @@ import {
 
 // Libs
 import { formatPrice } from "@/lib/formatters";
-import { getPaymentBreakdown, getPaymentAmountCents } from "@/lib/payments";
+import { getFinalPaymentBreakdown, getPaymentAmountCents } from "@/lib/payments";
 import {
   FEE_PAYER_NOTE,
   PLATFORM_FEE_PERCENT_LABEL,
 } from "@/constants/payments";
-import { getPaymentTypeLabel, getPaymentTypeHint } from "@/lib/payments";
 
 // Types
-import type { Inquiry, PaymentType } from "@/types/bookings";
+import type { Inquiry } from "@/types/bookings";
 import type { RequestPaymentForm } from "@/types/payments";
 import type { PlatformFeePayer } from "@/types/settings";
 
-const TYPE_ICON: Record<PaymentType, LucideIcon> = {
-  deposit: ShieldCheck,
-  final: CreditCard,
-};
+const TYPE_ICON: LucideIcon = CreditCard;
 
 interface RequestPaymentReviewPhaseProps {
   inquiry: Inquiry;
   form: RequestPaymentForm;
   currency: string;
   feePayer: PlatformFeePayer;
+  depositPaidCents: number;
 }
 
 export const RequestPaymentReviewPhase = ({
@@ -46,24 +43,35 @@ export const RequestPaymentReviewPhase = ({
   form,
   currency,
   feePayer,
+  depositPaidCents,
 }: RequestPaymentReviewPhaseProps) => {
-  const breakdown = getPaymentBreakdown(getPaymentAmountCents(form), feePayer);
+  const breakdown = getFinalPaymentBreakdown(
+    getPaymentAmountCents(form),
+    depositPaidCents,
+    feePayer,
+  );
   const feeAddedToClient = feePayer !== "artist";
 
   return (
     <div className={styles.editFields}>
       <ReviewCard>
         <ReviewTypeBox
-          icon={TYPE_ICON[form.type]}
-          label={getPaymentTypeLabel(form.type)}
-          hint={getPaymentTypeHint(form.type)}
+          icon={TYPE_ICON}
+          label="Full payment"
+          hint="Charge the remaining balance"
         />
 
         <ReviewSection>
           <ReviewLineItem
-            label={getPaymentTypeLabel(form.type)}
-            value={formatPrice(breakdown.amountCents, currency)}
+            label="Job total"
+            value={formatPrice(breakdown.jobTotalCents, currency)}
           />
+          {breakdown.depositAppliedCents > 0 && (
+            <ReviewLineItem
+              label="Deposit paid"
+              value={`−${formatPrice(breakdown.depositAppliedCents, currency)}`}
+            />
+          )}
           <ReviewLineItem
             label={`Platform fee (${PLATFORM_FEE_PERCENT_LABEL})`}
             note={FEE_PAYER_NOTE[feePayer]}

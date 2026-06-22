@@ -25,6 +25,9 @@ const AVAILABILITY_KEYS: (keyof AvailabilityDraft)[] = [
   "timezone",
 ];
 
+type GoalDraft = Pick<ArtistSettings, "monthlyBookingGoal">;
+const GOAL_KEYS: (keyof GoalDraft)[] = ["monthlyBookingGoal"];
+
 type SchedulingRulesDraft = Pick<
   ArtistSettings,
   | "slotIntervalMinutes"
@@ -47,6 +50,9 @@ export function useBookingPreferencesForm(
   const availability = useDraftState<AvailabilityDraft>({
     acceptingBookings: settings?.acceptingBookings ?? true,
     timezone: settings?.timezone ?? "America/Toronto",
+  });
+  const goal = useDraftState<GoalDraft>({
+    monthlyBookingGoal: settings?.monthlyBookingGoal ?? 20,
   });
   const schedulingRules = useDraftState<SchedulingRulesDraft>({
     slotIntervalMinutes: settings?.slotIntervalMinutes ?? 60,
@@ -87,8 +93,17 @@ export function useBookingPreferencesForm(
     return saveSettings(patch);
   };
 
+  const submitGoal = () => {
+    if (!settings) return Promise.resolve();
+    return saveSettings(getChangedFields(settings, goal.draft, GOAL_KEYS));
+  };
+
   const availabilityChanged = settings
     ? hasUnsavedChanges(settings, availability.draft, AVAILABILITY_KEYS)
+    : false;
+
+  const goalChanged = settings
+    ? hasUnsavedChanges(settings, goal.draft, GOAL_KEYS)
     : false;
 
   const schedulingRulesChanged = settings
@@ -106,6 +121,9 @@ export function useBookingPreferencesForm(
     availability,
     availabilityChanged,
     submitAvailability,
+    goal,
+    goalChanged,
+    submitGoal,
     schedulingRules,
     schedulingRulesChanged,
     submitSchedulingRules,

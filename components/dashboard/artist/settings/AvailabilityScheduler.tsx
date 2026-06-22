@@ -1,6 +1,10 @@
 "use client";
 
+// Next.js
+import { useState } from "react";
+
 // CSS
+import clsx from "clsx";
 import styles from "@/styles/dashboard/artist/settings/Settings.module.css";
 
 // HTML Components
@@ -29,6 +33,8 @@ export const AvailabilityScheduler = ({
   windows,
   onChange,
 }: AvailabilitySchedulerProps) => {
+  const [selectedDay, setSelectedDay] = useState<number>(WEEKDAYS[0].value);
+
   // One range per weekday. Index the latest window per day so edits replace it.
   const byDay = new Map<number, AvailabilityWindowInput>();
   windows.forEach((w) => {
@@ -72,55 +78,70 @@ export const AvailabilityScheduler = ({
     commit(next);
   };
 
+  const activeDay =
+    WEEKDAYS.find((d) => d.value === selectedDay) ?? WEEKDAYS[0];
+  const activeRange = byDay.get(activeDay.value);
+  const activeEnabled = activeRange !== undefined;
+
   return (
-    <div>
-      {WEEKDAYS.map((day) => {
-        const range = byDay.get(day.value);
-        const enabled = range !== undefined;
+    <div className={styles.weeklyHours}>
+      <div className={styles.dayChips}>
+        {WEEKDAYS.map((day) => (
+          <button
+            key={day.value}
+            type="button"
+            className={clsx(styles.dayChip, {
+              [styles.dayChipOpen]: byDay.has(day.value),
+              [styles.dayChipSelected]: day.value === selectedDay,
+            })}
+            onClick={() => setSelectedDay(day.value)}
+            aria-pressed={day.value === selectedDay}
+          >
+            {day.short}
+          </button>
+        ))}
+      </div>
 
-        return (
-          <div key={day.value} className={styles.dayRow}>
-            <div className={styles.dayToggle}>
-              <Switch
-                checked={enabled}
-                onCheckedChange={(on) => toggleDay(day.value, on)}
-                aria-label={day.label}
-              />
-              <span className={styles.dayLabel}>{day.label}</span>
-            </div>
+      <div className={styles.dayEditor}>
+        <div className={styles.dayToggle}>
+          <Switch
+            checked={activeEnabled}
+            onCheckedChange={(on) => toggleDay(activeDay.value, on)}
+            aria-label={`Open on ${activeDay.label}`}
+          />
+          <span className={styles.dayLabel}>
+            {activeEnabled
+              ? `Open on ${activeDay.label}`
+              : `${activeDay.label} — closed`}
+          </span>
+        </div>
 
-            <div className={styles.timeRanges}>
-              {!enabled ? (
-                <span className={styles.dayClosed}>Closed</span>
-              ) : (
-                <div className={styles.timeRangeRow}>
-                  <OptionsSelect
-                    ariaLabel={`${day.label} start time`}
-                    value={String(range.startMinute)}
-                    options={AVAILABILITY_START_TIME_OPTIONS.filter(
-                      (o) => Number(o.value) < range.endMinute,
-                    )}
-                    onValueChange={(v) =>
-                      updateDay(day.value, { startMinute: Number(v) })
-                    }
-                  />
-                  <span className={styles.timeSeparator}>to</span>
-                  <OptionsSelect
-                    ariaLabel={`${day.label} end time`}
-                    value={String(range.endMinute)}
-                    options={AVAILABILITY_END_TIME_OPTIONS.filter(
-                      (o) => Number(o.value) > range.startMinute,
-                    )}
-                    onValueChange={(v) =>
-                      updateDay(day.value, { endMinute: Number(v) })
-                    }
-                  />
-                </div>
+        {activeEnabled && activeRange && (
+          <div className={styles.timeRangeRow}>
+            <OptionsSelect
+              ariaLabel={`${activeDay.label} start time`}
+              value={String(activeRange.startMinute)}
+              options={AVAILABILITY_START_TIME_OPTIONS.filter(
+                (o) => Number(o.value) < activeRange.endMinute,
               )}
-            </div>
+              onValueChange={(v) =>
+                updateDay(activeDay.value, { startMinute: Number(v) })
+              }
+            />
+            <span className={styles.timeSeparator}>to</span>
+            <OptionsSelect
+              ariaLabel={`${activeDay.label} end time`}
+              value={String(activeRange.endMinute)}
+              options={AVAILABILITY_END_TIME_OPTIONS.filter(
+                (o) => Number(o.value) > activeRange.startMinute,
+              )}
+              onValueChange={(v) =>
+                updateDay(activeDay.value, { endMinute: Number(v) })
+              }
+            />
           </div>
-        );
-      })}
+        )}
+      </div>
     </div>
   );
 };

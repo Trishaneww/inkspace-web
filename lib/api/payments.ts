@@ -1,9 +1,7 @@
 // Libs
 import { api } from "@/lib/api/client";
-import type { ClientSession } from "@/lib/auth/context";
 import type {
   CheckoutResponse,
-  CreateClientAccountPayload,
   CreatePaymentRequestPayload,
   PaymentRequest,
   PublicPaymentRequest,
@@ -50,11 +48,11 @@ export const paymentsApi = {
     return api.get<PublicPaymentRequest>(`/v1/pay/${token}`);
   },
 
-  createCheckout(token: string) {
-    return api.post<CheckoutResponse>(`/v1/pay/${token}/checkout`, {});
-  },
-
-  createClientAccount(token: string, payload: CreateClientAccountPayload) {
-    return api.post<ClientSession>(`/v1/pay/${token}/account`, payload);
+  createClientCheckout(token: string, authToken: string) {
+    return api.post<CheckoutResponse>(
+      `/v1/current-user/payments/${token}/checkout`,
+      {},
+      authToken,
+    );
   },
 };

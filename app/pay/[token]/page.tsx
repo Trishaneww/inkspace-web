@@ -2,39 +2,40 @@
 
 // Next.js
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 // CSS
 import styles from "@/styles/pay/PayPage.module.css";
 
 // HTML Components
-import { CheckCircle2, CircleAlert, Loader2 } from "lucide-react";
+import { CircleAlert, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 // Components
-import { ClientSignupCard } from "@/components/payment/ClientSignupCard";
-import { PaymentRequestCard } from "@/components/payment/PaymentRequestCard";
 import { PayStatus } from "@/components/payment/PayStatus";
 
 // Libs
 import { paymentsApi } from "@/lib/api/payments";
-import { displayToast } from "@/lib/toast";
+import { useAuth } from "@/lib/auth";
 import { isUnavailable } from "@/lib/payments";
+import { formatPrice } from "@/lib/formatters";
 
 // Types
 import type { PublicPaymentRequest } from "@/types/payments";
 
+const CLIENT_BOOKINGS_PATH = "/dashboard/client/bookings";
+
 export default function PayPage() {
   const params = useParams<{ token: string }>();
   const token = String(params.token);
-  const search = useSearchParams();
-  const returnedFromStripe = search.get("status") === "success";
+  const router = useRouter();
+  const { user, isLoading: authLoading } = useAuth();
 
   const [request, setRequest] = useState<PublicPaymentRequest | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-  const [paying, setPaying] = useState(false);
-  const [payError, setPayError] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -48,30 +49,13 @@ export default function PayPage() {
     };
   }, [token]);
 
-  // Confirm the payment with a toast the moment the client lands back here.
+  // Signed-in clients pay from their dashboard.
   useEffect(() => {
-    if (returnedFromStripe) {
-      displayToast(
-        "Payment successful — your booking is confirmed.",
-        "success",
-      );
-    }
-  }, [returnedFromStripe]);
-
-  const startCheckout = async () => {
-    setPaying(true);
-    setPayError(null);
-    try {
-      const { url } = await paymentsApi.createCheckout(token);
-      window.location.href = url;
-    } catch {
-      setPayError("Couldn't start checkout. Please try again.");
-      setPaying(false);
-    }
-  };
+    if (!authLoading && user) router.replace(CLIENT_BOOKINGS_PATH);
+  }, [authLoading, user, router]);
 
   function renderContent() {
-    if (loading) {
+    if (loading || authLoading || user) {
       return (
         <div className={styles.loading}>
           <Loader2 size={24} className="animate-spin" />
@@ -89,47 +73,52 @@ export default function PayPage() {
       );
     }
 
-    if (request.status === "paid" || returnedFromStripe) {
-      if (!request.hasAccount) {
-        return (
-          <ClientSignupCard
-            token={token}
-            email={request.clientEmail}
-            name={request.clientName}
-            artist={request.artistName || "your artist"}
-          />
-        );
-      }
-      return (
-        <PayStatus
-          icon={<CheckCircle2 size={36} className={styles.iconSuccess} />}
-          title="Payment complete"
-          description={
-            request.status === "paid"
-              ? "Thank you, your payment has been received. Your booking is confirmed."
-              : "Thank you, we're confirming your payment now."
-          }
-        />
-      );
-    }
-
-    if (isUnavailable(request)) {
+    if (isUnavailable(request) || request.status === "paid") {
       return (
         <PayStatus
           icon={<CircleAlert size={36} className={styles.iconMuted} />}
-          title="This link is no longer active"
-          description="Reach out to your artist for an up-to-date payment link."
+          title={
+            request.status === "paid"
+              ? "This payment is already settled"
+              : "This link is no longer active"
+          }
+          description="Reach out to your artist if you think this is a mistake."
         />
       );
     }
 
+    const artist = request.artistName || "your artist";
+    const due = formatPrice(request.clientChargeCents, request.currency);
+    const label = request.type === "deposit" ? "deposit" : "balance";
+
     return (
-      <PaymentRequestCard
-        request={request}
-        paying={paying}
-        payError={payError}
-        onStartCheckout={startCheckout}
-      />
+      <div className={styles.signInCard}>
+        <span className={styles.eyebrow}>Payment for {artist}</span>
+        <h1 className={styles.heading}>
+          Sign in to pay your {label} of {due}
+        </h1>
+        <p className={styles.body}>
+          Inkspace keeps your bookings and payments in one place. Log in or
+          create an account, then pay securely from your dashboard.
+        </p>
+
+        <div className={styles.actions}>
+          <Button
+            className={styles.primaryBtn}
+            nativeButton={false}
+            render={<Link href="/login" />}
+          >
+            Log in
+          </Button>
+          <Button
+            variant="outline"
+            nativeButton={false}
+            render={<Link href="/signup" />}
+          >
+            Create an account
+          </Button>
+        </div>
+      </div>
     );
   }
 

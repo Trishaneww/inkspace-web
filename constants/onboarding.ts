@@ -44,8 +44,11 @@ export const ONBOARDING_INPUT_PHASES = [
   OnboardingPhase.Availability,
   OnboardingPhase.Styles,
   OnboardingPhase.Bookings,
+  OnboardingPhase.Goals,
   OnboardingPhase.Calendar,
 ];
+
+export const DEFAULT_MONTHLY_BOOKING_GOAL = 20;
 
 export const ONBOARDING_PHASE_META: Record<
   OnboardingPhase,
@@ -70,6 +73,10 @@ export const ONBOARDING_PHASE_META: Record<
   [OnboardingPhase.Bookings]: {
     lead: "Bookings.",
     rest: "Choose how clients book with you.",
+  },
+  [OnboardingPhase.Goals]: {
+    lead: "Your goal.",
+    rest: "Optional — set a monthly booking target and we'll cheer you on.",
   },
   [OnboardingPhase.Calendar]: {
     lead: "Sync your calendar.",
