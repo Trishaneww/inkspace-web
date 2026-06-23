@@ -47,6 +47,10 @@ const initialForm = (): OnboardingFormState => ({
   deposit: "",
   schedulingMode: "",
   monthlyBookingGoal: String(DEFAULT_MONTHLY_BOOKING_GOAL),
+  minSessionPrice: "",
+  declinedStyles: [],
+  declinedPlacements: [],
+  workSummary: "",
 });
 
 export const useOnboardingForm = () => {
@@ -120,6 +124,8 @@ export const useOnboardingForm = () => {
           form.availability.every((w) => w.endMinute > w.startMinute)
         );
       case OnboardingPhase.Styles:
+        return true;
+      case OnboardingPhase.Work:
         return true;
       case OnboardingPhase.Bookings:
         return form.schedulingMode !== "";

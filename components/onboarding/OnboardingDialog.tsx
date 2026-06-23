@@ -20,6 +20,7 @@ import { ProfilePhase } from "./ProfilePhase";
 import { StudioPhase } from "./StudioPhase";
 import { AvailabilityPhase } from "./AvailabilityPhase";
 import { StylesPhase } from "./StylesPhase";
+import { WorkPhase } from "./WorkPhase";
 import { BookingsPhase } from "./BookingsPhase";
 import { GoalsPhase } from "./GoalsPhase";
 import { CalendarPhase } from "./CalendarPhase";
@@ -66,6 +67,8 @@ export const OnboardingDialog = () => {
         return <AvailabilityPhase form={form} update={update} />;
       case OnboardingPhase.Styles:
         return <StylesPhase form={form} update={update} />;
+      case OnboardingPhase.Work:
+        return <WorkPhase form={form} update={update} />;
       case OnboardingPhase.Bookings:
         return <BookingsPhase form={form} update={update} />;
       case OnboardingPhase.Goals:

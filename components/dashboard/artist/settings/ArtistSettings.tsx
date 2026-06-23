@@ -14,6 +14,7 @@ import { PersonalInfoTab } from "./PersonalInfoTab";
 import { EmailPasswordTab } from "./EmailPasswordTab";
 import { PaymentsPayoutsTab } from "./PaymentsPayoutsTab";
 import { BillingTab } from "./BillingTab";
+import { YourWorkTab } from "./YourWorkTab";
 import { DepositsTab } from "./DepositsTab";
 import { BookingPreferencesTab } from "./BookingPreferencesTab";
 import { PoliciesTab } from "./PoliciesTab";
@@ -81,6 +82,8 @@ const TabContent = ({
       return <PaymentsPayoutsTab controller={controller} />;
     case "billing":
       return <BillingTab />;
+    case "yourwork":
+      return <YourWorkTab controller={controller} />;
     case "deposits":
       return <DepositsTab controller={controller} />;
     case "booking":

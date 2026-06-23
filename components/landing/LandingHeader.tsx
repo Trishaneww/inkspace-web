@@ -46,8 +46,8 @@ export const LandingHeader = () => {
               Go to dashboard
             </Link>
           ) : (
-            <Link href="/login" className={styles.loginButton}>
-              Log in
+            <Link href="/signup" className={styles.loginButton}>
+              Sign Up
             </Link>
           )}
           <a
