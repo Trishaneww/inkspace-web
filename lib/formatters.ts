@@ -111,6 +111,31 @@ export function formatDate(iso: string): string {
 }
 
 /**
+ * Capitalizes each word of a full name, e.g. "trishane neupnexx" ->
+ * "Trishane Neupnexx". Collapses extra whitespace.
+ * @param name - The raw name.
+ * @returns The title-cased name.
+ */
+export function formatFullName(name: string): string {
+  return name
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
+
+/**
+ * Formats an ISO 8601 timestamp as a clock time, e.g.
+ * "2026-06-18T19:30:00Z" -> "3:30 PM" (in local time).
+ * @param iso - The ISO 8601 timestamp to format.
+ * @returns The formatted time string.
+ */
+export function formatClockTime(iso: string): string {
+  return formatISO(iso, "h:mm a");
+}
+
+/**
  * Formats an ISO 8601 timestamp as a date and time, e.g.
  * "2026-06-18T19:30:00Z" -> "Jun 18, 2026 · 3:30 PM" (in local time).
  * @param iso - The ISO 8601 timestamp to format.

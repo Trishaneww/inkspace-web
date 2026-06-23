@@ -1,27 +1,23 @@
+// Next.js
+import { Suspense } from "react";
+
 // CSS
 import styles from "@/styles/dashboard/client/ClientPage.module.css";
 
-// HTML Components
-import { MessagesSquare } from "lucide-react";
-
 // Components
-import { DashboardEmptyState } from "@/components/dashboard/DashboardEmptyState";
+import { DashboardMessages } from "@/components/dashboard/messaging/DashboardMessages";
 
 export default function ClientMessagesPage() {
   return (
     <div className={styles.page}>
       <div className={styles.header}>
         <h1 className={styles.title}>Messages</h1>
-        <span className={styles.subtitle}>
-          Chat with the artists you have booked with
-        </span>
+        <span className={styles.subtitle}>Chat with your artists</span>
       </div>
 
-      <DashboardEmptyState
-        icon={MessagesSquare}
-        title="Messages are coming soon"
-        description="Soon you'll be able to message your artists right here to talk through your design, placement, and appointment details."
-      />
+      <Suspense>
+        <DashboardMessages scope="client" />
+      </Suspense>
     </div>
   );
 }
