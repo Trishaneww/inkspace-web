@@ -1,0 +1,217 @@
+/* ── Section ─────────────────────────────────────────────────────────────── */
+.pricing {
+  padding: 3.5rem 1.25rem 5rem;
+}
+
+.intro {
+  width: 100%;
+  max-width: 42rem;
+
+  margin: 0 auto 3rem;
+
+  text-align: center;
+}
+
+.eyebrow {
+  margin-bottom: 0.75rem;
+
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.title {
+  margin-bottom: 1rem;
+
+  font-size: 2.25rem;
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: hsl(220, 13%, 14%);
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: hsl(220, 9%, 40%);
+}
+
+/* ── Cards ───────────────────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  max-width: 46rem;
+
+  margin-inline: auto;
+  gap: 1.5rem;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  padding: 2rem;
+  border-radius: 1.1rem;
+
+  border: 1px solid hsl(220, 13%, 91%);
+  background-color: hsl(0, 0%, 100%);
+  box-shadow: 0 1px 2px hsl(220, 13%, 50%, 0.05);
+}
+
+.cardFeatured {
+  border: 1px solid var(--color-indigo-border);
+  box-shadow: 0 1.25rem 3rem hsl(240, 60%, 45%, 0.15);
+}
+
+.badge {
+  position: absolute;
+  top: -0.85rem;
+  left: 50%;
+
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px;
+
+  background-color: var(--color-primary);
+  color: hsl(0, 0%, 100%);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+
+  transform: translateX(-50%);
+}
+
+.planName {
+  margin-bottom: 0.5rem;
+
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 14%);
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.priceAmount {
+  font-size: 2.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: hsl(220, 13%, 14%);
+}
+
+.pricePeriod {
+  font-size: 0.95rem;
+  color: hsl(220, 9%, 46%);
+}
+
+.planDescription {
+  min-height: 3.2rem;
+  margin-bottom: 1.5rem;
+
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: hsl(220, 9%, 44%);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  padding: 0.65rem 1.15rem;
+  border: none;
+  border-radius: 0.6rem;
+
+  background-color: hsl(220, 13%, 18%);
+  color: hsl(0, 0%, 100%);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: background-color 150ms ease;
+
+  &:hover {
+    background-color: hsl(220, 13%, 28%);
+  }
+}
+
+.ctaFeatured {
+  background-color: var(--color-primary);
+
+  &:hover {
+    background-color: var(--color-primary-hover);
+  }
+}
+
+/* ── Feature list ────────────────────────────────────────────────────────── */
+.featuresLead {
+  margin-top: 1.75rem;
+  margin-bottom: 1rem;
+  padding-top: 1.5rem;
+
+  border-top: 1px solid hsl(220, 13%, 92%);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: hsl(220, 9%, 50%);
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.feature {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 0.6rem;
+
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: hsl(220, 9%, 38%);
+}
+
+.featureIcon {
+  flex-shrink: 0;
+
+  margin-top: 0.1rem;
+
+  color: var(--color-primary);
+}
+
+@media (min-width: 768px) {
+  .pricing {
+    padding: 5rem 1.5rem 6rem;
+  }
+
+  .title {
+    font-size: 3rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .planDescription {
+    min-height: 4.5rem;
+  }
+}

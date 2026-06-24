@@ -1,3 +1,5 @@
+"use client";
+
 // Next.js
 import Link from "next/link";
 
@@ -8,14 +10,18 @@ import styles from "@/styles/landing/Landing.module.css";
 import InkspaceLogo from "@/public/logos/inkspace-logo.svg";
 
 // Libs
+import { useAuth, postAuthRedirect } from "@/lib/auth";
 import { BOOK_DEMO_URL } from "@/constants/landing";
 
 const NAV_LINKS = [
   { label: "Features", href: "#features" },
+  { label: "Pricing", href: "/pricing" },
   { label: "FAQ", href: "#faq" },
 ];
 
 export const LandingHeader = () => {
+  const { user, isAuthenticated } = useAuth();
+
   return (
     <header className={styles.header}>
       <div className={styles.headerInner}>
@@ -35,9 +41,15 @@ export const LandingHeader = () => {
         </div>
 
         <div className={styles.headerActions}>
-          <Link href="/login" className={styles.loginButton}>
-            Log in
-          </Link>
+          {isAuthenticated && user ? (
+            <Link href={postAuthRedirect(user)} className={styles.loginButton}>
+              Go to dashboard
+            </Link>
+          ) : (
+            <Link href="/login" className={styles.loginButton}>
+              Log in
+            </Link>
+          )}
           <a
             href={BOOK_DEMO_URL}
             target="_blank"
