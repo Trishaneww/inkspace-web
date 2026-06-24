@@ -7,6 +7,7 @@ import {
   Image as ImageIcon,
   Inbox,
   Settings,
+  Sparkles,
   Star,
   Users,
   Zap,
@@ -14,6 +15,9 @@ import {
 
 // Libs
 import { ARTIST_DASHBOARD_ROOT } from "@/constants/flashes";
+
+export const NEW_REQUESTS_HREF = "/dashboard/artist/new-requests";
+export const MESSAGES_HREF = "/dashboard/artist/messages";
 
 export type IconType = React.ComponentType<{ className?: string }>;
 
@@ -45,6 +49,11 @@ export const artistMainNav: NavLeaf[] = [
     icon: Home,
   },
   {
+    href: NEW_REQUESTS_HREF,
+    label: "New Requests",
+    icon: Sparkles,
+  },
+  {
     href: "/dashboard/artist/bookings",
     label: "Bookings",
     icon: BookOpenCheck,
@@ -60,7 +69,7 @@ export const artistMainNav: NavLeaf[] = [
     icon: Users,
   },
   {
-    href: "/dashboard/artist/messages",
+    href: MESSAGES_HREF,
     label: "Messages",
     icon: Inbox,
   },

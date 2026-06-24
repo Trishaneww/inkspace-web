@@ -238,6 +238,26 @@ export function formatTime(minutes: number, isCompact = false): string {
   return `${hour12}:${String(mins).padStart(2, "0")} ${period}`;
 }
 
+const WEEKDAY_NAMES = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+/**
+ * Formats a weekday number (0 = Sunday, 6 = Saturday) as its full name.
+ *
+ * @param weekday - Day of week, 0 (Sunday) through 6 (Saturday).
+ * @returns The weekday name, or an empty string if out of range.
+ */
+export function formatWeekday(weekday: number): string {
+  return WEEKDAY_NAMES[weekday] ?? "";
+}
+
 /**
  * Formats a duration in minutes as a compact human-readable string,
  * e.g. 45 -> "45 min", 60 -> "1 hour", 90 -> "1.5 hours".

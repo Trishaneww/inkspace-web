@@ -24,7 +24,6 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
@@ -181,10 +180,10 @@ const LeafNavItem = ({ item, pathname }: LeafNavItemProps) => {
       >
         <Icon />
         <span className={styles.navItemLabel}>{item.label}</span>
+        {item.badge !== undefined && (
+          <span className={styles.navItemBadge}>{item.badge}</span>
+        )}
       </SidebarMenuButton>
-      {item.badge !== undefined && (
-        <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
-      )}
     </SidebarMenuItem>
   );
 };

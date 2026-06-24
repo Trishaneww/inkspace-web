@@ -92,7 +92,8 @@
   justify-content: center;
 }
 
-:global([data-collapsible="icon"]) .navItemLabel {
+:global([data-collapsible="icon"]) .navItemLabel,
+:global([data-collapsible="icon"]) .navItemBadge {
   display: none;
 }
 
@@ -323,4 +324,20 @@
 .navItemLabel {
   font-weight: 500;
   letter-spacing: 0.02em;
+}
+
+.navItemBadge {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.4rem;
+
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.5rem;
+
+  background-color: hsl(240, 100%, 96%);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: hsl(240, 100%, 64%);
 }

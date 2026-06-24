@@ -131,6 +131,23 @@ export interface Inquiry {
   appointment?: Appointment;
   liveAppointments: Appointment[];
   payments: InquiryPayment[];
+  ai: InquiryTriage;
+  conversationId: string | null;
+  artistReplied: boolean;
+}
+
+export type TriageLabel = "book" | "needs_info" | "pass" | "spam";
+
+export interface InquiryTriage {
+  status: "pending" | "ready" | "failed" | "skipped";
+  label: TriageLabel | null;
+  summary: string;
+  signals: { good: string[]; bad: string[] };
+  redFlags: string[];
+  reasoning: string;
+  valueCents: number | null;
+  sessionCount: number | null;
+  draftReply: string;
 }
 
 export interface SlotOption {
