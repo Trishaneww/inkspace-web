@@ -22,6 +22,9 @@ import { InquiryConfirmPhase } from "./InquiryConfirmPhase";
 // Hooks
 import { useInquiryDetailView } from "@/hooks/useInquiryDetailView";
 
+// Libs
+import { formatFullName } from "@/lib/formatters";
+
 // Types
 import type { InquiryView } from "@/hooks/useInquiryDetailView";
 import type { Inquiry } from "@/types/bookings";
@@ -73,7 +76,7 @@ export const InquiryDetailView = ({
       <div className={styles.detailHeader}>
         <div className={styles.detailTitleRow}>
           <SheetTitle className={styles.detailTitle}>
-            {inquiry.clientName}
+            {formatFullName(inquiry.clientName)}
           </SheetTitle>
           <StatusBadge label={status.label} variant={status.variant} />
         </div>

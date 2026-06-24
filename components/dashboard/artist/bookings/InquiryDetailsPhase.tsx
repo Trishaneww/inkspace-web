@@ -35,6 +35,7 @@ import {
 import {
   formatDateTime,
   formatDurationMinutes,
+  formatFullName,
   formatLocation,
   formatPrice,
 } from "@/lib/formatters";
@@ -164,7 +165,7 @@ export const InquiryDetailsPhase = ({ inquiry }: { inquiry: Inquiry }) => {
 
       <div className={styles.detailCard}>
         <span className={styles.detailCardTitle}>Client</span>
-        <DetailRow label="Name" value={inquiry.clientName} />
+        <DetailRow label="Name" value={formatFullName(inquiry.clientName)} />
         <DetailRow label="Email" value={inquiry.clientEmail} />
         {inquiry.clientPhone && (
           <DetailRow label="Phone" value={inquiry.clientPhone} />
