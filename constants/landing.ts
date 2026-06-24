@@ -13,6 +13,8 @@ import {
   Clock,
   ShieldCheck,
   Palette,
+  Sparkles,
+  MessageSquare,
 } from "lucide-react";
 
 export interface ShowcaseTab {
@@ -44,6 +46,13 @@ export const SHOWCASE_TABS: ShowcaseTab[] = [
     alt: "Inkspace dashboard with earnings, booking pipeline and upcoming appointments",
   },
   {
+    key: "new-requests",
+    label: "New Requests",
+    icon: Sparkles,
+    image: "/landing/new-requests.png",
+    alt: "Inkspace New Requests page with AI-triaged tattoo leads",
+  },
+  {
     key: "calendar",
     label: "Calendar",
     icon: CalendarDays,
@@ -56,6 +65,13 @@ export const SHOWCASE_TABS: ShowcaseTab[] = [
     icon: Inbox,
     image: "/landing/bookings.png",
     alt: "Inkspace bookings inbox of client tattoo requests",
+  },
+  {
+    key: "messages",
+    label: "Messages",
+    icon: MessageSquare,
+    image: "/landing/messages.png",
+    alt: "Inkspace messages with client conversations about bookings",
   },
   {
     key: "transactions",
@@ -91,6 +107,37 @@ export const SHOWCASE_TABS: ShowcaseTab[] = [
     icon: BookOpen,
     image: "/landing/open-booking.png",
     alt: "Inkspace Open Book public booking page",
+  },
+];
+
+export interface HighlightFeature {
+  key: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+}
+
+export const HIGHLIGHT_FEATURES: HighlightFeature[] = [
+  {
+    key: "triage",
+    eyebrow: "Lead Triage",
+    title: "Every lead, sorted for you",
+    description:
+      "AI reviews each new request the moment it lands, reads the brief and the reference photos, flags the perfect fits, and drafts a reply in your voice, so you act on the right bookings first instead of reading a wall of DMs.",
+  },
+  {
+    key: "messaging",
+    eyebrow: "Messaging",
+    title: "Every client chat in one place",
+    description:
+      "Talk to every client from one inbox, with replies drafted in your tone. No more switching between Instagram, email, and texts to keep a booking moving.",
+  },
+  {
+    key: "followup",
+    eyebrow: "Follow-up Agent",
+    title: "It chases the ones who go quiet",
+    description:
+      "When a lead stalls or a deposit goes unpaid, Inkspace writes the perfect nudge and reminds you to send it, so no booking ever slips through the cracks.",
   },
 ];
 

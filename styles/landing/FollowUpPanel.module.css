@@ -1,0 +1,205 @@
+.followup {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  font-size: clamp(0.4rem, 4.3cqw, 0.78rem);
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  gap: 0.9em;
+  padding: 1.2em 1.3em;
+  border-radius: 1.1em;
+
+  border: 1px solid hsl(220, 13%, 91%);
+  background-color: hsl(0, 0%, 100%);
+  box-shadow: 0 1.6em 3.2em hsl(235, 40%, 22%, 0.16);
+}
+
+.boardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.boardTitle {
+  font-size: 1.1em;
+  font-weight: 700;
+  color: hsl(220, 13%, 16%);
+}
+
+.boardLink {
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.3em;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+
+  gap: 0.7em;
+  padding: 0.6em 0.5em;
+  border-radius: 0.7em;
+
+  background-color: hsl(220, 20%, 98%);
+}
+
+.itemAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.2em;
+  height: 2.2em;
+  border-radius: 999px;
+
+  background-color: hsl(240, 100%, 95%);
+  color: var(--color-primary);
+  font-size: 0.85em;
+  font-weight: 700;
+}
+
+.itemBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+
+  gap: 0.15em;
+}
+
+.itemTop {
+  display: flex;
+  align-items: center;
+
+  gap: 0.5em;
+}
+
+.itemName {
+  font-size: 0.92em;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.reason {
+  padding: 0.15em 0.5em;
+  border-radius: 999px;
+
+  font-size: 0.72em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.reasonWarn {
+  background-color: hsl(38, 90%, 93%);
+  color: hsl(30, 70%, 35%);
+}
+
+.reasonAlert {
+  background-color: hsl(0, 75%, 95%);
+  color: hsl(0, 62%, 45%);
+}
+
+.reasonMuted {
+  background-color: hsl(220, 14%, 94%);
+  color: hsl(220, 9%, 40%);
+}
+
+.itemNote {
+  overflow: hidden;
+
+  font-size: 0.8em;
+  color: hsl(220, 9%, 50%);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.itemChevron {
+  flex-shrink: 0;
+  width: 1.1em;
+  height: 1.1em;
+
+  color: hsl(220, 9%, 60%);
+}
+
+/* Floating quick-nudge suggestion, overlapping the lower-right of the board. */
+.nudge {
+  position: absolute;
+  right: -0.5em;
+  bottom: 1.5em;
+  display: flex;
+  flex-direction: column;
+  width: 17em;
+
+  gap: 0.5em;
+  padding: 0.9em 1em;
+  border-radius: 0.9em;
+
+  border: 1px solid hsl(240, 100%, 92%);
+  background-color: hsl(0, 0%, 100%);
+  box-shadow: 0 1.75em 3.5em hsl(235, 40%, 22%, 0.22);
+}
+
+.nudgeLabel {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.4em;
+
+  font-size: 0.72em;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.nudgeIcon {
+  width: 1.1em;
+  height: 1.1em;
+}
+
+.nudgeText {
+  font-size: 0.86em;
+  line-height: 1.45;
+  color: hsl(220, 13%, 28%);
+}
+
+.nudgeActions {
+  display: flex;
+  align-items: center;
+
+  gap: 0.5em;
+}
+
+.nudgeSend {
+  padding: 0.45em 0.85em;
+  border-radius: 0.55em;
+
+  background-color: var(--color-primary);
+  color: hsl(0, 0%, 100%);
+  font-size: 0.82em;
+  font-weight: 600;
+}
+
+.nudgeDismiss {
+  padding: 0.45em 0.8em;
+
+  font-size: 0.82em;
+  font-weight: 500;
+  color: hsl(220, 9%, 46%);
+}

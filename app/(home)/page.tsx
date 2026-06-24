@@ -5,6 +5,7 @@ import styles from "@/styles/landing/Landing.module.css";
 import { LandingHeader } from "@/components/landing/LandingHeader";
 import { LandingHero } from "@/components/landing/LandingHero";
 import { DashboardShowcase } from "@/components/landing/DashboardShowcase";
+import { HighlightsSection } from "@/components/landing/HighlightsSection";
 import { TestimonialsSection } from "@/components/landing/TestimonialsSection";
 import { FeatureSection } from "@/components/landing/FeatureSection";
 import { CtaSection } from "@/components/landing/CtaSection";
@@ -21,6 +22,7 @@ export default function Home() {
         <main>
           <LandingHero />
           <DashboardShowcase />
+          <HighlightsSection />
           <TestimonialsSection />
           <FeatureSection />
           <CtaSection />

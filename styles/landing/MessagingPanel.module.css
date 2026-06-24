@@ -1,0 +1,155 @@
+.messaging {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  font-size: clamp(0.4rem, 4.3cqw, 0.78rem);
+}
+
+.window {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  border-radius: 1.1em;
+
+  border: 1px solid hsl(220, 13%, 91%);
+  background-color: hsl(0, 0%, 100%);
+  box-shadow: 0 1.6em 3.2em hsl(235, 40%, 22%, 0.16);
+
+  overflow: hidden;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+
+  gap: 0.7em;
+  padding: 0.9em 1em;
+
+  border-bottom: 1px solid hsl(220, 13%, 93%);
+}
+
+.headAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.4em;
+  height: 2.4em;
+  border-radius: 999px;
+
+  background-color: hsl(222, 47%, 20%);
+  color: hsl(0, 0%, 100%);
+  font-size: 1em;
+  font-weight: 700;
+}
+
+.headIdentity {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.headName {
+  font-size: 1em;
+  font-weight: 700;
+  color: hsl(220, 13%, 16%);
+}
+
+.headDetail {
+  font-size: 0.8em;
+  color: hsl(220, 9%, 52%);
+}
+
+.headIcon {
+  display: inline-flex;
+  flex-shrink: 0;
+
+  color: hsl(220, 9%, 50%);
+
+  & svg {
+    width: 1.2em;
+    height: 1.2em;
+  }
+}
+
+.thread {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.9em;
+  padding: 1.1em 1em;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 88%;
+
+  gap: 0.35em;
+}
+
+.rowMine {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+
+  gap: 0.45em;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.9em;
+  height: 1.9em;
+  border-radius: 999px;
+
+  background-color: hsl(222, 47%, 20%);
+  color: hsl(0, 0%, 100%);
+  font-size: 0.62em;
+  font-weight: 600;
+}
+
+.avatarMine {
+  background-color: hsl(95, 38%, 38%);
+}
+
+.metaName {
+  font-size: 0.82em;
+  font-weight: 600;
+  line-height: 1;
+  color: hsl(220, 13%, 18%);
+}
+
+.metaTime {
+  font-size: 0.72em;
+  line-height: 1;
+  color: hsl(220, 9%, 55%);
+}
+
+.bubble {
+  padding: 0.6em 0.85em;
+  border-radius: 1em;
+
+  background-color: hsl(220, 16%, 95%);
+  color: hsl(220, 13%, 18%);
+  font-size: 0.88em;
+  line-height: 1.45;
+}
+
+.bubbleMine {
+  background-color: hsl(250, 85%, 95%);
+  color: hsl(250, 35%, 30%);
+}
