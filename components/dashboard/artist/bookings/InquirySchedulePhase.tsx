@@ -26,7 +26,7 @@ import {
   SESSION_DURATION_OPTIONS,
 } from "@/constants/bookings";
 import { MIN_CHARGE_DOLLARS } from "@/constants/payments";
-import { formatDurationMinutes } from "@/lib/formatters";
+import { formatDurationMinutes, formatFullName } from "@/lib/formatters";
 import type {
   AppointmentType,
   ConsultationFormat,
@@ -51,7 +51,7 @@ export const InquirySchedulePhase = ({
   currency,
   isReschedule = false,
 }: InquirySchedulePhaseProps) => {
-  const firstName = inquiry.clientName.split(" ")[0];
+  const firstName = formatFullName(inquiry.clientName).split(" ")[0];
   const clientPicks = clientPicksTime(type, form, isReschedule);
 
   return (

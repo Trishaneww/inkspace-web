@@ -44,6 +44,12 @@ export function buildOnboardingPayload(
       : null,
     schedulingMode: form.schedulingMode as SchedulingMode,
     monthlyBookingGoal: parseGoal(form.monthlyBookingGoal),
+    minSessionPriceCents: form.minSessionPrice
+      ? Math.round(parseFloat(form.minSessionPrice) * 100)
+      : null,
+    declinedStyles: form.declinedStyles,
+    declinedPlacements: form.declinedPlacements,
+    workSummary: form.workSummary.trim() || undefined,
   };
 }
 

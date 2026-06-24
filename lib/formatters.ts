@@ -111,6 +111,31 @@ export function formatDate(iso: string): string {
 }
 
 /**
+ * Capitalizes each word of a full name, e.g. "trishane neupnexx" ->
+ * "Trishane Neupnexx". Collapses extra whitespace.
+ * @param name - The raw name.
+ * @returns The title-cased name.
+ */
+export function formatFullName(name: string): string {
+  return name
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
+
+/**
+ * Formats an ISO 8601 timestamp as a clock time, e.g.
+ * "2026-06-18T19:30:00Z" -> "3:30 PM" (in local time).
+ * @param iso - The ISO 8601 timestamp to format.
+ * @returns The formatted time string.
+ */
+export function formatClockTime(iso: string): string {
+  return formatISO(iso, "h:mm a");
+}
+
+/**
  * Formats an ISO 8601 timestamp as a date and time, e.g.
  * "2026-06-18T19:30:00Z" -> "Jun 18, 2026 · 3:30 PM" (in local time).
  * @param iso - The ISO 8601 timestamp to format.
@@ -211,6 +236,26 @@ export function formatTime(minutes: number, isCompact = false): string {
   }
 
   return `${hour12}:${String(mins).padStart(2, "0")} ${period}`;
+}
+
+const WEEKDAY_NAMES = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+/**
+ * Formats a weekday number (0 = Sunday, 6 = Saturday) as its full name.
+ *
+ * @param weekday - Day of week, 0 (Sunday) through 6 (Saturday).
+ * @returns The weekday name, or an empty string if out of range.
+ */
+export function formatWeekday(weekday: number): string {
+  return WEEKDAY_NAMES[weekday] ?? "";
 }
 
 /**

@@ -43,6 +43,7 @@ export const ONBOARDING_INPUT_PHASES = [
   OnboardingPhase.Studio,
   OnboardingPhase.Availability,
   OnboardingPhase.Styles,
+  OnboardingPhase.Work,
   OnboardingPhase.Bookings,
   OnboardingPhase.Goals,
   OnboardingPhase.Calendar,
@@ -69,6 +70,10 @@ export const ONBOARDING_PHASE_META: Record<
   [OnboardingPhase.Styles]: {
     lead: "Your styles.",
     rest: "Optional — what you specialize in, so we can get to know your work.",
+  },
+  [OnboardingPhase.Work]: {
+    lead: "Your limits.",
+    rest: "Optional — your minimum and what you turn down, so AI can screen requests for you. You can add this anytime in Settings.",
   },
   [OnboardingPhase.Bookings]: {
     lead: "Bookings.",

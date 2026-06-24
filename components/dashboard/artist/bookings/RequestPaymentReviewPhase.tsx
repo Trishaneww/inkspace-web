@@ -16,7 +16,7 @@ import {
 } from "@/components/dashboard/artist/bookings/ReviewPrimitives";
 
 // Libs
-import { formatPrice } from "@/lib/formatters";
+import { formatFullName, formatPrice } from "@/lib/formatters";
 import { getFinalPaymentBreakdown, getPaymentAmountCents } from "@/lib/payments";
 import {
   FEE_PAYER_NOTE,
@@ -90,7 +90,7 @@ export const RequestPaymentReviewPhase = ({
         </ReviewSection>
 
         <ReviewSection label="Billed to">
-          <ReviewLineItem label="Name" value={inquiry.clientName} />
+          <ReviewLineItem label="Name" value={formatFullName(inquiry.clientName)} />
           <ReviewLineItem label="Email" value={inquiry.clientEmail} />
           {inquiry.clientPhone && (
             <ReviewLineItem label="Phone" value={inquiry.clientPhone} />
@@ -98,7 +98,7 @@ export const RequestPaymentReviewPhase = ({
         </ReviewSection>
 
         <ReviewNote icon={Lock}>
-          We&apos;ll email {inquiry.clientName} a secure link to pay{" "}
+          We&apos;ll email {formatFullName(inquiry.clientName)} a secure link to pay{" "}
           {formatPrice(breakdown.clientChargeCents, currency)}.
         </ReviewNote>
       </ReviewCard>

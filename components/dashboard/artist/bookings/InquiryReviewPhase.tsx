@@ -33,7 +33,7 @@ import {
 // Libs
 import { buildScheduleReview, parseDepositCents } from "@/lib/inquiryScheduling";
 import { useAuth } from "@/lib/auth";
-import { formatLocation, formatPrice } from "@/lib/formatters";
+import { formatFullName, formatLocation, formatPrice } from "@/lib/formatters";
 import { describePiece } from "@/lib/bookings";
 import { getPaymentBreakdown } from "@/lib/payments";
 import { CONSULTATION_FORMAT_LABELS } from "@/constants/bookings";
@@ -108,13 +108,14 @@ export const InquiryReviewPhase = ({
         <ReviewTypeBox
           icon={typeIcon}
           label={`${action} ${bookingTypeLabel}`}
-          hint={`${review.durationLabel} · with ${review.clientName}`}
+          hint={`${review.durationLabel} · with ${formatFullName(review.clientName)}`}
         />
 
         <ReviewSection>
           {review.clientScheduled ? (
             <ReviewRow icon={CalendarClock}>
-              {review.clientName.split(" ")[0]} picks their own start time
+              {formatFullName(review.clientName).split(" ")[0]} picks their own
+              start time
             </ReviewRow>
           ) : (
             <>

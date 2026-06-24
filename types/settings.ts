@@ -10,6 +10,7 @@ export type SettingsTabId =
   | "email"
   | "payments"
   | "billing"
+  | "yourwork"
   | "deposits"
   | "booking"
   | "policies"
@@ -65,6 +66,11 @@ export interface ArtistSettings {
   notifyBySms: boolean;
 
   styles: string[];
+
+  minSessionPriceCents: number | null;
+  declinedPlacements: string[];
+  declinedStyles: string[];
+  workSummary: string;
 }
 
 export interface Location {
@@ -190,6 +196,12 @@ export interface UpdateSettingsPayload {
   clearWaiverFile?: boolean;
   cancellationNoticeHours?: number | null;
   clearCancellationNotice?: boolean;
+
+  minSessionPriceCents?: number | null;
+  clearMinSessionPrice?: boolean;
+  declinedPlacements?: string[];
+  declinedStyles?: string[];
+  workSummary?: string;
 }
 
 export interface AvailabilityWindowInput {

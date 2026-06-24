@@ -1,0 +1,498 @@
+/* ── Layout ───────────────────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+  width: 100%;
+  max-width: 78rem;
+
+  gap: 1rem;
+}
+
+.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.5rem;
+  padding: 4rem 1.5rem;
+
+  color: hsl(220, 9%, 46%);
+  text-align: center;
+}
+
+.emptyTitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 18%);
+}
+
+.emptyText {
+  font-size: 0.9rem;
+  color: hsl(220, 9%, 46%);
+}
+
+/* ── Card ─────────────────────────────────────────────────────────────────── */
+.card {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.7rem;
+  padding: 1rem 1.1rem;
+  border-radius: 0.9rem;
+
+  border: 1px solid hsl(220, 13%, 91%);
+  background-color: hsl(0, 0%, 100%);
+  box-shadow: 0 1px 2px hsl(220, 13%, 50%, 0.04);
+
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
+}
+
+.cardExiting {
+  transform: scale(0.98);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+
+  gap: 0.6rem;
+}
+
+.cardIdentity {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.cardName {
+  overflow: hidden;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 16%);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.cardSubline {
+  overflow: hidden;
+
+  font-size: 0.8rem;
+  color: hsl(220, 9%, 50%);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.cardMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+
+  gap: 0.25rem;
+}
+
+.cardTime {
+  font-size: 0.75rem;
+  color: hsl(220, 9%, 55%);
+  white-space: nowrap;
+}
+
+/* ── Label badge ──────────────────────────────────────────────────────────── */
+.badge {
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badgeBook {
+  background-color: hsl(145, 60%, 94%);
+  color: hsl(150, 55%, 28%);
+}
+
+.badgeNeedsInfo {
+  background-color: hsl(38, 90%, 93%);
+  color: hsl(30, 70%, 35%);
+}
+
+.badgePass {
+  background-color: hsl(220, 14%, 94%);
+  color: hsl(220, 9%, 40%);
+}
+
+.badgeSpam {
+  background-color: hsl(0, 75%, 95%);
+  color: hsl(0, 62%, 45%);
+}
+
+/* ── Red flags ────────────────────────────────────────────────────────────── */
+.redFlags {
+  display: flex;
+  align-items: center;
+
+  gap: 0.45rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.5rem;
+
+  background-color: hsl(0, 80%, 97%);
+  color: hsl(0, 60%, 42%);
+  font-size: 0.8rem;
+}
+
+.redFlagIcon {
+  flex-shrink: 0;
+}
+
+/* ── Summary ──────────────────────────────────────────────────────────────── */
+.summary {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: hsl(220, 13%, 30%);
+}
+
+.summaryFull {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+}
+
+/* ── Signal strip ─────────────────────────────────────────────────────────── */
+.signals {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 0.3rem 0.7rem;
+}
+
+.signal {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+
+  gap: 0.35rem;
+
+  font-size: 0.8rem;
+  color: hsl(220, 9%, 38%);
+}
+
+.signalGood {
+  flex-shrink: 0;
+  color: hsl(150, 50%, 40%);
+}
+
+.signalBad {
+  flex-shrink: 0;
+  color: hsl(220, 9%, 55%);
+}
+
+.signalText {
+  overflow: hidden;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Expanded, signals wrap to their full text instead of truncating. */
+.signalsFull .signalText {
+  overflow: visible;
+
+  white-space: normal;
+}
+
+/* ── Draft ────────────────────────────────────────────────────────────────── */
+.draft {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.3rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: 0.6rem;
+
+  background-color: hsl(220, 20%, 98%);
+}
+
+.draftLabel {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: hsl(220, 9%, 52%);
+}
+
+.draftPreview {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: hsl(220, 13%, 32%);
+}
+
+.draftFull {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+}
+
+.draftInput {
+  width: 100%;
+
+  padding: 0.5rem 0.6rem;
+  border-radius: 0.5rem;
+
+  border: 1px solid hsl(220, 13%, 86%);
+  background-color: hsl(0, 0%, 100%);
+  font-family: inherit;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: hsl(220, 13%, 25%);
+  resize: vertical;
+
+  &:focus {
+    border-color: var(--color-primary);
+    outline: none;
+  }
+}
+
+/* ── Actions ──────────────────────────────────────────────────────────────── */
+.actions {
+  display: flex;
+  align-items: center;
+
+  margin-top: auto;
+  padding-top: 0.2rem;
+  gap: 0.5rem;
+}
+
+.primaryAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.35rem;
+  padding: 0.35rem 0.8rem;
+  border: none;
+  border-radius: 0.5rem;
+
+  background-color: var(--color-primary);
+  color: hsl(0, 0%, 100%);
+  font-size: 0.83rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: background-color 150ms ease;
+
+  &:hover {
+    background-color: var(--color-primary-hover);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+.secondaryAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.5rem;
+
+  border: 1px solid hsl(220, 13%, 86%);
+  background-color: hsl(0, 0%, 100%);
+  color: hsl(220, 13%, 25%);
+  font-size: 0.83rem;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: border-color 150ms ease;
+
+  &:hover {
+    border-color: hsl(220, 13%, 70%);
+  }
+}
+
+.reviewLink {
+  margin-left: auto;
+  padding: 0;
+
+  border: none;
+  background: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: hsl(220, 9%, 46%);
+
+  cursor: pointer;
+  transition: color 150ms ease;
+
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+/* ── Reviewing (triage not ready) ─────────────────────────────────────────── */
+.reviewingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: auto;
+}
+
+.reviewing {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.4rem;
+
+  font-size: 0.85rem;
+  color: hsl(220, 9%, 50%);
+}
+
+/* ── Expanded details (Review) ────────────────────────────────────────────── */
+.details {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.6rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: 0.6rem;
+
+  background-color: hsl(220, 20%, 98%);
+}
+
+.detailsLabel {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: hsl(220, 9%, 52%);
+}
+
+.detailGroup {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.3rem;
+}
+
+.detailSubLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: hsl(220, 9%, 46%);
+}
+
+.detailText {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: hsl(220, 13%, 32%);
+}
+
+.detailRows {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.3rem;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+
+  gap: 1rem;
+
+  font-size: 0.83rem;
+}
+
+.detailRowLabel {
+  color: hsl(220, 9%, 46%);
+}
+
+.detailRowValue {
+  font-weight: 500;
+  color: hsl(220, 13%, 25%);
+  text-align: right;
+}
+
+.referenceGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 0.4rem;
+}
+
+.referenceThumb {
+  position: relative;
+
+  aspect-ratio: 1;
+
+  border: 1px solid hsl(220, 13%, 88%);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.referenceImg {
+  object-fit: cover;
+}
+
+/* ── Premium upsell ───────────────────────────────────────────────────────── */
+.upsell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 32rem;
+
+  margin: 3rem auto 0;
+  gap: 0.75rem;
+  padding: 2.5rem 2rem;
+  border-radius: 1rem;
+
+  border: 1px solid var(--color-indigo-border);
+  background-color: hsl(0, 0%, 100%);
+  text-align: center;
+}
+
+.upsellIcon {
+  color: var(--color-primary);
+}
+
+.upsellTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: hsl(220, 13%, 16%);
+}
+
+.upsellText {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: hsl(220, 9%, 44%);
+}
+
+.upsellButton {
+  margin-top: 0.5rem;
+
+  background-color: var(--color-primary);
+
+  &:hover {
+    background-color: var(--color-primary-hover);
+  }
+}

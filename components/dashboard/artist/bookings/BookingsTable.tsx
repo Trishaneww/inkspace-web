@@ -31,7 +31,11 @@ import {
   getInquiryStatusMeta,
   requestMeta,
 } from "@/lib/bookings";
-import { formatLocation, formatRelativeDate } from "@/lib/formatters";
+import {
+  formatFullName,
+  formatLocation,
+  formatRelativeDate,
+} from "@/lib/formatters";
 
 // Types
 import type { Inquiry } from "@/types/bookings";
@@ -112,7 +116,7 @@ export const BookingsTable = ({
                       />
                       <div className={styles.clientText}>
                         <div className={styles.clientName}>
-                          {inquiry.clientName}
+                          {formatFullName(inquiry.clientName)}
                         </div>
                         <Link
                           href={`mailto:${inquiry.clientEmail}`}

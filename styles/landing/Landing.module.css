@@ -248,7 +248,7 @@
   position: relative;
   isolation: isolate;
   width: 100%;
-  max-width: 78rem;
+  max-width: 86rem;
 
   margin-inline: auto;
   padding: 0.75rem;
@@ -452,6 +452,94 @@
 .testimonialRole {
   font-size: 0.875rem;
   color: hsl(220, 9%, 46%);
+}
+
+/* ── Highlights (new AI features) ────────────────────────────────────────── */
+.highlights {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2rem;
+  padding: 3rem 1rem 1rem;
+}
+
+.highlightsIntro {
+  width: 100%;
+  max-width: 44rem;
+
+  margin: 0 auto;
+
+  text-align: center;
+}
+
+.highlightGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  max-width: 86rem;
+
+  margin-inline: auto;
+  gap: 1.5rem;
+}
+
+.highlight {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1.25rem;
+  padding: 1.25rem;
+  border-radius: 1.5rem;
+
+  background-color: hsl(220, 20%, 97%);
+}
+
+.highlightVisual {
+  position: relative;
+  aspect-ratio: 1 / 1;
+
+  border-radius: 1rem;
+
+  overflow: hidden;
+}
+
+.highlightShot {
+  position: absolute;
+  inset: 0.75rem;
+
+  container-type: inline-size;
+}
+
+.highlightText {
+  display: flex;
+  flex-direction: column;
+
+  padding: 0.25rem 0.5rem 0.5rem;
+}
+
+.highlightEyebrow {
+  margin-bottom: 0.5rem;
+
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.highlightTitle {
+  margin-bottom: 0.6rem;
+
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: hsl(220, 13%, 14%);
+}
+
+.highlightDescription {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: hsl(220, 9%, 40%);
 }
 
 /* ── Feature rows ────────────────────────────────────────────────────────── */
@@ -917,6 +1005,17 @@
 
   .footerCols {
     gap: 5rem;
+  }
+
+  .highlights {
+    gap: 2.5rem;
+    padding: 4rem 1.5rem 1.5rem;
+  }
+
+  .highlightGrid {
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 1.75rem;
   }
 
   .features {

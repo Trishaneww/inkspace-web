@@ -1,5 +1,6 @@
 // Libs
 import { formatTime } from "@/lib/formatters";
+import { PLACEMENT_OPTIONS } from "@/constants/tattooStyles";
 import type {
   DepositRefundPolicy,
   PayoutFrequency,
@@ -23,6 +24,7 @@ export const SETTINGS_TABS: SettingsTab[] = [
   { id: "email", label: "Email & Password" },
   { id: "payments", label: "Payments & Payouts" },
   { id: "billing", label: "Billing" },
+  { id: "yourwork", label: "Your Work" },
   { id: "deposits", label: "Deposits" },
   { id: "booking", label: "Booking Preferences" },
   { id: "policies", label: "Terms & Waiver" },
@@ -40,6 +42,8 @@ export const FEE_PAYER_OPTIONS: Option<PlatformFeePayer>[] = [
   { value: "split", label: "50 / 50 split" },
 ];
 
+
+export const PLACEMENT_CHIP_OPTIONS = PLACEMENT_OPTIONS;
 export const REFUND_POLICY_OPTIONS: Option<DepositRefundPolicy>[] = [
   { value: "non_refundable", label: "Non-refundable" },
   { value: "refundable_within_window", label: "Refundable within a window" },

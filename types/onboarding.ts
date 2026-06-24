@@ -5,6 +5,7 @@ export enum OnboardingPhase {
   Studio,
   Availability,
   Styles,
+  Work,
   Bookings,
   Goals,
   Calendar,
@@ -35,6 +36,11 @@ export interface OnboardingPayload {
   depositFlatFeeCents?: number | null;
   schedulingMode: SchedulingMode;
   monthlyBookingGoal?: number;
+
+  minSessionPriceCents?: number | null;
+  declinedPlacements?: string[];
+  declinedStyles?: string[];
+  workSummary?: string;
 }
 
 export interface OnboardingResponse {
@@ -63,6 +69,10 @@ export type OnboardingFormState = {
   deposit: string;
   schedulingMode: SchedulingMode | "";
   monthlyBookingGoal: string;
+  minSessionPrice: string;
+  declinedStyles: string[];
+  declinedPlacements: string[];
+  workSummary: string;
 };
 
 export type UsernameStatus =
